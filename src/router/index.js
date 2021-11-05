@@ -24,26 +24,26 @@ export default new Router({
 function configRoutes() {
   return [
     {
-      path: "/",
+      path: "/dashboard",
       redirect: "/dashboard",
       name: "Home",
       component: TheContainer,
       children: [
         {
-          path: "dashboard",
+          path: "/dashboard",
           name: "Dashboard",
           component: Dashboard,
         },
         {
-          path: "/newrequest",
+          path: "newrequest",
           name: "New Request",
           component: NewRequest,
         },
       ],
     },
     {
-      path: "/pages",
-      redirect: "/pages/404",
+      path: "/",
+      redirect: "/login",
       name: "Pages",
       component: {
         render(c) {

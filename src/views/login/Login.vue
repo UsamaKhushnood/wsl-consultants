@@ -46,7 +46,7 @@
                 >
               </div>
               <div class="form-element">
-                <button class="btn-block" type="submit">Login</button>
+                <router-link to="/dashboard" tag="button" class="btn-block" type="submit">Login</router-link>
               </div>
             </div>
           </form>

@@ -1,13 +1,12 @@
 <template>
   <div>
     <WidgetsDropdown />
-    <CCard>
+    <!-- <CCard>
       <CCardBody>
         <CRow>
           <CCol sm="5">
             <h4 id="traffic" class="card-title mb-0">Traffic</h4>
             <div class="small text-muted">November 2017</div>
-
           </CCol>
           <CCol sm="7" class="d-none d-md-block">
             <CButton color="primary" class="float-right">
@@ -78,13 +77,13 @@
           </CCol>
         </CRow>
       </CCardFooter>
-    </CCard>
-    <WidgetsBrand />
+    </CCard> -->
+
     <CRow>
       <CCol md="12">
         <CCard>
           <CCardHeader>
-            Traffic &amp; Sales
+            <h5 class="mb-0 mt-2">Traffic &amp; Sales</h5>
           </CCardHeader>
           <CCardBody>
             <CRow>
@@ -92,13 +91,15 @@
                 <CRow>
                   <CCol sm="6">
                     <CCallout color="info">
-                      <small class="text-muted">New Clients</small><br />
+                      <small class="text-muted">Total Recieved Queries</small
+                      ><br />
                       <strong class="h4">9,123</strong>
                     </CCallout>
                   </CCol>
                   <CCol sm="6">
                     <CCallout color="danger">
-                      <small class="text-muted">Recurring Clients</small><br />
+                      <small class="text-muted">Total Resolved Queries</small
+                      ><br />
                       <strong class="h4">22,643</strong>
                     </CCallout>
                   </CCol>
@@ -184,11 +185,11 @@
                 <div class="legend text-center">
                   <small>
                     <sup><CBadge shape="pill" color="info">&nbsp;</CBadge></sup>
-                    New clients &nbsp;&nbsp;
+                    &nbsp;&nbsp;
                     <sup
                       ><CBadge shape="pill" color="danger">&nbsp;</CBadge></sup
                     >
-                    Recurring clients
+                    Total Forms Status
                   </small>
                 </div>
               </CCol>
@@ -196,13 +197,13 @@
                 <CRow>
                   <CCol sm="6">
                     <CCallout color="warning">
-                      <small class="text-muted">Pageviews</small><br />
+                      <small class="text-muted">New Students</small><br />
                       <strong class="h4">78,623</strong>
                     </CCallout>
                   </CCol>
                   <CCol sm="6">
                     <CCallout color="success">
-                      <small class="text-muted">Organic</small><br />
+                      <small class="text-muted">Active Students</small><br />
                       <strong class="h4">49,123</strong>
                     </CCallout>
                   </CCol>
@@ -219,7 +220,7 @@
                       <CProgress
                         class="progress-xs"
                         :value="43"
-                        color="warning"
+                        color="primary"
                       />
                     </div>
                   </div>
@@ -236,11 +237,11 @@
                       <CProgress
                         class="progress-xs"
                         :value="37"
-                        color="warning"
+                        color="danger"
                       />
                     </div>
                   </div>
-                  <div class="progress-group">
+                  <!-- <div class="progress-group">
                     <div class="progress-group-header">
                       <CIcon name="cil-globe-alt" class="progress-group-icon" />
                       <span class="title">Organic Search</span>
@@ -255,7 +256,7 @@
                         color="success"
                       />
                     </div>
-                  </div>
+                  </div> -->
                   <div class="progress-group">
                     <div class="progress-group-header">
                       <CIcon
@@ -316,11 +317,11 @@
                       />
                     </div>
                   </div>
-                  <div class="divider text-center">
+                  <!-- <div class="divider text-center">
                     <CButton color="link" size="sm" class="text-muted">
                       <CIcon name="cil-options" />
                     </CButton>
-                  </div>
+                  </div> -->
                 </ul>
               </CCol>
             </CRow>
@@ -355,19 +356,19 @@
               <td slot="country" slot-scope="{ item }" class="text-center">
                 <CIcon :name="item.country.flag" height="25" />
               </td>
-              <td slot="usage" slot-scope="{ item }">
+              <td slot="progress" slot-scope="{ item }">
                 <div class="clearfix">
                   <div class="float-left">
-                    <strong>{{ item.usage.value }}%</strong>
+                    <strong>{{ item.progress.value }}%</strong>
                   </div>
                   <div class="float-right">
-                    <small class="text-muted">{{ item.usage.period }}</small>
+                    <small class="text-muted">{{ item.progress.period }}</small>
                   </div>
                 </div>
                 <CProgress
                   class="progress-xs"
-                  v-model="item.usage.value"
-                  :color="color(item.usage.value)"
+                  v-model="item.progress.value"
+                  :color="color(item.progress.value)"
                 />
               </td>
               <td slot="payment" slot-scope="{ item }" class="text-center">
@@ -382,6 +383,7 @@
         </CCard>
       </CCol>
     </CRow>
+    <WidgetsBrand />
   </div>
 </template>
 
@@ -409,8 +411,7 @@ export default {
             registered: "Jan 1, 2015",
           },
           country: { name: "USA", flag: "cif-us" },
-          usage: { value: 50, period: "Jun 11, 2015 - Jul 10, 2015" },
-          payment: { name: "Mastercard", icon: "cib-cc-mastercard" },
+          progress: { value: 50, period: "Jun 11, 2015 - Jul 10, 2015" },
           activity: "10 sec ago",
         },
         {
@@ -421,24 +422,21 @@ export default {
             registered: "Jan 1, 2015",
           },
           country: { name: "Brazil", flag: "cif-br" },
-          usage: { value: 22, period: "Jun 11, 2015 - Jul 10, 2015" },
-          payment: { name: "Visa", icon: "cib-cc-visa" },
+          progress: { value: 22, period: "Jun 11, 2015 - Jul 10, 2015" },
           activity: "5 minutes ago",
         },
         {
           avatar: { url: "img/avatars/3.jpg", status: "warning" },
           user: { name: "Quintin Ed", new: true, registered: "Jan 1, 2015" },
           country: { name: "India", flag: "cif-in" },
-          usage: { value: 74, period: "Jun 11, 2015 - Jul 10, 2015" },
-          payment: { name: "Stripe", icon: "cib-stripe" },
+          progress: { value: 74, period: "Jun 11, 2015 - Jul 10, 2015" },
           activity: "1 hour ago",
         },
         {
           avatar: { url: "img/avatars/4.jpg", status: "" },
           user: { name: "Enéas Kwadwo", new: true, registered: "Jan 1, 2015" },
           country: { name: "France", flag: "cif-fr" },
-          usage: { value: 98, period: "Jun 11, 2015 - Jul 10, 2015" },
-          payment: { name: "PayPal", icon: "cib-paypal" },
+          progress: { value: 98, period: "Jun 11, 2015 - Jul 10, 2015" },
           activity: "Last month",
         },
         {
@@ -449,8 +447,7 @@ export default {
             registered: "Jan 1, 2015",
           },
           country: { name: "Spain", flag: "cif-es" },
-          usage: { value: 22, period: "Jun 11, 2015 - Jul 10, 2015" },
-          payment: { name: "Google Wallet", icon: "cib-google-pay" },
+          progress: { value: 22, period: "Jun 11, 2015 - Jul 10, 2015" },
           activity: "Last week",
         },
         {
@@ -461,17 +458,15 @@ export default {
             registered: "Jan 1, 2015",
           },
           country: { name: "Poland", flag: "cif-pl" },
-          usage: { value: 43, period: "Jun 11, 2015 - Jul 10, 2015" },
-          payment: { name: "Amex", icon: "cib-cc-amex" },
+          progress: { value: 43, period: "Jun 11, 2015 - Jul 10, 2015" },
           activity: "Last week",
         },
       ],
       tableFields: [
         { key: "avatar", label: "", _classes: "text-center" },
-        { key: "user" },
+        { key: "user", label: "Agents" },
         { key: "country", _classes: "text-center" },
-        { key: "usage" },
-        { key: "payment", label: "Payment method", _classes: "text-center" },
+        { key: "progress" },
         { key: "activity" },
       ],
     };

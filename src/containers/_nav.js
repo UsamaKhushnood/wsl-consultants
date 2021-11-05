@@ -15,7 +15,7 @@ export default [
       {
         _name: "CSidebarNavItem",
         name: "New Request",
-        to: "/newrequest",
+        to: "/dashboard/newrequest",
         fontIcon: "fa fa-flag-o",
         badge: {
           color: "primary",
