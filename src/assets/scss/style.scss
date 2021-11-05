@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+// If you want to override variables do it here
+@import "variables";
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+// If you want to add something do it here
+@import "custom";
+
+:root {
+  --primary-color: #131152;
+}
+
+.c-app {
+  --primary: #131152 !important;
+  --primary-light: #192a56;
+}
+
+.breadcrumb a {
+  color: var(--primary-color) !important;
+  font-weight: 500;
+}
+
+.c-sidebar {
+  background-color: var(--primary-light);
+}
+
+.c-sidebar .c-sidebar-nav-link.c-active,
+.c-sidebar .c-active.c-sidebar-nav-dropdown-toggle {
+  background-color: var(--primary);
+  &:hover {
+    background-color: var(--primary);
+  }
+}
+
+.c-sidebar .c-sidebar-nav-link,
+.c-sidebar .c-sidebar-nav-dropdown-toggle {
+  &:hover {
+    background-color: var(--primary);
+  }
+}
+
+.card-header:not(.content-center) > .c-icon:first-child {
+  margin-right: 0.1rem;
+  margin-top: 0.1rem;
+  vertical-align: top;
+  width: 1.2rem;
+  height: 1.2rem;
+  font-size: 1.2rem;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.below-dash {
+  width: 50px;
+  background-color: #a2a6bb;
+  height: 2px;
+  margin-top: 25px;
+}
+
+.form-group {
+  .form-element {
+    &:not(:first-child) {
+      margin-top: 15px;
+    }
+    input {
+      border: 1px solid var(--primary-color) !important;
+      border-radius: 5px;
+      &[type="checkbox"] {
+        margin-right: 10px;
+      }
+    }
+    label {
+      font-size: 16px;
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    button {
+      border: 2px solid var(--primary-color);
+      background: var(--primary-color);
+      color: #fff;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 15px;
+      padding: 5px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s all ease;
+      &:hover {
+        background-color: transparent;
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+.btn-block {
+  width: 100%;
+}
+.pointer {
+  cursor: pointer;
+}
