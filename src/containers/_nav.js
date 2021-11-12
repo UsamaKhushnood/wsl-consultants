@@ -29,6 +29,12 @@ export default [
         fontIcon: "fa fa-plus-square",
       },
       {
+        _name: "CSidebarNavItem",
+        name: "Student Form",
+        to: "/form",
+        fontIcon: "fa fa-align-justify",
+      },
+      {
         _name: "CSidebarNavTitle",
         _children: ["Pages"],
       },
