@@ -39,6 +39,7 @@
     "@coreui/vue-chartjs": "^1.0.6",
     "bootstrap-vue": "^2.21.2",
     "vue": "~2.6.12",
+    "vue-file-agent": "^1.7.3",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.4.9",
     "vuex": "~3.6.0"

@@ -6,7 +6,9 @@ const TheContainer = () => import("@/containers/TheContainer");
 // Views
 const Dashboard = () => import("@/views/Dashboard");
 const NewRequest = () => import("@/views/NewRequest");
+const AddNewAgent = () => import("@/views/dashboard/AddNewAgent");
 // Views - Pages
+const StudentForm = () => import("@/views/call-center/StudentForm");
 const Page404 = () => import("@/views/pages/Page404");
 const Page500 = () => import("@/views/pages/Page500");
 const Login = () => import("@/views/login/Login");
@@ -39,6 +41,16 @@ function configRoutes() {
           name: "New Request",
           component: NewRequest,
         },
+        {
+          path: "newagent",
+          name: "Add New Agent",
+          component: AddNewAgent,
+        },
+        {
+          path: "*",
+          name: "Page Not Found",
+          component: Page404,
+        },
       ],
     },
     {
@@ -70,6 +82,11 @@ function configRoutes() {
           path: "register",
           name: "Register",
           component: Register,
+        },
+        {
+          path: "form",
+          name: "Student Form",
+          component: StudentForm,
         },
       ],
     },

@@ -1,26 +1,24 @@
 <template>
   <div>
-    <b-modal :id="'deny-request-modal' + propsindex" title="Deny this Request">
-      <div class="modal-body">
-        <form method="post">
-          <div class="form-group">
-            <select class="custom-select">
-              <option selected="">Select the deny reason</option>
-              <option value="1">Because of</option>
-              <option value="2">Because of</option>
-            </select>
+    <b-modal
+      :id="'deny-request-modal' + propsindex"
+      title="Confirmation"
+      header-bg-variant="danger"
+      header-text-variant="light"
+      centered
+      hide-footer
+    >
+      <template #default="{hide}">
+        <div class="modal-body">
+          <h4>Are you Sure?</h4>
+          <div class="row mt-4 mr-2 justify-content-end">
+            <b-button variant="dark" class="mr-2" squared @click="hide"
+              >Cancel</b-button
+            >
+            <b-button variant="danger" squared @click="hide"
+              >Confirm Delete</b-button
+            >
           </div>
-          <div class="form-group">
-            <input type="text" placeholder="text" />
-          </div>
-          <button type="submit" class="btn btn-primary btn-sm">OK</button>
-        </form>
-      </div>
-      <template #modal-footer="{hide}">
-        <div class="w-100">
-          <b-button variant="dark" size="sm" class="float-right" @click="hide" squared>
-            Close
-          </b-button>
         </div>
       </template>
     </b-modal>

@@ -101,3 +101,11 @@ body {
 .pointer {
   cursor: pointer;
 }
+
+div[helperclass="active-sorting-item"] {
+  background: #f2f2f2;
+}
+
+.vue-file-agent .file-preview-new:before {
+  background: #f2f2f2 !important;
+}

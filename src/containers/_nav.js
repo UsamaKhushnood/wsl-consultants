@@ -6,7 +6,7 @@ export default [
         _name: "CSidebarNavItem",
         name: "Dashboard",
         to: "/dashboard",
-        icon: "cil-speedometer",
+        fontIcon: "fa fa-chart-line",
         // badge: {
         //   color: "primary",
         //   text: "NEW",
@@ -23,16 +23,50 @@ export default [
         },
       },
       {
+        _name: "CSidebarNavItem",
+        name: "Add New Agent",
+        to: "/dashboard/newagent",
+        fontIcon: "fa fa-plus-square",
+      },
+      {
         _name: "CSidebarNavTitle",
         _children: ["Pages"],
       },
       {
         _name: "CSidebarNavDropdown",
-        name: "Activity",
+        name: "Leads",
         fontIcon: "fa fa-cubes",
         items: [
           {
-            name: "Assign Queries",
+            name: "Canda Leads",
+            to: "/",
+          },
+          {
+            name: "Austria Leads ",
+            to: "/",
+          },
+          {
+            name: "Italy Leads",
+            to: "/",
+          },
+          {
+            name: "UK Leads",
+            to: "/",
+          },
+          {
+            name: "USA Leads",
+            to: "/",
+          },
+          {
+            name: "Turkey MBBS Leads",
+            to: "/",
+          },
+          {
+            name: "Italy MBBS Leads",
+            to: "/",
+          },
+          {
+            name: "Visit Visa Leads",
             to: "/",
           },
         ],

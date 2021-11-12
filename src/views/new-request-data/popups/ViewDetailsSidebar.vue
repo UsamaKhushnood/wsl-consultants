@@ -1,0 +1,172 @@
+<template>
+  <div>
+    <b-sidebar
+      :id="'view-details-sidebar' + propsindex"
+      class="viewProjectSidebar rightSidebar"
+      :class="'viewProjectSidebar' + propsindex"
+      backdrop-variant="dark"
+      backdrop
+      shadow
+      no-header
+      bg-variant="white"
+      right
+    >
+      <template #default="{ hide }">
+        <div
+          class="d-flex text-light align-items-center justify-content-center px-3 py-2 modalHeader bg-dark"
+        >
+          <b-button size="sm" @click="hide"
+            ><i class="fa fa-arrow-circle-right"></i
+          ></b-button>
+          <h4 class="mx-auto">Student Details</h4>
+        </div>
+        <div
+          class="d-flex align-items-center justify-content-center bg-danger vd_white headerSecondary"
+        >
+          <div class="col-md-2 pdng5-0 col-md-offset-3 text-center">
+            <h6 class="mrgn0">
+              Student Form ID:
+              <span>112223443</span>
+            </h6>
+          </div>
+          <div class="col-md-2 pdng5-0 text-center">
+            <h6 class="mrgn0">
+              Preferred Country:
+              <span>USA</span>
+            </h6>
+          </div>
+          <div class="col-md-2 pdng5-0 text-center">
+            <h6 class="mrgn0">
+              Status:
+              <span>Matured</span>
+            </h6>
+          </div>
+        </div>
+
+        <!-- Sidebar Body  -->
+        <div class="modal-body h100">
+          <div class="row mr-0">
+            <div class="col-sm-3 text-center">
+              <div class="userAvatar vd_bg-light-grey">
+                <div class="avatarBackground">
+                  <img src="@/assets/avatar/avatarBg.png" alt="" />
+                </div>
+                <div class="userImageWrapper">
+                  <b-avatar variant="danger" size="80"></b-avatar>
+                </div>
+
+                <h4>Student Name</h4>
+              </div>
+
+              <!-- Panel widget start -->
+              <b-card
+                border-variant="dark"
+                header="Contact Details"
+                header-bg-variant="dark"
+                header-text-variant="white"
+                align="center"
+                class="mt-2"
+              >
+                <b-card-text>
+                  <b-button class="btn btn-success btn-sm">
+                    <i class="fa fa-whatsapp"></i>
+                  </b-button>
+                  <b-button class="btn btn-dark btn-sm ml-2">
+                    <i class="fa fa-phone-alt"></i>
+                  </b-button>
+                  <b-button class="btn btn-danger btn-sm ml-2">
+                    <i class="far fa-envelope"></i>
+                  </b-button>
+                </b-card-text>
+              </b-card>
+              <b-card
+                border-variant="primary"
+                header="Student Notes"
+                header-bg-variant="primary"
+                header-text-variant="white"
+                align="center"
+                class="mt-2 mb-2"
+              >
+                <b-card-text>
+                  <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Inventore accusamus ducimus consequuntur vel asperiores nemo
+                    maiores neque, minus corrupti assumenda
+                  </p>
+                </b-card-text>
+              </b-card>
+
+              <!-- Panel widget end -->
+            </div>
+            <div class="col-sm-9 ">
+              <div
+                class="row messageArea vd_bd-light-grey panel pdng10 align-items-center border"
+              >
+                <div class="col-sm-8"></div>
+                <div class="col-sm-4 brdLeft">
+                  <div class="text-center mb-2">
+                    <b-avatar variant="dark" size="80"></b-avatar>
+                  </div>
+                  <h4 class="text-center">Agent's Name</h4>
+                  <div class="text-center">
+                    <b-button class="mrgn0 text-center btn-sm" variant="dark">
+                      Agent Profile
+                    </b-button>
+                  </div>
+                </div>
+              </div>
+              <h3 class="mt-3">Student Details</h3>
+              <hr class="mrgn10-0" />
+              <h5>Student CV</h5>
+              <p>File...</p>
+              <h5>Qualification</h5>
+              <p>Intermediate</p>
+              <h5>Qualification</h5>
+              <p>Intermediate</p>
+              <h5>Qualification</h5>
+              <p>Intermediate</p>
+              <h5>Qualification</h5>
+              <p>Intermediate</p>
+              <h5>Qualification</h5>
+              <p>Intermediate</p>
+            </div>
+          </div>
+        </div>
+      </template>
+    </b-sidebar>
+  </div>
+</template>
+<script>
+import usersData from "./userData";
+export default {
+  props: ["propsindex"],
+  data: () => ({
+    items: usersData,
+  }),
+  methods: {
+    getBadge(status) {
+      return status === "Active"
+        ? "success"
+        : status === "Inactive"
+        ? "secondary"
+        : status === "Pending"
+        ? "warning"
+        : status === "Banned"
+        ? "danger"
+        : "primary";
+    },
+  },
+};
+</script>
+<style lang="scss">
+.modalHeader {
+  h4 {
+    text-transform: uppercase;
+  }
+}
+
+.headerSecondary h6 {
+  font-size: 13px;
+  padding: 5px 0;
+}
+</style>

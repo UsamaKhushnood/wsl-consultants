@@ -14,6 +14,13 @@
         <div class="vd_content-section clearfix">
           <div class="row">
             <div class="col-sm-12 tabs">
+              <button
+                class="btn btn-dark btn-sm ml-auto d-block mb-2"
+                v-b-modal="'create-lead-modal'"
+              >
+                Create New Lead
+              </button>
+              <CreateNewLead />
               <div id="Country1" class="active tab-pane  in">
                 <div class="tabs widget">
                   <ul class="nav nav-tabs widget">
@@ -23,7 +30,7 @@
                         href="#new-request-tab-c1"
                         class="active"
                       >
-                        New Queries
+                        All Leads
                         <span class="menu-active">
                           <i class="fa fa-caret-up"></i>
                         </span>
@@ -31,7 +38,7 @@
                     </li>
                     <li>
                       <a data-toggle="tab" href="#request-hold-tab-c1">
-                        Queries On Hold
+                        Unassigned
                         <span class="menu-active">
                           <i class="fa fa-caret-up"></i>
                         </span>
@@ -39,7 +46,7 @@
                     </li>
                     <li>
                       <a data-toggle="tab" href="#accepted-request-tab-c1">
-                        Accepted Queries
+                        In Process
                         <span class="menu-active">
                           <i class="fa fa-caret-up"></i>
                         </span>
@@ -47,7 +54,7 @@
                     </li>
                     <li>
                       <a data-toggle="tab" href="#denied-request-tab-c1">
-                        Denied Queries
+                        Matured
                         <span class="menu-active">
                           <i class="fa fa-caret-up"></i>
                         </span>
@@ -57,6 +64,7 @@
                   <div class="tab-content">
                     <div id="new-request-tab-c1" class="tab-pane active">
                       <CDataTable
+                        responsive
                         :hover="true"
                         :striped="true"
                         :border="true"
@@ -67,21 +75,40 @@
                         :itemsPerPage="5"
                         sorter
                         :fields="[
+                          'CreateDate',
                           'StudentName',
-                          'Country',
-                          'Type',
+                          'Email',
+                          'Whatsapp',
                           'PhoneNo',
-                          'Options',
+                          'PreferredCountry',
+                          'AssignedTo',
+                          'Status',
+                          'Actions',
                         ]"
-                        :items-per-page="10"
                         pagination
                       >
-                        <template #Options="{index}">
+                        <template #Whatsapp="{item}">
+                          <td>
+                            <a
+                              :href="
+                                'https://api.whatsapp.com/send?phone=' +
+                                  item.Whatsapp
+                              "
+                              target="_blank"
+                              v-b-tooltip.hover
+                              title="Click To Open Whatsapp"
+                            >
+                              {{ item.Whatsapp }}
+                            </a>
+                          </td>
+                        </template>
+                        <template #Actions="{index}">
                           <td class="menu-action">
                             <a
                               data-target="#viewAccept"
                               data-toggle="modal"
                               class="btn menu-icon vd_bd-green vd_green"
+                              v-b-toggle="'view-details-sidebar' + index"
                             >
                               <i
                                 class="fa fa-eye"
@@ -98,7 +125,7 @@
                               <i
                                 class="fa fa-check"
                                 v-b-tooltip.hover
-                                title="Accept"
+                                title="Assign"
                               ></i>
                             </a>
 
@@ -110,8 +137,8 @@
                             >
                               <i
                                 v-b-tooltip.hover
-                                title="Denied"
-                                class="fa fa-minus-circle"
+                                title="Delete"
+                                class="fa fa-trash"
                               ></i>
                             </a>
                             <a
@@ -126,7 +153,7 @@
                                 title="Hold"
                               ></i>
                             </a>
-                            <!-- <AllPopups :propsindex="index"> </AllPopups> -->
+                            <AllPopups :propsindex="index"> </AllPopups>
                           </td>
                         </template>
                       </CDataTable>
@@ -178,7 +205,7 @@
                               <i
                                 class="fa fa-check"
                                 v-b-tooltip.hover
-                                title="Accept"
+                                title="Assign"
                               ></i>
                             </a>
 
@@ -191,7 +218,7 @@
                               <i
                                 v-b-tooltip.hover
                                 title="Denied"
-                                class="fa fa-minus-circle"
+                                class="fa fa-trash"
                               ></i>
                             </a>
                             <a
@@ -374,12 +401,14 @@
 </template>
 
 <script>
-import tableData from "./new-request-data/tableData";
+import tableData from "./tableData";
 import WidgetsDropdown from "./widgets/WidgetsDropdown";
-// import AllPopups from "@/views/new-request-data/AllPopups.vue";
+import AllPopups from "@/views/new-request-data/AllPopups.vue";
+import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
+
 export default {
   name: "NewRequest",
-  components: { WidgetsDropdown },
+  components: { WidgetsDropdown, AllPopups, CreateNewLead },
   data: () => ({
     items: tableData,
   }),
