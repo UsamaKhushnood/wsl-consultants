@@ -37,6 +37,10 @@ export default {
     minimize() {
       return this.$store.state.sidebarMinimize;
     },
+    nav() {
+      
+      return $options.nav;
+    },
   },
 };
 </script>

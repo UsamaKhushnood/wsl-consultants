@@ -7,6 +7,7 @@ export default [
         name: "Dashboard",
         to: "/dashboard",
         fontIcon: "fa fa-chart-line",
+        user_type :'admin'
         // badge: {
         //   color: "primary",
         //   text: "NEW",
@@ -17,6 +18,7 @@ export default [
         name: "New Request",
         to: "/dashboard/newrequest",
         fontIcon: "fa fa-flag-o",
+        user_type :'admin',
         badge: {
           color: "primary",
           text: "NEW",
@@ -27,12 +29,14 @@ export default [
         name: "Add New Agent",
         to: "/dashboard/newagent",
         fontIcon: "fa fa-plus-square",
+        user_type :'admin',
       },
       {
         _name: "CSidebarNavItem",
         name: "Student Form",
         to: "/form",
         fontIcon: "fa fa-align-justify",
+        user_type :'admin',
       },
       {
         _name: "CSidebarNavTitle",
@@ -42,6 +46,7 @@ export default [
         _name: "CSidebarNavDropdown",
         name: "Leads",
         fontIcon: "fa fa-cubes",
+        user_type :'admin',
         items: [
           {
             name: "Canda Leads",
@@ -81,6 +86,7 @@ export default [
         _name: "CSidebarNavDropdown",
         name: "Updates",
         fontIcon: "fas fa-sync",
+        user_type :'admin',
         items: [
           {
             name: "Students Updates",
@@ -100,6 +106,7 @@ export default [
         _name: "CSidebarNavDropdown",
         name: "Students",
         fontIcon: "fas fa-graduation-cap",
+        user_type :'admin',
         items: [
           {
             name: "New Students",
@@ -123,6 +130,7 @@ export default [
         _name: "CSidebarNavDropdown",
         name: "Sales Department",
         fontIcon: "fa fa-bar-chart-o",
+        user_type :'admin',
         items: [
           {
             name: "Agent Status",
@@ -142,6 +150,7 @@ export default [
         _name: "CSidebarNavDropdown",
         name: "Call Center Department",
         fontIcon: "fa fa-users",
+        user_type :'admin',
         items: [
           {
             name: "Agent Status",
@@ -162,6 +171,7 @@ export default [
         _name: "CSidebarNavDropdown",
         name: "Dashboard Settings",
         fontIcon: "fa fa-gear",
+        user_type :'admin',
         items: [
           {
             name: "Admin Control",

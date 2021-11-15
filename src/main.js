@@ -20,11 +20,28 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import "./css/adminLTE.css";
 import "./css/themeStyle.css";
 import "./css/customStyles.css";
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
 
+
+
+Vue.use(Toast);
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin);
+
+import Axios from 'axios';
+
+Vue.prototype.$http = Axios;
+
+Axios.defaults.baseURL = process.env.VUE_APP_API_URL
+const token = localStorage.getItem('token');
+Axios.defaults.headers.common['Authorization'] = 'Bearer '+token;
+Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+Axios.defaults.headers.common['Content-Type'] = 'application/json'
+Axios.defaults.headers.common['Accept'] = 'application/json'
 
 Vue.config.performance = true;
 Vue.use(CoreuiVue);

@@ -391,6 +391,7 @@
 import MainChartExample from "./charts/MainChartExample";
 import WidgetsDropdown from "./widgets/WidgetsDropdown";
 import WidgetsBrand from "./widgets/WidgetsBrand";
+import { mapGetters } from 'vuex';
 
 export default {
   name: "Dashboard",
@@ -486,5 +487,8 @@ export default {
       return $color;
     },
   },
+  computed:{
+    ...mapGetters(['getUser'])
+  }
 };
 </script>

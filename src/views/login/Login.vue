@@ -30,14 +30,14 @@
             <div class="form-group">
               <div class="form-element">
                 <label for="email">Email:</label>
-                <input type="text" id="email" />
+                <input type="email" v-model="email" id="email" />
               </div>
               <div class="form-element">
                 <label for="password">Password:</label>
-                <input type="password" id="password" />
+                <input type="password"  v-model="password" id="password" />
               </div>
               <div class="form-element">
-                <input type="checkbox" name="remember" id="remember" />
+                <input type="checkbox" v-model="remember" name="remember" id="remember" />
                 <label
                   for="remember"
                   onselectstart="return false"
@@ -46,7 +46,8 @@
                 >
               </div>
               <div class="form-element">
-                <router-link to="/dashboard" tag="button" class="btn-block" type="submit">Login</router-link>
+                <button @click.prevent="signIn()" tag="button" class="btn-block" type="submit">Login</button>
+                <!-- <router-link to="/dashboard" tag="button" class="btn-block" type="submit">Login</router-link> -->
               </div>
             </div>
           </form>
@@ -55,6 +56,78 @@
     </div>
   </div>
 </template>
+<script>
+
+import axios from 'axios'
+export default {
+
+  data(){
+    return {
+      email:'',
+      password:'',
+      remember:'',
+      showSpinner:false
+    }
+  },
+  methods:{
+    trigger() {
+      this.$refs.sendReq.click()
+    },
+    signIn(){
+
+       const vm = this;
+          //  vm.$store.commit("SET_SPINNER", true);
+       axios
+        .post(process.env.VUE_APP_API_URL+"/login",{
+          email: this.email,
+          password: this.password
+        })
+        .then((response) => {
+          console.log('data::',response.data);
+          const token = response.data.token
+          localStorage.setItem('token', token)
+            vm.$store.commit("SET_AUTH_TOKEN", response.data.token);
+            // vm.$store.commit("SET_SPINNER", false);
+            vm.$store.commit("SET_USER", response.data.user);
+            vm.$toast.success("Login Successfully", {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+                // vm.$store.commit('SET_SPINNER',false);
+          window.location.href =process.env.VUE_APP_URL+'dashboard' 
+          // vm.$router.push({ name: "Dashboard" });
+
+        })
+        .catch((errors) => {
+          var err =''
+          if(errors.response.data.errors.email){
+            err+=errors.response.data.errors.email
+          }
+          if(errors.response.data.errors.password){
+            err+=errors.response.data.errors.password
+          }
+          if(errors)
+          this.$toast.error(err, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+            // vm.$store.commit('SET_SPINNER',false);
+        });
+    },
+    sendTo(url){
+      window.open(url,'_blank');
+    }
+  },
+  created(){
+    //  this.$store.commit('SET_SPINNER',false);
+  }
+};
+</script>
+
 <style lang="scss">
 .login {
   .login-left-side {
