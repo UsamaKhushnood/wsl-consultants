@@ -31,7 +31,7 @@
           Request <span class="badge badge-primary"> NEW </span></a
         >
       </li>
-      <li class="c-sidebar-nav-item">
+      <li class="c-sidebar-nav-item" v-if="getUser.user_type =='admin'">
         <a href="/dashboard/newagent" class="c-sidebar-nav-link" target="_self">
           <i
             class="c-sidebar-nav-icon fa fa-plus-square"
@@ -49,8 +49,9 @@
           Student Form
         </a>
       </li>
-      <li class="c-sidebar-nav-title">Pages</li>
-      <li class="c-sidebar-nav-dropdown">
+      <li class="c-sidebar-nav-title" v-if="getUser.user_type =='admin'">Pages</li>
+
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.user_type =='admin'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-1>
           <i class="c-sidebar-nav-icon fa fa-cubes" aria-hidden="true"></i>
           Leads
@@ -103,7 +104,7 @@
           </li>
         </b-collapse>
       </li>
-      <li class="c-sidebar-nav-dropdown">
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.user_type =='admin'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-2>
           <i class="c-sidebar-nav-icon fas fa-sync" aria-hidden="true"></i>
           Updates
@@ -131,7 +132,7 @@
           </li>
         </b-collapse>
       </li>
-      <li class="c-sidebar-nav-dropdown">
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.user_type =='admin'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-3>
           <i
             class="c-sidebar-nav-icon fas fa-graduation-cap"
@@ -167,7 +168,7 @@
           </li>
         </b-collapse>
       </li>
-      <li class="c-sidebar-nav-dropdown">
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.user_type =='admin'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-4>
           <i
             class="c-sidebar-nav-icon fa fa-bar-chart-o"
@@ -198,7 +199,7 @@
           </li>
         </b-collapse>
       </li>
-      <li class="c-sidebar-nav-dropdown">
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.user_type =='admin'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-5>
           <i class="c-sidebar-nav-icon fa fa-users" aria-hidden="true"></i>
           Call Center Department
@@ -226,7 +227,7 @@
           </li>
         </b-collapse>
       </li>
-      <li class="c-sidebar-nav-dropdown">
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.user_type =='admin'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-6>
           <i class="c-sidebar-nav-icon fa fa-gear" aria-hidden="true"></i>
           Dashboard Settings
@@ -254,14 +255,14 @@
           </li>
         </b-collapse>
       </li>
-      <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+      <div class="ps__rail-x" style="left: 0px; bottom: 0px;" v-if="getUser.user_type =='admin'">
         <div
           class="ps__thumb-x"
           tabindex="0"
           style="left: 0px; width: 0px;"
         ></div>
       </div>
-      <div class="ps__rail-y" style="top: 0px; right: 0px;">
+      <div class="ps__rail-y" style="top: 0px; right: 0px;" v-if="getUser.user_type =='admin'">
         <div
           class="ps__thumb-y"
           tabindex="0"
@@ -274,6 +275,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import nav from "./_nav";
 
 export default {
@@ -289,6 +291,7 @@ export default {
     nav() {
       return $options.nav;
     },
+    ...mapGetters(['getUser'])
   },
 };
 </script>
