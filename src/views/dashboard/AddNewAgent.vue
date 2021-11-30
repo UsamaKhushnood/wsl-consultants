@@ -11,7 +11,7 @@
       <!-- content here  -->
       <div class="row">
         <div
-          class="col-md-6 bg-white pt-5 px-4 pb-2"
+          class="col-md-7 bg-white pt-5 px-4 pb-2"
           style="border-radius: 5px;"
         >
           <form>
@@ -69,19 +69,24 @@
                 </div>
               </div>
               <div class="row">
-                <b-button variant="dark" class="ml-auto mr-3 w-25"
-                @click.prevent="addAgent"
+                <b-button
+                  variant="dark"
+                  class="ml-auto mr-3 w-25"
+                  @click.prevent="addAgent"
                   >Create</b-button
                 >
               </div>
             </div>
           </form>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
           <div class="agentsList ml-2 p-4 py-2 bg-white">
-            <h2 class="text-center mb-4">Agents List</h2>
+            <div class="d-flex mb-4 align-items-center justify-content-between">
+              <h2>Agents List</h2>
+              <b-button variant="dark" size="sm">View All</b-button>
+            </div>
             <div
-              class="agent row p-3 bg-gray-100 mb-2 align-items-center"
+              class="agent d-flex p-3 bg-gray-100 mb-2 align-items-center"
               v-for="(i, x) in 4"
               :key="x"
             >
@@ -94,6 +99,9 @@
               </div>
               <div class="ml-auto ">
                 <b-button size="sm" variant="dark">Copy Credentials</b-button>
+                <b-button size="sm" variant="danger" class="ml-1">
+                  <b-icon icon="trash"></b-icon>
+                </b-button>
               </div>
             </div>
           </div>
@@ -126,10 +134,10 @@ export default {
           first_name: this.first_name,
           last_name: this.last_name,
           email: this.email,
-          password: this.password
+          password: this.password,
         })
         .then((response) => {
-          console.log('s',response.data.message)
+          console.log("s", response.data.message);
           // vm.$store.commit("SET_AUTH_TOKEN", response.data.token);
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$store.commit("SET_USER", response.data.userDetail.user);

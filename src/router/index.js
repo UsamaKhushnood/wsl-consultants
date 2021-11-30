@@ -7,6 +7,12 @@ const TheContainer = () => import("@/containers/TheContainer");
 const Dashboard = () => import("@/views/Dashboard");
 const NewRequest = () => import("@/views/NewRequest");
 const AddNewAgent = () => import("@/views/dashboard/AddNewAgent");
+const LoginTimeSettings = () => import("@/views/settings/LoginTimeSettings");
+const AllLeads = () => import("@/views/leads/AllLeads");
+const ApprovedLeads = () => import("@/views/leads/Approved");
+const InProgress = () => import("@/views/leads/InProgress");
+const OnHold = () => import("@/views/leads/OnHold");
+const Rejected = () => import("@/views/leads/Rejected");
 // Views - Pages
 const StudentForm = () => import("@/views/call-center/StudentForm");
 const Page404 = () => import("@/views/pages/Page404");
@@ -46,6 +52,37 @@ function configRoutes() {
           name: "Add New Agent",
           component: AddNewAgent,
         },
+        {
+          path: "time-setting",
+          name: "Login/Logout Settings",
+          component: LoginTimeSettings,
+        },
+        {
+          path: "all-leads",
+          name: "All Leads",
+          component: AllLeads,
+        },
+        {
+          path: "leads/approved",
+          name: "Approved Leads",
+          component: ApprovedLeads,
+        },
+        {
+          path: "leads/in-progress",
+          name: "In Progress Leads",
+          component: InProgress,
+        },
+        {
+          path: "leads/rejected",
+          name: "Rejected Leads",
+          component: Rejected,
+        },
+        {
+          path: "leads/on-hold",
+          name: "On Hold Leads",
+          component: OnHold,
+        },
+
         {
           path: "*",
           name: "Page Not Found",

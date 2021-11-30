@@ -102,10 +102,34 @@
               <div
                 class="row messageArea vd_bd-light-grey panel pdng10 align-items-center border"
               >
-                <div class="col-sm-8"></div>
+                <div class="col-sm-4"></div>
                 <div class="col-sm-4 brdLeft">
+                  <h6
+                    class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
+                    style="width: fit-content"
+                  >
+                    Call Center
+                  </h6>
+
                   <div class="text-center mb-2">
-                    <b-avatar variant="dark" size="80"></b-avatar>
+                    <b-avatar variant="dark" size="80">AN</b-avatar>
+                  </div>
+                  <h4 class="text-center">Agent's Name</h4>
+                  <div class="text-center">
+                    <b-button class="mrgn0 text-center btn-sm" variant="dark">
+                      Agent Profile
+                    </b-button>
+                  </div>
+                </div>
+                <div class="col-sm-4 brdLeft">
+                  <h6
+                    class="font-bold bg-warning d-flex justify-content-center p-1 radius-10 text-dark"
+                    style="width: fit-content"
+                  >
+                    Assing To
+                  </h6>
+                  <div class="text-center mb-2">
+                    <b-avatar variant="dark" size="80">AN</b-avatar>
                   </div>
                   <h4 class="text-center">Agent's Name</h4>
                   <div class="text-center">

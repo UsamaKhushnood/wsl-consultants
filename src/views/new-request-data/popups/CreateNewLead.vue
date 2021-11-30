@@ -44,6 +44,10 @@
               <label for="agentFirstName">Student CV:</label>
               <input type="file" id="agentFirstName" />
             </div>
+            <div class="form-element">
+              <label for="agentFirstName">Screenshots:</label>
+              <input type="file" id="agentFirstName" />
+            </div>
           </form>
         </div>
       </template>

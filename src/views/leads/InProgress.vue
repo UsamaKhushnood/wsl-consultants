@@ -1,30 +1,26 @@
 <template>
-  <div id="newrequest">
+  <div id="in-progress-leads-page">
     <div class="vd_content-wrapper">
       <div class="vd_content clearfix">
         <div class="vd_title-section clearfix">
           <div class="vd_panel-header">
-            <h1><i class="fa fa-flag-o"></i> New Request</h1>
+            <h1><i class="fas fa-cubes"></i> In Progress Leads</h1>
           </div>
-        </div>
-
-        <div class="dashboardPanels clearfix">
-          <WidgetsDropdown />
         </div>
         <div class="clearfix">
           <div class="row">
-            <div class="col-sm-12 tabs">
-              <button
+            <div class="col-sm-12">
+              <!-- <button
                 class="btn btn-dark btn-sm ml-auto d-block mb-2"
                 v-b-modal="'create-lead-modal'"
               >
                 Create New Lead
               </button>
-              <CreateNewLead />
-              <div id="Country1" class="active tab-pane  in">
-                <div class="tabs widget">
-                  <div class="tab-content">
-                    <div id="new-request-tab-c1" class="tab-pane active">
+              <CreateNewLead /> -->
+              <div id="Country1">
+                <div class="widget">
+                  <div class="bg-white">
+                    <div id="new-request-tab-c1">
                       <CDataTable
                         responsive
                         :hover="true"
@@ -34,11 +30,11 @@
                         :items="items"
                         columnFilter
                         itemsPerPageSelect
-                        :itemsPerPage="10"
+                        :itemsPerPage="20"
                         class="leads-table"
                         sorter
                         :fields="[
-                          'CreateDate',
+                          { key: 'CreateDate' },
                           'StudentName',
                           'Email',
                           'Whatsapp',
@@ -46,7 +42,10 @@
                           'PreferredCountry',
                           'AssignedTo',
                           'Status',
-                          'Actions',
+                          {
+                            key: 'Actions',
+                            sorter: false,
+                          },
                         ]"
                         pagination
                       >
@@ -101,21 +100,10 @@
                             </a>
                           </td>
                         </template>
-                        <template #Status="{item}">
+                        <template #Status>
                           <td class="status text-center">
-                            <span
-                              class="badge badge-pill"
-                              :class="[
-                                item.Status.toLowerCase() == 'in progress'
-                                  ? 'badge-info'
-                                  : item.Status.toLowerCase() == 'approved'
-                                  ? 'badge-success'
-                                  : item.Status.toLowerCase() == 'rejected'
-                                  ? 'badge-danger'
-                                  : 'badge-warning',
-                              ]"
-                            >
-                              {{ item.Status }}
+                            <span class="badge badge-pill badge-info">
+                              In Progress
                             </span>
                           </td>
                         </template>
@@ -158,7 +146,7 @@
                                 class="fa fa-trash"
                               ></i>
                             </a>
-                            <a
+                            <!-- <a
                               data-target="#holdRequest"
                               data-toggle="modal"
                               class="btn menu-icon vd_bd-red vd_red"
@@ -169,35 +157,26 @@
                                 v-b-tooltip.hover
                                 title="Hold"
                               ></i>
-                            </a>
+                            </a> -->
                             <AllPopups :propsindex="index"> </AllPopups>
                           </td>
                         </template>
                       </CDataTable>
-                      <!-- pd-20 end -->
                     </div>
                   </div>
-                  <!-- tab-content end -->
                 </div>
-                <!-- tabs widget -->
               </div>
-              <!-- #Country1 -->
             </div>
           </div>
-          <!-- row -->
         </div>
-        <!-- .vd_content-section -->
       </div>
-      <!-- .vd_content -->
-
-      <!-- .vd_container -->
     </div>
   </div>
 </template>
 
 <script>
-import tableData from "./tableData";
-import WidgetsDropdown from "./widgets/WidgetsDropdown";
+import tableData from "../tableData";
+import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
 
@@ -213,5 +192,14 @@ export default {
 #newrequest .col-sm-6.p-0.offset-sm-6 {
   padding: 5px 20px !important;
   padding-bottom: 0px !important;
+}
+
+.leads-table {
+  .col-sm-6.p-0.offset-sm-6 {
+    .form-inline.justify-content-sm-end {
+      color: #000;
+      padding: 10px 10px 0 0;
+    }
+  }
 }
 </style>
