@@ -14,39 +14,39 @@
               <div class="col-6">
                 <div class="form-element">
                   <label for="agentFirstName">First Name:</label>
-                  <input type="text" id="agentFirstName" />
+                  <input type="text" v-model="first_name" id="agentFirstName" />
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-element">
-                  <label for="agentFirstName">Last Name:</label>
-                  <input type="text" id="agentFirstName" />
+                  <label for="last_name">Last Name:</label>
+                  <input type="text" v-model="last_name" id="last_name" />
                 </div>
               </div>
             </div>
             <div class="form-element">
-              <label for="agentFirstName">Preferred Country:</label>
-              <input type="text" id="agentFirstName" />
+              <label for="country">Preferred Country:</label>
+              <input type="text" v-model="country" id="country" />
             </div>
             <div class="form-element">
-              <label for="agentFirstName">Phone Number:</label>
-              <input type="text" id="agentFirstName" />
+              <label for="phone">Phone Number:</label>
+              <input type="text" v-model="phone" id="phone" />
             </div>
             <div class="form-element">
-              <label for="agentFirstName">Whatsapp Number:</label>
-              <input type="text" id="agentFirstName" />
+              <label for="whatsapp_num">Whatsapp Number:</label>
+              <input type="text" v-model="whatsapp_num" id="whatsapp_num" />
             </div>
             <div class="form-element">
-              <label for="agentFirstName">Email:</label>
-              <input type="text" id="agentFirstName" />
+              <label for="email">Email:</label>
+              <input type="text" v-model="email" id="email" />
             </div>
             <div class="form-element">
-              <label for="agentFirstName">Student CV:</label>
-              <input type="file" id="agentFirstName" />
+              <label for="cv">Student CV:</label>
+              <input type="file"  ref="file" @change="handleCvUpload($event)" id="cv" />
             </div>
             <div class="form-element">
               <label for="agentFirstName">Screenshots:</label>
-              <input type="file" id="agentFirstName" />
+              <input type="file" ref="screen"  @change="handleScreenshot($event)" id="agentFirstName" />
             </div>
           </form>
         </div>
@@ -57,7 +57,7 @@
             <b-button variant="dark" class="mr-2" squared @click="hide"
               >Cancel</b-button
             >
-            <b-button variant="success" squared @click="hide">Create</b-button>
+            <b-button variant="success" squared @click="addLead">Create</b-button>
           </div>
         </div>
       </template>
@@ -65,6 +65,77 @@
   </div>
 </template>
 <script>
-export default {};
+import axios from 'axios'
+export default {
+
+  data: () => ({
+    // items: tableData,
+    first_name: '',
+    last_name: '',
+    country: '',
+    email: '',
+    phone: '',
+    whatsapp_num: '',
+    cv:'',
+    screenShot:'',
+  }),
+  methods:{
+    handleCvUpload(event){
+      let vm = this
+      var image = event.target.files[0];
+      const reader = new FileReader();
+              reader.readAsDataURL(image);
+              reader.onload = e =>{
+                  vm.cv = e.target.result;
+                  console.log(this.cv);
+              };
+    },
+    handleScreenshot(event){
+      let vm = this
+      var images = event.target.files[0];
+      const reader = new FileReader();
+        reader.readAsDataURL(images);
+        reader.onload = e =>{
+            vm.screenShot = e.target.result;
+            console.log(this.screenShot);
+      };
+    },
+    addLead() {
+      const vm = this;
+      axios
+        .post(process.env.VUE_APP_API_URL +"/admin/new-leads",{
+          first_name: vm.first_name,
+          last_name:  vm.last_name,
+          country:  vm.country,
+          email:  vm.email,
+          phone:  vm.phone,
+          whatsapp_num:  vm.whatsapp_num,
+          cv: vm.cv,
+          screen_shot: vm.screenShot
+        })
+        .then((response) => {
+          console.log("data::", response.data);
+          vm.cities_options = response.data.data
+        })
+        .catch((errors) => {
+        var err =''
+          if(errors.response.data.errors.email){
+            err+=errors.response.data.errors.email
+          }
+          if(errors.response.data.errors.password){
+            err+=errors.response.data.errors.password
+          }
+          if(errors)
+          this.$toast.error(err, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+        });
+    },
+
+  }
+};
 </script>
 <style lang="scss"></style>

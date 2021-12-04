@@ -15,7 +15,7 @@
             <b-button variant="dark" class="mr-2" squared @click="hide"
               >Cancel</b-button
             >
-            <b-button variant="danger" squared @click="hide"
+            <b-button variant="danger" squared @click="deleteStudent"
               >Confirm Delete</b-button
             >
           </div>
@@ -25,8 +25,37 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+import { mapGetters } from 'vuex';
 export default {
-  props: ["propsindex"],
+  props: ["propsindex","item"],
+  computed:{
+    ...mapGetters(['getSelectedStudent'])
+  },
+
+  methods:{
+      deleteStudent() {
+      const vm = this;
+      axios
+        .delete(process.env.VUE_APP_API_URL +"/admin/students/"+this.getSelectedStudent)
+        .then((response) => {
+           vm.isModalVisible = false;
+           vm.$toast.success(response.data.message, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+        });
+    },
+  }
+
 };
 </script>
 <style lang="scsss"></style>

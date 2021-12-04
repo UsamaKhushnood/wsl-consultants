@@ -55,7 +55,7 @@
                   <b-avatar variant="danger" size="80"></b-avatar>
                 </div>
 
-                <h4>Student Name</h4>
+                <h4>{{getSelectedStudent.first_name}}</h4>
               </div>
 
               <!-- Panel widget start -->
@@ -80,6 +80,7 @@
                 </b-card-text>
               </b-card>
               <b-card
+                v-show="getSelectedStudent.student_info !=null"
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -89,9 +90,7 @@
               >
                 <b-card-text>
                   <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Inventore accusamus ducimus consequuntur vel asperiores nemo
-                    maiores neque, minus corrupti assumenda
+                    {{getSelectedStudent.student_info !=null ? getSelectedStudent.student_info.query : ""}}
                   </p>
                 </b-card-text>
               </b-card>
@@ -145,14 +144,6 @@
               <p>File...</p>
               <h5>Qualification</h5>
               <p>Intermediate</p>
-              <h5>Qualification</h5>
-              <p>Intermediate</p>
-              <h5>Qualification</h5>
-              <p>Intermediate</p>
-              <h5>Qualification</h5>
-              <p>Intermediate</p>
-              <h5>Qualification</h5>
-              <p>Intermediate</p>
             </div>
           </div>
         </div>
@@ -161,12 +152,16 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import usersData from "./userData";
 export default {
   props: ["propsindex"],
   data: () => ({
     items: usersData,
   }),
+  computed:{
+    ...mapGetters(['getSelectedStudent'])
+  },
   methods: {
     getBadge(status) {
       return status === "Active"

@@ -18,7 +18,7 @@
       style="position: relative; overflow: auto !important;"
     >
       <li class="c-sidebar-nav-title" v-if="getUser.type == 'admin'">Admin</li>
-      <li class="c-sidebar-nav-item">
+      <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
         <router-link
           active-class="c-active"
           to="/dashboard"
@@ -31,7 +31,7 @@
           Dashboard
         </router-link>
       </li>
-      <li class="c-sidebar-nav-item">
+      <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
         <router-link
           active-class="c-active"
           to="/dashboard/newrequest"
@@ -56,7 +56,7 @@
           Add New Agent
         </router-link>
       </li>
-      <li class="c-sidebar-nav-item">
+      <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
         <router-link
           active-class="c-active"
           to="/form"
@@ -223,14 +223,17 @@
           </li>
         </b-collapse>
       </li>
-      <li class="c-sidebar-nav-title" v-if="getUser.type == 'admin'">
+
+      
+      <li class="c-sidebar-nav-title" v-if="getUser.type == 'Sales Agent'">
         Sales Department
       </li>
 
-      <li class="c-sidebar-nav-item">
+      <li class="c-sidebar-nav-item" v-if="getUser.type == 'Sales Agent'">
+        <!-- Dashboard/Sales  -->
         <router-link
           active-class="c-active"
-          to="/Dashboard/Sales"
+          to="/dashboard"
           aria-current="page"
           class="router-link-exact-active c-sidebar-nav-link"
           target="_self"
@@ -242,7 +245,7 @@
           Dashboard
         </router-link>
       </li>
-      <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'admin'">
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'Sales Agent'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-sales>
           <i class="c-sidebar-nav-icon fa fa-cubes" aria-hidden="true"></i>
           Leads
@@ -305,13 +308,15 @@
           </li>
         </b-collapse>
       </li>
-      <li class="c-sidebar-nav-title" v-if="getUser.type == 'admin'">
+
+      <li class="c-sidebar-nav-title" v-if="getUser.type == 'Call Center Agent'">
         Call Center Department
       </li>
-      <li class="c-sidebar-nav-item">
+      <li class="c-sidebar-nav-item" v-if="getUser.type == 'Call Center Agent'">
+        <!-- Dashboard/CallCenter -->
         <router-link
           active-class="c-active"
-          to="/Dashboard/CallCenter"
+          to="/dashboard"
           aria-current="page"
           class="router-link-exact-active c-sidebar-nav-link"
           target="_self"
@@ -321,7 +326,7 @@
         </router-link>
       </li>
 
-      <li class="c-sidebar-nav-item">
+      <li class="c-sidebar-nav-item" v-if="getUser.type == 'Call Center Agent'">
         <router-link
           active-class="c-active"
           to="/form"
@@ -336,7 +341,7 @@
         </router-link>
       </li>
 
-      <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'admin'">
+      <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'Call Center Agent'">
         <a
           class="c-sidebar-nav-dropdown-toggle"
           v-b-toggle.accordion-call-center

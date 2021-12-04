@@ -10,6 +10,7 @@ const state = {
   authentication_token: false,
   showSpinner: false,
   user: '',
+  current_student: '',
 }
 
 
@@ -39,10 +40,12 @@ const mutations = {
   SET_AUTH_TOKEN(state, data) {
     state.authentication_token = data;
   },
+  SET_CURRENT_STUDENT(state, data) {
+    state.current_student = data;
+  },
   SET_USER(state, data) {
     state.user = data;
     console.log('sd',data)
-
   },
   SET_MODEL_STATUS(state, data) {
     state.model_status = data;
@@ -57,6 +60,9 @@ const mutations = {
     },
     getUser(state) {
       return state.user;
+    },
+    getSelectedStudent(state) {
+      return state.current_student;
     },
     getReceiver(state) {
       return state.receiver_data;

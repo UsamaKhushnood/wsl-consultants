@@ -50,7 +50,7 @@
                       type="radio"
                       name="agentType"
                       id="callCenterAgent"
-                      value="callCenterAgent"
+                      value="Call Center Agent"
                       v-model="agentType"
                     >
                       Call Center Agent</b-form-radio
@@ -61,7 +61,7 @@
                       type="radio"
                       name="agentType"
                       id="saleAgent"
-                      value="saleAgent"
+                      value="Sales Agent"
                       v-model="agentType"
                       >Sales Agent
                     </b-form-radio>
@@ -87,20 +87,20 @@
             </div>
             <div
               class="agent d-flex p-3 bg-gray-100 mb-2 align-items-center"
-              v-for="(i, x) in 4"
+              v-for="(i, x) in agents_list"
               :key="x"
             >
               <div class="mr-3">
                 <b-avatar></b-avatar>
               </div>
               <div>
-                <h5 class="mb-0">Agent Name</h5>
-                <p class="m-0">agent role</p>
+                <h5 class="mb-0">{{i.first_name}}</h5>
+                <p class="m-0">{{i.type}}</p>
               </div>
               <div class="ml-auto ">
                 <b-button size="sm" variant="dark">Copy Credentials</b-button>
-                <b-button size="sm" variant="danger" class="ml-1">
-                  <b-icon icon="trash"></b-icon>
+                <b-button size="sm" variant="danger" class="ml-1"   @click="deleteAgents(i.id)">
+                  <b-icon icon="trash" ></b-icon>
                 </b-button>
               </div>
             </div>
@@ -111,6 +111,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -119,6 +120,7 @@ export default {
       last_name: "",
       email: "",
       password: "",
+      agents_list: [],
     };
   },
   methods: {
@@ -147,6 +149,10 @@ export default {
             icon: true,
             rtl: false,
           });
+          vm.first_name = '',
+          vm.last_name = '',
+          vm.email = '',
+          vm.password = ''
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$router.push({ name: "Dashboard" });
         })
@@ -168,9 +174,48 @@ export default {
           // vm.$store.commit('SET_SPINNER',false);
         });
     },
+    getAgents() {
+      const vm = this;
+      axios
+        .get(process.env.VUE_APP_API_URL +"/admin/agents")
+        .then((response) => {
+          console.log("data:: agggs", response.data.data);
+          vm.agents_list=response.data.data
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+        }
+      });
+    },
+    deleteAgents(id) {
+      const vm = this;
+      axios
+        .delete(process.env.VUE_APP_API_URL +"/admin/agents/"+id)
+        .then((response) => {
+           vm.isModalVisible = false;
+           vm.$toast.success(response.data.message, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+            vm.getAgents()
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+        });
+    },
     sendTo(url) {
       window.open(url, "_blank");
     },
   },
+  created(){
+    this.getAgents()
+  }
 };
 </script>
