@@ -5,7 +5,7 @@ const tableData = [
     Email: "student@gmail.com",
     Whatsapp: "+999-999999-9",
     PreferredCountry: "USA",
-    Status: "In Progress",
+    Status: null,
     AssignedTo: "Agent",
     PhoneNo: "+999-999999-9",
   },

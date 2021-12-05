@@ -55,10 +55,14 @@
                               v-if="item.agent == null"
                               class="badge badge-pill badge-danger"
                             >
-                             unassigned
+                              unassigned
                             </span>
                             <span v-else>
-                              {{ item.agent == null ? "unassigned" :item.agent.first_name }}
+                              {{
+                                item.agent == null
+                                  ? "unassigned"
+                                  : item.agent.first_name
+                              }}
                             </span>
                           </td>
                         </template>
@@ -92,21 +96,21 @@
                         <template #StudentName="{item}">
                           <td>
                             <p>
-                              {{  item.first_name+item.last_name }}
+                              {{ item.first_name + item.last_name }}
                             </p>
                           </td>
                         </template>
                         <template #CreateDate="{item}">
                           <td>
                             <p>
-                              {{  item.created_at }}
+                              {{ item.created_at }}
                             </p>
                           </td>
                         </template>
                         <template #PreferredCountry="{item}">
                           <td>
                             <p>
-                              {{  item.country }}
+                              {{ item.country }}
                             </p>
                           </td>
                         </template>
@@ -123,19 +127,32 @@
                         </template>
                         <template #Status="{item}">
                           <td class="status text-center">
+                            <b-form-select
+                              v-if="item.Status === null"
+                              size="sm"
+                              v-model="item.Status"
+                              :options="[
+                                'Matured',
+                                'in progress',
+                                'Approved',
+                                'Rejected',
+                                'On Hold',
+                              ]"
+                            ></b-form-select>
                             <span
+                              v-else
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'in progress'
+                                item.Status.toLowerCase() == 'in progress'
                                   ? 'badge-info'
-                                  : item.status == 'approved'
+                                  : item.Status.toLowerCase() == 'approved'
                                   ? 'badge-success'
-                                  : item.status == 'rejected'
+                                  : item.Status.toLowerCase() == 'rejected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
-                              {{ item.status }}
+                              {{ item.Status }}
                             </span>
                           </td>
                         </template>
@@ -213,6 +230,7 @@
 </template>
 
 <script>
+
   import tableData from "../tableData";
   import WidgetsDropdown from "../widgets/WidgetsDropdown";
   import AllPopups from "@/views/new-request-data/AllPopups.vue";
@@ -260,17 +278,15 @@ import { mapGetters } from 'vuex';
         // this.deleteStudentId = data
         this.$store.commit('SET_CURRENT_STUDENT',data)
       },
-
-      currentStudent(data){
-        this.$store.commit('SET_CURRENT_STUDENT',{})
-        this.$store.commit('SET_CURRENT_STUDENT',data)
-      }
+    currentStudent(data) {
+      this.$store.commit("SET_CURRENT_STUDENT", {});
+      this.$store.commit("SET_CURRENT_STUDENT", data);
     },
-    mounted(){
-      this.getStudent()
-    }
-
-  };
+  },
+  mounted() {
+    this.getStudent();
+  },
+};
 </script>
 
 <style lang="scss">
