@@ -1,84 +1,25 @@
 <template>
   <div>
+    <div class=" mb-4 ">
+      <div class="row m-0">
+        <div class="col-12 p-4  welcomeCard bg-white ">
+          <div class="day">
+            <h4>
+              {{ getWeekDay }},
+              {{ getCurrentMonth + " " + new Date().getDate() }}
+            </h4>
+            <h1 class="mb-0 Greetings">
+              Good {{ getGreetings }}, <br />
+              <span>
+                Usama Khushnood.
+              </span>
+            </h1>
+          </div>
+        </div>
+        <!-- <div class="col-4"></div> -->
+      </div>
+    </div>
     <WidgetsDropdown />
-    <!-- <CCard>
-      <CCardBody>
-        <CRow>
-          <CCol sm="5">
-            <h4 id="traffic" class="card-title mb-0">Traffic</h4>
-            <div class="small text-muted">November 2017</div>
-          </CCol>
-          <CCol sm="7" class="d-none d-md-block">
-            <CButton color="primary" class="float-right">
-              <CIcon name="cil-cloud-download" />
-            </CButton>
-            <CButtonGroup class="float-right mr-3">
-              <CButton
-                color="outline-secondary"
-                v-for="(value, key) in ['Day', 'Month', 'Year']"
-                :key="key"
-                class="mx-0"
-                :pressed="value === selected ? true : false"
-                @click="selected = value"
-              >
-                {{ value }}
-              </CButton>
-            </CButtonGroup>
-          </CCol>
-        </CRow>
-        <MainChartExample style="height:300px;margin-top:40px;" />
-      </CCardBody>
-      <CCardFooter>
-        <CRow class="text-center">
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Visits</div>
-            <strong>29.703 Users (40%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="success"
-              :value="40"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Unique</div>
-            <strong>24.093 Users (20%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="info"
-              :value="20"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Pageviews</div>
-            <strong>78.706 Views (60%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="warning"
-              :value="60"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">New Users</div>
-            <strong>22.123 Users (80%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="danger"
-              :value="80"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Bounce Rate</div>
-            <strong>Average Rate (40.15%)</strong>
-            <CProgress class="progress-xs mt-2" :precision="1" :value="40" />
-          </CCol>
-        </CRow>
-      </CCardFooter>
-    </CCard> -->
-
     <CRow>
       <CCol md="12">
         <CCard>
@@ -391,7 +332,7 @@
 import MainChartExample from "./charts/MainChartExample";
 import WidgetsDropdown from "./widgets/WidgetsDropdown";
 import WidgetsBrand from "./widgets/WidgetsBrand";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   name: "Dashboard",
@@ -487,8 +428,64 @@ export default {
       return $color;
     },
   },
-  computed:{
-    ...mapGetters(['getUser'])
-  }
+  computed: {
+    ...mapGetters(["getUser"]),
+    getWeekDay() {
+      var weekday = new Array(
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      );
+      var day = weekday[new Date().getDay()];
+      return day;
+    },
+    getCurrentMonth() {
+      var months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      var month = months[new Date().getMonth()];
+      return month;
+    },
+    getGreetings() {
+      var curHr = new Date().getHours();
+      if (curHr < 12) {
+        return "Morning";
+      } else if (curHr < 18) {
+        return "Afternoon";
+      } else {
+        return "Evening";
+      }
+    },
+  },
 };
 </script>
+<style lang="scss">
+.welcomeCard {
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  .day h4 {
+    font-family: "Lato", sans-serif;
+    font-weight: 900;
+  }
+  h1.Greetings {
+    font-family: "Lora", serif;
+    font-size: 40px;
+    line-height: 40px;
+  }
+}
+</style>
