@@ -159,6 +159,7 @@
                               data-toggle="modal"
                               class="btn menu-icon vd_bd-yellow vd_yellow"
                               v-b-modal="'successfully-added-modal' + index"
+                              v-if="getUser.typr =='admin'"
                               @click="currentStudent(item)"
                             >
                               <i
@@ -174,6 +175,7 @@
                               class="btn menu-icon vd_bd-red vd_red"
                               v-b-modal="'deny-request-modal' + index"
                               :item="item.id"
+                                v-if="getUser.typr =='admin'"
                             >
                               <i
                                 v-b-tooltip.hover
@@ -216,6 +218,7 @@
   import AllPopups from "@/views/new-request-data/AllPopups.vue";
   import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
   import axios from 'axios';
+import { mapGetters } from 'vuex';
   export default {
     name: "NewRequest",
     components: { WidgetsDropdown, AllPopups, CreateNewLead },
@@ -224,12 +227,24 @@
       items: [],
       deleteStudentId: '',
     }),
+    computed:{
+      ...mapGetters(['getUser'])
+    },
     methods:{
       getStudent() {
         const vm = this;
-        
+        console.log(vm.getUser.type)
+        let url ='';
+        if(vm.getUser.type =='Sales Agent'){
+            url = process.env.VUE_APP_API_URL +"/sales-agent/students";
+        }else if(vm.getUser.type =='Call Center Agent'){
+            url = process.env.VUE_APP_API_URL +"/call-agent/students";
+        }
+        else{
+            url = process.env.VUE_APP_API_URL +"/admin/students";
+        }
         axios
-          .get(process.env.VUE_APP_API_URL +"/admin/students")
+          .get(url)
           .then((response) => {
             console.log("data::", response.data.data);
             vm.items = response.data.data.allLead

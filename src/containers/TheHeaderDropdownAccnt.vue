@@ -16,7 +16,7 @@
       </CHeaderNavLink>
     </template>
     <CDropdownHeader tag="div" class="text-center" color="light">
-      <strong>Account</strong>
+      <strong>{{getUser.first_name}} Account</strong>
     </CDropdownHeader>
     <CDropdownItem>
       <CIcon name="cil-bell"/> Updates
@@ -59,12 +59,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: 'TheHeaderDropdownAccnt',
   data () {
     return { 
       itemsCount: 42
     }
+  },
+  computed:{
+    ...mapGetters(['getUser'])
   },
   methods: {
     trigger() {

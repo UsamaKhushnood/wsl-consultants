@@ -62,7 +62,7 @@ export default {
     getAgents() {
       const vm = this;
       axios
-        .get(process.env.VUE_APP_API_URL +"/admin/agents")
+        .get(process.env.VUE_APP_API_URL +"/admin/sale-agents")
         .then((response) => {
           console.log("data::", response.data.data);
           let arr = response.data.data;
