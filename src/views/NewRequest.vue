@@ -103,7 +103,20 @@
                         </template>
                         <template #Status="{item}">
                           <td class="status text-center">
+                            <b-form-select
+                              v-if="item.Status === null"
+                              size="sm"
+                              v-model="item.Status"
+                              :options="[
+                                'Matured',
+                                'in progress',
+                                'Approved',
+                                'Rejected',
+                                'On Hold',
+                              ]"
+                            ></b-form-select>
                             <span
+                              v-else
                               class="badge badge-pill"
                               :class="[
                                 item.Status.toLowerCase() == 'in progress'
