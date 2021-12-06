@@ -39,8 +39,17 @@
                 <input type="email" id="email" v-model="email" />
               </div>
               <div class="form-element">
-                <label for="password">Enter password:</label>
-                <input type="password" id="=password" v-model="password" />
+                <div class="row">
+                  <div class="col-8">
+                    <label for="password">Enter password:</label>
+                    <PasswordInput :value="password" />
+                  </div>
+                  <div class="col-4 d-flex align-items-end">
+                    <b-button variant="dark" block @click="getPassword"
+                      >Generate Password
+                    </b-button>
+                  </div>
+                </div>
               </div>
               <div class="form-element">
                 <h6>Select Agent Type:</h6>
@@ -91,16 +100,31 @@
               :key="x"
             >
               <div class="mr-3">
-                <b-avatar></b-avatar>
+                <b-avatar>
+                  {{
+                    i.first_name
+                      .split(" ")
+                      .map((i) => i.charAt(0))
+                      .join("")
+                      .toUpperCase()
+                  }}
+                </b-avatar>
               </div>
               <div>
-                <h5 class="mb-0">{{i.first_name}}</h5>
-                <p class="m-0">{{i.type}}</p>
+                <h5 class="mb-0">{{ i.first_name }}</h5>
+                <p class="m-0">{{ i.type }}</p>
               </div>
               <div class="ml-auto ">
-                <b-button size="sm" variant="dark">Copy Credentials</b-button>
-                <b-button size="sm" variant="danger" class="ml-1"   @click="deleteAgents(i.id)">
-                  <b-icon icon="trash" ></b-icon>
+                <b-button size="sm" variant="dark" @click="copyCredentials(x)"
+                  >Copy Credentials</b-button
+                >
+                <b-button
+                  size="sm"
+                  variant="danger"
+                  class="ml-1"
+                  @click="deleteAgents(i.id)"
+                >
+                  <b-icon icon="trash"></b-icon>
                 </b-button>
               </div>
             </div>
@@ -111,15 +135,17 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from "axios";
+import PasswordInput from "@/components/PasswordInput";
 export default {
+  components: { PasswordInput },
   data() {
     return {
-      agentType: "callCenterAgent",
+      agentType: "Call Center Agent",
       first_name: "",
       last_name: "",
       email: "",
-      password: "",
+      password: null,
       agents_list: [],
     };
   },
@@ -149,10 +175,10 @@ export default {
             icon: true,
             rtl: false,
           });
-          vm.first_name = '',
-          vm.last_name = '',
-          vm.email = '',
-          vm.password = ''
+          (vm.first_name = ""),
+            (vm.last_name = ""),
+            (vm.email = ""),
+            (vm.password = "");
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$router.push({ name: "Dashboard" });
         })
@@ -177,31 +203,31 @@ export default {
     getAgents() {
       const vm = this;
       axios
-        .get(process.env.VUE_APP_API_URL +"/admin/agents")
+        .get(process.env.VUE_APP_API_URL + "/admin/agents")
         .then((response) => {
           console.log("data:: agggs", response.data.data);
-          vm.agents_list=response.data.data
+          vm.agents_list = response.data.data;
         })
         .catch((errors) => {
           var err = "";
           if (errors.response.data.errors.email) {
             err += errors.response.data.errors.email;
-        }
-      });
+          }
+        });
     },
     deleteAgents(id) {
       const vm = this;
       axios
-        .delete(process.env.VUE_APP_API_URL +"/admin/agents/"+id)
+        .delete(process.env.VUE_APP_API_URL + "/admin/agents/" + id)
         .then((response) => {
-           vm.isModalVisible = false;
-           vm.$toast.success(response.data.message, {
-              position: "top-right",
-              closeButton: "button",
-              icon: true,
-              rtl: false,
-            });
-            vm.getAgents()
+          vm.isModalVisible = false;
+          vm.$toast.success(response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          vm.getAgents();
         })
         .catch((errors) => {
           var err = "";
@@ -213,9 +239,66 @@ export default {
     sendTo(url) {
       window.open(url, "_blank");
     },
+    copyCredentials(index) {
+      const vm = this;
+      // first name will replace with password
+      var credentials = `Email: ${this.agents_list[index].email}\nPassword: ${this.agents_list[index].first_name}`;
+      navigator.clipboard.writeText(credentials).then(
+        function() {
+          vm.isModalVisible = false;
+          vm.$toast.success("Successfully Copied", {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+        },
+        function() {
+          vm.isModalVisible = false;
+          vm.$toast.error("Something went wrong", {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+        }
+      );
+    },
+    getPassword() {
+      let pass = "";
+      let length = 12;
+
+      const special = "!#$%&()*+,-./:;<=>?@[\]^_|~".split("");
+      const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const chars = new Array(26)
+        .fill()
+        .map((_, i) => String.fromCharCode(i + 65));
+
+      let availableChars = [...chars];
+      // ensuring at least one number in the output
+      pass += this.randomPick(numbers);
+      length--;
+      availableChars = availableChars.concat(numbers);
+      // ensuring at least one special character in the output
+      pass += this.randomPick(special);
+      length--;
+      availableChars = availableChars.concat(special);
+      for (let i = 0; i < length; i++) {
+        let picked = this.randomPick(availableChars);
+        if (/[A-Z]/.test(picked)) {
+          let lower = Math.random();
+          picked = lower < 0.5 ? picked.toLowerCase() : picked;
+        }
+        pass += picked;
+      }
+      this.password = pass;
+    },
+    randomPick(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    },
   },
-  created(){
-    this.getAgents()
-  }
+  created() {
+    this.getAgents();
+  },
 };
 </script>

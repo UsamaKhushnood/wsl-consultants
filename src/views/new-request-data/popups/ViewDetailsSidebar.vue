@@ -55,7 +55,7 @@
                   <b-avatar variant="danger" size="80"></b-avatar>
                 </div>
 
-                <h4>{{getSelectedStudent.first_name}}</h4>
+                <h4>{{ getSelectedStudent.first_name }}</h4>
               </div>
 
               <!-- Panel widget start -->
@@ -68,19 +68,40 @@
                 class="mt-2"
               >
                 <b-card-text>
-                  <b-button class="btn btn-success btn-sm">
+                  <a
+                    class="btn btn-success btn-sm"
+                    :href="
+                      'https://api.whatsapp.com/send?phone=' +
+                        getSelectedStudent.whatsapp
+                    "
+                    target="_blank"
+                    v-b-tooltip.hover
+                    title="Click To Open Whatsapp"
+                  >
                     <i class="fa fa-whatsapp"></i>
-                  </b-button>
-                  <b-button class="btn btn-dark btn-sm ml-2">
-                    <i class="fa fa-phone-alt"></i>
-                  </b-button>
-                  <b-button class="btn btn-danger btn-sm ml-2">
+                  </a>
+                  <a
+                    class="btn btn-dark btn-sm ml-2"
+                    :href="'mailto:' + getSelectedStudent.Email"
+                    target="_blank"
+                    v-b-tooltip.hover
+                    title="Click To Send Email"
+                  >
                     <i class="far fa-envelope"></i>
-                  </b-button>
+                  </a>
+
+                  <a
+                    class="btn btn-danger btn-sm ml-2"
+                    :href="'tel:' + getSelectedStudent.PhoneNo"
+                    v-b-tooltip.hover
+                    title="Click To Make Phone Call"
+                  >
+                    <i class="fa fa-phone-alt"></i>
+                  </a>
                 </b-card-text>
               </b-card>
               <b-card
-                v-show="getSelectedStudent.student_info !=null"
+                v-show="getSelectedStudent.student_info != null"
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -90,7 +111,11 @@
               >
                 <b-card-text>
                   <p>
-                    {{getSelectedStudent.student_info !=null ? getSelectedStudent.student_info.query : ""}}
+                    {{
+                      getSelectedStudent.student_info != null
+                        ? getSelectedStudent.student_info.query
+                        : ""
+                    }}
                   </p>
                 </b-card-text>
               </b-card>
@@ -111,7 +136,15 @@
                   </h6>
 
                   <div class="text-center mb-2">
-                    <b-avatar variant="dark" size="80">AN</b-avatar>
+                    <b-avatar variant="dark" size="80">
+                      {{
+                        "Agent Name"
+                          .split(" ")
+                          .map((i) => i.charAt(0))
+                          .join("")
+                          .toUpperCase()
+                      }}</b-avatar
+                    >
                   </div>
                   <h4 class="text-center">Agent's Name</h4>
                   <div class="text-center">
@@ -128,7 +161,15 @@
                     Assing To
                   </h6>
                   <div class="text-center mb-2">
-                    <b-avatar variant="dark" size="80">AN</b-avatar>
+                    <b-avatar variant="dark" size="80">
+                      {{
+                        "Agent Name"
+                          .split(" ")
+                          .map((i) => i.charAt(0))
+                          .join("")
+                          .toUpperCase()
+                      }}</b-avatar
+                    >
                   </div>
                   <h4 class="text-center">Agent's Name</h4>
                   <div class="text-center">
@@ -152,15 +193,15 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import usersData from "./userData";
 export default {
   props: ["propsindex"],
   data: () => ({
     items: usersData,
   }),
-  computed:{
-    ...mapGetters(['getSelectedStudent'])
+  computed: {
+    ...mapGetters(["getSelectedStudent"]),
   },
   methods: {
     getBadge(status) {
