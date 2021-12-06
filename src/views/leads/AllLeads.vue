@@ -128,9 +128,9 @@
                         <template #Status="{item}">
                           <td class="status text-center">
                             <b-form-select
-                              v-if="item.Status === null"
+                              v-if="getUser.type === 'Sales Agent' || getUser.type === 'admin' "
                               size="sm"
-                              v-model="item.Status"
+                              v-model="item.status"
                               :options="[
                                 'Matured',
                                 'in progress',
@@ -140,19 +140,18 @@
                               ]"
                             ></b-form-select>
                             <span
-                              v-else
                               class="badge badge-pill"
                               :class="[
-                                item.Status.toLowerCase() == 'in progress'
+                                item.status == 'in progress'
                                   ? 'badge-info'
-                                  : item.Status.toLowerCase() == 'approved'
+                                  : item.status == 'approved'
                                   ? 'badge-success'
-                                  : item.Status.toLowerCase() == 'rejected'
+                                  : item.status == 'rejected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
-                              {{ item.Status }}
+                              {{ item.status }}
                             </span>
                           </td>
                         </template>
@@ -176,7 +175,7 @@
                               data-toggle="modal"
                               class="btn menu-icon vd_bd-yellow vd_yellow"
                               v-b-modal="'successfully-added-modal' + index"
-                              v-if="getUser.typr =='admin'"
+                              v-if="getUser.type === 'admin'"
                               @click="currentStudent(item)"
                             >
                               <i
@@ -192,7 +191,7 @@
                               class="btn menu-icon vd_bd-red vd_red"
                               v-b-modal="'deny-request-modal' + index"
                               :item="item.id"
-                                v-if="getUser.typr =='admin'"
+                                v-if="getUser.type =='admin'"
                             >
                               <i
                                 v-b-tooltip.hover

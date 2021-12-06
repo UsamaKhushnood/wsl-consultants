@@ -123,6 +123,18 @@
                         </template>
                         <template #Status="{item}">
                           <td class="status text-center">
+                            <b-form-select
+                              v-if="getUser.type === 'Sales Agent' || getUser.type === 'admin' "
+                              size="sm"
+                              v-model="item.status"
+                              :options="[
+                                'Matured',
+                                'in progress',
+                                'Approved',
+                                'Rejected',
+                                'On Hold',
+                              ]"
+                            ></b-form-select>
                             <span
                               class="badge badge-pill"
                               :class="[
@@ -146,6 +158,7 @@
                               data-toggle="modal"
                               class="btn menu-icon vd_bd-green vd_green"
                               v-b-toggle="'view-details-sidebar' + index"
+                              @click="currentStudent(item)"
                             >
                               <i
                                 class="fa fa-eye"
@@ -158,6 +171,7 @@
                               data-toggle="modal"
                               class="btn menu-icon vd_bd-yellow vd_yellow"
                               v-b-modal="'successfully-added-modal' + index"
+                              v-if="getUser.type === 'admin'"
                               @click="currentStudent(item)"
                             >
                               <i
@@ -173,6 +187,7 @@
                               class="btn menu-icon vd_bd-red vd_red"
                               v-b-modal="'deny-request-modal' + index"
                               :item="item.id"
+                                v-if="getUser.type =='admin'"
                             >
                               <i
                                 v-b-tooltip.hover
