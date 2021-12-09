@@ -128,26 +128,31 @@
                         <template #Status="{item}">
                           <td class="status text-center">
                             <b-form-select
-                              v-if="getUser.type === 'Sales Agent' || getUser.type === 'admin' "
+                              v-if="
+                                getUser.type === 'Sales Agent' ||
+                                  getUser.type === 'admin'
+                              "
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
                               :options="[
-                                'Matured',
+                                'New Lead',
                                 'in progress',
-                                'Approved',
-                                'Rejected',
-                                'On Hold',
+                                'Expected',
+                                'Not Expected',
+                                'Applied',
                               ]"
                             ></b-form-select>
                             <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'in progress'
+                                item.status.toLowerCase() == 'in progress' ||
+                                item.status.toLowerCase() == 'new lead'
                                   ? 'badge-info'
-                                  : item.status == 'approved'
+                                  : item.status.toLowerCase() == 'expected' ||
+                                    item.status.toLowerCase() == 'applied'
                                   ? 'badge-success'
-                                  : item.status == 'rejected'
+                                  : item.status.toLowerCase() == 'not expected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
@@ -192,13 +197,27 @@
                               class="btn menu-icon vd_bd-red vd_red"
                               v-b-modal="'deny-request-modal' + index"
                               :item="item.id"
-                                v-if="getUser.type =='admin'"
+                              v-if="getUser.type == 'admin'"
                             >
                               <i
                                 v-b-tooltip.hover
                                 title="Delete"
                                 @click="setStudent(item.id)"
                                 class="fa fa-trash"
+                              ></i>
+                            </a>
+                            <a
+                              data-target="#denyRequest"
+                              data-toggle="modal"
+                              class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
+                              v-b-modal="'add-note-modal' + index"
+                              :item="item.id"
+                              v-if="getUser.type == 'admin'"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Add Note"
+                                class="fa fa-pen"
                               ></i>
                             </a>
                             <!-- <a
@@ -230,93 +249,96 @@
 </template>
 
 <script>
-
-  import tableData from "../tableData";
-  import WidgetsDropdown from "../widgets/WidgetsDropdown";
-  import AllPopups from "@/views/new-request-data/AllPopups.vue";
-  import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-  import axios from 'axios';
-import { mapGetters } from 'vuex';
-  export default {
-    name: "NewRequest",
-    components: { WidgetsDropdown, AllPopups, CreateNewLead },
-    data: () => ({
-      // items: tableData,
-      items: [],
-      deleteStudentId: '',
-    }),
-    computed:{
-      ...mapGetters(['getUser'])
+import tableData from "../tableData";
+import WidgetsDropdown from "../widgets/WidgetsDropdown";
+import AllPopups from "@/views/new-request-data/AllPopups.vue";
+import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
+import axios from "axios";
+import { mapGetters } from "vuex";
+export default {
+  name: "NewRequest",
+  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  data: () => ({
+    // items: tableData,
+    items: [],
+    deleteStudentId: "",
+  }),
+  computed: {
+    ...mapGetters(["getUser"]),
+    computedItems() {
+      return items.map((item) => {
+        return { ...item, agent: item.agent.first_name };
+      });
     },
-    methods:{
-      getStudent() {
-        const vm = this;
-        console.log(vm.getUser.type)
-        let url ='';
-        if(vm.getUser.type =='Sales Agent'){
-            url = process.env.VUE_APP_API_URL +"/sales-agent/students";
-        }else if(vm.getUser.type =='Call Center Agent'){
-            url = process.env.VUE_APP_API_URL +"/call-agent/students";
-        }
-        else{
-            url = process.env.VUE_APP_API_URL +"/admin/students";
-        }
-        axios
-          .get(url)
-          .then((response) => {
-            console.log("data::", response.data.data);
-            vm.items = response.data.data.allLead
-          })
-          .catch((errors) => {
-            var err = "";
-            if (errors.response.data.errors.email) {
-              err += errors.response.data.errors.email;
-            }
+  },
+  methods: {
+    getStudent() {
+      const vm = this;
+      console.log(vm.getUser.type);
+      let url = "";
+      if (vm.getUser.type == "Sales Agent") {
+        url = process.env.VUE_APP_API_URL + "/sales-agent/students";
+      } else if (vm.getUser.type == "Call Center Agent") {
+        url = process.env.VUE_APP_API_URL + "/call-agent/students";
+      } else {
+        url = process.env.VUE_APP_API_URL + "/admin/students";
+      }
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("data::", response.data.data);
+          vm.items = response.data.data.allLead;
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+        });
+    },
+    setStudent(data) {
+      // this.deleteStudentId = data
+      this.$store.commit("SET_CURRENT_STUDENT", data);
+    },
+    changeStatus(item) {
+      const vm = this;
+      console.log(item.status);
+      let url = "";
+      if (vm.getUser.type == "admin") {
+        url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
+      } else {
+        url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
+      }
+      axios
+        .post(url, {
+          status: item.status,
+        })
+        .then((response) => {
+          console.log("data::", response.data);
+          vm.$toast.success(response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
           });
-      },
-      setStudent(data) {
-        // this.deleteStudentId = data
-        this.$store.commit('SET_CURRENT_STUDENT',data)
-      },
-      changeStatus(item) {
-        const vm = this;
-        console.log(item.status)
-        let url ="";
-        if(vm.getUser.type =='admin'){
-          url =process.env.VUE_APP_API_URL +"/admin/status/"+item.id;
-        }else{
-          url =process.env.VUE_APP_API_URL +"/sales-agent/status/"+item.id;
-        }
-        axios
-          .post(url,{
-            status: item.status,
-            })
-          .then((response) => {
-            console.log("data::", response.data);
-              vm.$toast.success(response.data.message, {
-                position: "top-right",
-                closeButton: "button",
-                icon: true,
-                rtl: false,
-              });
-              vm.getStudent()
-          })
-          .catch((errors) => {
-          var err =''
-            if(errors.response.data.errors.email){
-              err+=errors.response.data.errors.email
-            }
-            if(errors.response.data.errors.password){
-              err+=errors.response.data.errors.password
-            }
-            if(errors)
+          vm.getStudent();
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+          if (errors.response.data.errors.password) {
+            err += errors.response.data.errors.password;
+          }
+          if (errors)
             this.$toast.error(err, {
               position: "top-right",
               closeButton: "button",
               icon: true,
               rtl: false,
             });
-          });
+        });
     },
     currentStudent(data) {
       this.$store.commit("SET_CURRENT_STUDENT", {});
@@ -324,10 +346,10 @@ import { mapGetters } from 'vuex';
     },
   },
   mounted() {
-     let vm = this
-    setTimeout(function(){
+    let vm = this;
+    setTimeout(function() {
       vm.getStudent();
-    },1000)
+    }, 1000);
   },
 };
 </script>
