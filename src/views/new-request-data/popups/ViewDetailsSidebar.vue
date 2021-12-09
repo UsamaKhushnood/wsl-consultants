@@ -23,22 +23,22 @@
         <div
           class="d-flex align-items-center justify-content-center bg-danger vd_white headerSecondary"
         >
-          <div class="col-md-2 pdng5-0 col-md-offset-3 text-center">
+          <div class="col-md-2 pdng5-0 col-md-offset-3 text-center" >
             <h6 class="mrgn0">
               Student Form ID:
-              <span>112223443</span>
+              <span>{{getSelectedStudent.id}}</span>
             </h6>
           </div>
           <div class="col-md-2 pdng5-0 text-center">
             <h6 class="mrgn0">
               Preferred Country:
-              <span>USA</span>
+              <span>{{getSelectedStudent.country}}</span>
             </h6>
           </div>
           <div class="col-md-2 pdng5-0 text-center">
             <h6 class="mrgn0">
               Status:
-              <span>Matured</span>
+              <span>{{getSelectedStudent.status}}</span>
             </h6>
           </div>
         </div>
@@ -55,7 +55,7 @@
                   <b-avatar variant="danger" size="80"></b-avatar>
                 </div>
 
-                <h4>{{ getSelectedStudent.first_name }}</h4>
+                <h4>{{ getSelectedStudent.first_name +' '+getSelectedStudent.last_name}}</h4>
               </div>
 
               <!-- Panel widget start -->
@@ -72,7 +72,7 @@
                     class="btn btn-success btn-sm"
                     :href="
                       'https://api.whatsapp.com/send?phone=' +
-                        getSelectedStudent.whatsapp
+                        getSelectedStudent.whatsapp_num
                     "
                     target="_blank"
                     v-b-tooltip.hover
@@ -82,7 +82,7 @@
                   </a>
                   <a
                     class="btn btn-dark btn-sm ml-2"
-                    :href="'mailto:' + getSelectedStudent.Email"
+                    :href="'mailto:' + getSelectedStudent.email"
                     target="_blank"
                     v-b-tooltip.hover
                     title="Click To Send Email"
@@ -92,7 +92,7 @@
 
                   <a
                     class="btn btn-danger btn-sm ml-2"
-                    :href="'tel:' + getSelectedStudent.PhoneNo"
+                    :href="'tel:' + getSelectedStudent.phone"
                     v-b-tooltip.hover
                     title="Click To Make Phone Call"
                   >
@@ -179,12 +179,24 @@
                   </div>
                 </div>
               </div>
-              <h3 class="mt-3">Student Details</h3>
+         
               <hr class="mrgn10-0" />
-              <h5>Student CV</h5>
-              <p>File...</p>
-              <h5>Qualification</h5>
-              <p>Intermediate</p>
+              <h5>Student Email</h5>
+               <p>{{getSelectedStudent.email}}</p>
+              <h5>Student Phone</h5>
+              <p>{{getSelectedStudent.phone}}</p>
+              <div class="" v-if="getSelectedStudent.student_info">
+                <h5>Qualification</h5>
+                <p>{{getSelectedStudent.student_info.qualification}}</p>
+                <h5>CGPA</h5>
+                <p>{{getSelectedStudent.student_info.cgpa}}</p>
+                 <h5>Major Subjects</h5>
+                <p>{{getSelectedStudent.student_info.major_sub}}</p>
+                 <h5>Passing Year</h5>
+                <p>{{getSelectedStudent.student_info.passing_year}}</p>
+               
+              </div>
+         
             </div>
           </div>
         </div>

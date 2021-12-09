@@ -175,6 +175,7 @@ export default {
             icon: true,
             rtl: false,
           });
+          vm.getAgents()
           (vm.first_name = ""),
             (vm.last_name = ""),
             (vm.email = ""),
@@ -242,7 +243,7 @@ export default {
     copyCredentials(index) {
       const vm = this;
       // first name will replace with password
-      var credentials = `Email: ${this.agents_list[index].email}\nPassword: ${this.agents_list[index].first_name}`;
+      var credentials = `Email: ${this.agents_list[index].email}\nPassword: ${this.agents_list[index].encrypt_password}`;
       navigator.clipboard.writeText(credentials).then(
         function() {
           vm.isModalVisible = false;
@@ -252,6 +253,7 @@ export default {
             icon: true,
             rtl: false,
           });
+          console.log(credentials)
         },
         function() {
           vm.isModalVisible = false;

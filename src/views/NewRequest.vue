@@ -222,6 +222,7 @@ export default {
   }),
 };
 </script>
+
 <style lang="scss">
 #newrequest .col-sm-6.p-0.offset-sm-6 {
   padding: 5px 20px !important;

@@ -22,13 +22,6 @@ const Register = () => import("@/views/pages/Register");
 
 Vue.use(Router);
 
-export default new Router({
-  mode: "history",
-  linkActiveClass: "active",
-  scrollBehavior: () => ({ y: 0 }),
-  routes: configRoutes(),
-});
-
 function configRoutes() {
   return [
     {
@@ -129,3 +122,27 @@ function configRoutes() {
     },
   ];
 }
+
+
+let  router =  new Router({
+  mode: "history",
+  linkActiveClass: "active",
+  scrollBehavior: () => ({ y: 0 }),
+  routes: configRoutes(),
+});
+
+router.beforeEach((to, from, next) => {
+  
+  if (!localStorage.getItem('token')) {
+      // checking to avoid loop
+      if (to.name === 'Login' || to.name === 'ForgetPassword' ||to.name ==='Student Form'  ) return next();
+      next({
+          path: '/'
+      });
+  }
+  else {
+     next();
+  }
+});
+
+export default router;

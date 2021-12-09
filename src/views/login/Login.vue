@@ -101,6 +101,14 @@ export default {
 
         })
         .catch((errors) => {
+          if(errors.response.data){
+            this.$toast.error(errors.response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          }
           var err =''
           if(errors.response.data.errors.email){
             err+=errors.response.data.errors.email
@@ -108,6 +116,7 @@ export default {
           if(errors.response.data.errors.password){
             err+=errors.response.data.errors.password
           }
+          
           if(errors)
           this.$toast.error(err, {
             position: "top-right",

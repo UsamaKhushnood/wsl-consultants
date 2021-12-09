@@ -127,6 +127,7 @@
                               v-if="getUser.type === 'Sales Agent' || getUser.type === 'admin' "
                               size="sm"
                               v-model="item.status"
+                              @change="changeStatus(item)"
                               :options="[
                                 'Matured',
                                 'in progress',
@@ -230,6 +231,7 @@ import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 export default {
   name: "NewRequest",
   components: { WidgetsDropdown, AllPopups, CreateNewLead },
@@ -238,7 +240,9 @@ export default {
     items: [],
     deleteStudentId: '',
   }),
-
+  computed:{
+    ...mapGetters(['getUser'])
+  },
     methods:{
     getStudent() {
       const vm = this;
@@ -264,7 +268,47 @@ export default {
     currentStudent(data){
       console.log(data)
       this.$store.commit('SET_CURRENT_STUDENT',data)
-    }
+    },
+    changeStatus(item) {
+        const vm = this;
+        console.log(item.status)
+        let url ="";
+        if(vm.getUser.type =='admin'){
+          url =process.env.VUE_APP_API_URL +"/admin/status/"+item.id;
+        }else{
+          url =process.env.VUE_APP_API_URL +"/sales-agent/status/"+item.id;
+        }
+        axios
+          .post(url,{
+            status: item.status,
+            })
+          .then((response) => {
+            console.log("data::", response.data);
+              vm.$toast.success(response.data.message, {
+                position: "top-right",
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+              });
+              vm.getStudent()
+          })
+          .catch((errors) => {
+          var err =''
+            if(errors.response.data.errors.email){
+              err+=errors.response.data.errors.email
+            }
+            if(errors.response.data.errors.password){
+              err+=errors.response.data.errors.password
+            }
+            if(errors)
+            this.$toast.error(err, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+          });
+    },
   },
   mounted(){
     this.getStudent()

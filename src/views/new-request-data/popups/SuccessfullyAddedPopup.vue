@@ -56,7 +56,7 @@ export default {
     };
   },
   computed:{
-    ...mapGetters(['getSelectedStudent'])
+    ...mapGetters(['getSelectedStudent','getUser'])
   },
    methods:{
     getAgents() {
@@ -116,7 +116,9 @@ export default {
     },
   },
   created(){
-    this.getAgents()
+    if(this.getUser.type =='admin'){
+      this.getAgents()
+    }
   }
 };
 </script>

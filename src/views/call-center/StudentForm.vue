@@ -6,11 +6,20 @@
           <div class="d-flex align-items-center">
             <div class="mr-3">
               <img src="@/assets/logo.png" width="80" />
+                 
             </div>
             <div>
               <h3 class="mb-0">Student Assessment Form</h3>
               <p class="mb-0">Fill out the form carefully for registration</p>
             </div>
+             <b-button
+                  v-if="getUser.id"
+                  variant="success"
+                  @click="getUrl()"
+                  class="w-25 mt-4 ml-auto "
+                  squared
+                  >Copy Url</b-button
+                >
           </div>
           <hr />
         </div>
@@ -105,7 +114,8 @@
         <div class="col-md-12 mt-2">
           <div class="form-element">
             <label for="cv">Upload your CV</label>
-            <VueFileAgent
+            <input type="file" id="test" @change="handleCvUpload($event)" name="test" accept=".pdf,.doc"/>
+            <!-- <VueFileAgent
               ref="vueFileAgent"
               :theme="'list'"
               :multiple="true"
@@ -123,7 +133,7 @@
               @beforedelete="onBeforeDelete($event)"
               @delete="fileDeleted($event)"
               v-model="fileRecords"
-            ></VueFileAgent>
+            ></VueFileAgent> -->
           </div>
         </div>
         <div class="col-md-12 mt-3">
@@ -148,11 +158,12 @@
 </template>
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
       selected: null,
-      fileRecords: [],
+      fileRecords: '',
       uploadUrl: '',
       uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
       fileRecordsForUpload: [], // maintain an upload queue
@@ -178,17 +189,27 @@ export default {
       // options: ["Lahore", "Karachi", "Islamabad", "Multan"],
     };
   },
-
+  computed:{
+    ...mapGetters(['getUser'])
+  },
   methods: {
     trigger() {
       this.$refs.sendReq.click();
     },
     addStudent() {
-      this.uploadFiles();
+      // this.uploadFiles();
+      let call_agent_id ="";
       const vm = this;
+      let url ="";
+      if(vm.getUser.type){
+       url = vm.getUser.type =='admin' ? process.env.VUE_APP_API_URL + "/admin/students" : process.env.VUE_APP_API_URL + "/call-agent/students"
+      }else{
+        
+       url = process.env.VUE_APP_API_URL + "/students"
+      }
       axios
-        .post(process.env.VUE_APP_API_URL + "/students", {
-          cv: this.filesData.tusUpload.url,
+        .post(url, {
+          cv: vm.fileRecords,
           first_name: this.first_name,
           last_name: this.last_name,
           email: this.email,
@@ -202,6 +223,7 @@ export default {
           question: this.question,
           city: this.city_name,
           country: this.country_name,
+          call_agent_id: this.$route.query.call_agent_id ? atob(this.$route.query.call_agent_id) : vm.getUser.id
         })
         .then((response) => {
           console.log("data::", response.data);
@@ -263,6 +285,43 @@ export default {
           }
         });
     },
+    getUrl() {
+      const vm = this;
+      // first name will replace with password
+      
+      var credentials = `${process.env.VUE_APP_URL+'form?call_agent_id=' + btoa(this.getUser.id)}`;
+      navigator.clipboard.writeText(credentials).then(
+        function() {
+          vm.isModalVisible = false;
+          vm.$toast.success("Successfully Copied", {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          console.log(credentials)
+        },
+        function() {
+          vm.isModalVisible = false;
+          vm.$toast.error("Something went wrong", {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+        }
+      );
+    },
+     handleCvUpload(event){
+      let vm = this
+      var image = event.target.files[0];
+      const reader = new FileReader();
+              reader.readAsDataURL(image);
+              reader.onload = e =>{
+                  vm.fileRecords = e.target.result;
+                  console.log(this.fileRecords);
+              };
+    },
       uploadFiles: function () {
         // Using the default uploader. You may use another uploader instead.
         this.$refs.vueFileAgent.upload(this.uploadUrl, this.uploadHeaders, this.fileRecordsForUpload);
@@ -301,6 +360,11 @@ export default {
   created() {
     //  this.$store.commit('SET_SPINNER',false);
     this.getCountries()
+    if( !this.$route.query.call_agent_id ){
+        if(!this.getUser){
+            this.$router.push({ path: '/login' })
+        }
+    }
   }
 
 };
@@ -309,5 +373,8 @@ export default {
 .student-form-page {
   width: 800px;
   margin: 0 auto;
+}
+button.btn.w-25.mt-4.ml-auto.btn-success.rounded-0 {
+    float: right;
 }
 </style>

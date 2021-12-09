@@ -13,7 +13,7 @@
         <b-form-timepicker v-model="endTime" locale="en"></b-form-timepicker>
       </div>
       <div class="col-12">
-        <b-button variant="dark" size="sm" class="mt-4">Save Changes</b-button>
+        <b-button variant="dark" size="sm" @click="changeTime()" class="mt-4">Save Changes</b-button>
       </div>
     </div>
     <div class="row mt-5">
@@ -112,6 +112,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -119,5 +120,41 @@ export default {
       endTime: "17:00:00",
     };
   },
+  methods:{
+    changeTime() {
+      const vm = this;
+
+      axios
+        .post(process.env.VUE_APP_API_URL +"/admin/login-time",{
+          login_time: vm.startTime,
+          logout_time: vm.endTime,
+          })
+        .then((response) => {
+          console.log("data::", response.data);
+            vm.$toast.success(response.data.message, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+        })
+        .catch((errors) => {
+        var err =''
+          if(errors.response.data.errors.email){
+            err+=errors.response.data.errors.email
+          }
+          if(errors.response.data.errors.password){
+            err+=errors.response.data.errors.password
+          }
+          if(errors)
+          this.$toast.error(err, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+        });
+    },
+  }
 };
 </script>

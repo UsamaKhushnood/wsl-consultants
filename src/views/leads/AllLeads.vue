@@ -130,6 +130,7 @@
                             <b-form-select
                               v-if="getUser.type === 'Sales Agent' || getUser.type === 'admin' "
                               size="sm"
+                              @change="changeStatus(item)"
                               v-model="item.status"
                               :options="[
                                 'Matured',
@@ -277,13 +278,56 @@ import { mapGetters } from 'vuex';
         // this.deleteStudentId = data
         this.$store.commit('SET_CURRENT_STUDENT',data)
       },
+      changeStatus(item) {
+        const vm = this;
+        console.log(item.status)
+        let url ="";
+        if(vm.getUser.type =='admin'){
+          url =process.env.VUE_APP_API_URL +"/admin/status/"+item.id;
+        }else{
+          url =process.env.VUE_APP_API_URL +"/sales-agent/status/"+item.id;
+        }
+        axios
+          .post(url,{
+            status: item.status,
+            })
+          .then((response) => {
+            console.log("data::", response.data);
+              vm.$toast.success(response.data.message, {
+                position: "top-right",
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+              });
+              vm.getStudent()
+          })
+          .catch((errors) => {
+          var err =''
+            if(errors.response.data.errors.email){
+              err+=errors.response.data.errors.email
+            }
+            if(errors.response.data.errors.password){
+              err+=errors.response.data.errors.password
+            }
+            if(errors)
+            this.$toast.error(err, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+          });
+    },
     currentStudent(data) {
       this.$store.commit("SET_CURRENT_STUDENT", {});
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
   },
   mounted() {
-    this.getStudent();
+     let vm = this
+    setTimeout(function(){
+      vm.getStudent();
+    },1000)
   },
 };
 </script>
