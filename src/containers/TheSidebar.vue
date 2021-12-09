@@ -56,7 +56,10 @@
           Add New Agent
         </router-link>
       </li>
-      <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
+      <li
+        class="c-sidebar-nav-item"
+        v-if="getUser.type == 'admin' || getUser.type == 'Call Center Agent'"
+      >
         <router-link
           active-class="c-active"
           to="/form"
