@@ -6,6 +6,7 @@
       header-bg-variant="dark"
       header-text-variant="light"
       centered
+      ref="create_lead_modal"
     >
       <template #default>
         <div class="modal-body">
@@ -42,11 +43,21 @@
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
-              <input type="file"  ref="file" @change="handleCvUpload($event)" id="cv" />
+              <input
+                type="file"
+                ref="file"
+                @change="handleCvUpload($event)"
+                id="cv"
+              />
             </div>
             <div class="form-element">
               <label for="agentFirstName">Screenshots:</label>
-              <input type="file" ref="screen"  @change="handleScreenshot($event)" id="agentFirstName" />
+              <input
+                type="file"
+                ref="screen"
+                @change="handleScreenshot($event)"
+                id="agentFirstName"
+              />
             </div>
           </form>
         </div>
@@ -54,10 +65,12 @@
       <template #modal-footer="{hide}">
         <div>
           <div class="row mt-4 mr-2 justify-content-end">
-            <b-button variant="dark" class="mr-2" squared @click="hide"
+            <b-button variant="dark" class="mr-2" ref="cancel" squared @click="hide"
               >Cancel</b-button
             >
-            <b-button variant="success" squared @click="addLead">Create</b-button>
+            <b-button variant="success" squared @click="addLead"
+              >Create</b-button
+            >
           </div>
         </div>
       </template>
@@ -65,77 +78,127 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
-
   data: () => ({
     // items: tableData,
-    first_name: '',
-    last_name: '',
-    country: '',
-    email: '',
-    phone: '',
-    whatsapp_num: '',
-    cv:'',
-    screenShot:'',
+    visibleLiveDemo: false,
+    first_name: "",
+    last_name: "",
+    country: "",
+    email: "",
+    phone: "",
+    whatsapp_num: "",
+    cv: "",
+    screenShot: "",
   }),
-  methods:{
-    handleCvUpload(event){
-      let vm = this
+  computed: {
+    ...mapGetters(["getUser"]),
+  },
+  methods: {
+    handleCvUpload(event) {
+      let vm = this;
       var image = event.target.files[0];
       const reader = new FileReader();
-              reader.readAsDataURL(image);
-              reader.onload = e =>{
-                  vm.cv = e.target.result;
-                  console.log(this.cv);
-              };
+      reader.readAsDataURL(image);
+      reader.onload = (e) => {
+        vm.cv = e.target.result;
+        console.log(this.cv);
+      };
     },
-    handleScreenshot(event){
-      let vm = this
+    handleScreenshot(event) {
+      let vm = this;
       var images = event.target.files[0];
       const reader = new FileReader();
-        reader.readAsDataURL(images);
-        reader.onload = e =>{
-            vm.screenShot = e.target.result;
-            console.log(this.screenShot);
+      reader.readAsDataURL(images);
+      reader.onload = (e) => {
+        vm.screenShot = e.target.result;
+        console.log(this.screenShot);
       };
+    },
+    getStudent() {
+      const vm = this;
+      console.log(vm.getUser.type)
+      let url ='';
+      if(vm.getUser.type =='Sales Agent'){
+          url = process.env.VUE_APP_API_URL +"/sales-agent/students";
+      }else if(vm.getUser.type =='Call Center Agent'){
+          url = process.env.VUE_APP_API_URL +"/call-agent/students";
+      }
+      else{
+          url = process.env.VUE_APP_API_URL +"/admin/students";
+      }
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("data::", response.data.data);
+          vm.items = response.data.data.allLead
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+        });
     },
     addLead() {
       const vm = this;
+      let url =
+        vm.getUser.type == "admin"
+          ? process.env.VUE_APP_API_URL + "/admin/new-leads"
+          : process.env.VUE_APP_API_URL + "/sales-agent/new-leads";
       axios
-        .post(process.env.VUE_APP_API_URL +"/admin/new-leads",{
+        .post(url, {
           first_name: vm.first_name,
-          last_name:  vm.last_name,
-          country:  vm.country,
-          email:  vm.email,
-          phone:  vm.phone,
-          whatsapp_num:  vm.whatsapp_num,
+          last_name: vm.last_name,
+          country: vm.country,
+          email: vm.email,
+          phone: vm.phone,
+          whatsapp_num: vm.whatsapp_num,
           cv: vm.cv,
-          screen_shot: vm.screenShot
+          screen_shot: vm.screenShot,
         })
         .then((response) => {
           console.log("data::", response.data);
-          vm.cities_options = response.data.data
-        })
-        .catch((errors) => {
-        var err =''
-          if(errors.response.data.errors.email){
-            err+=errors.response.data.errors.email
-          }
-          if(errors.response.data.errors.password){
-            err+=errors.response.data.errors.password
-          }
-          if(errors)
-          this.$toast.error(err, {
+          vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
             icon: true,
             rtl: false,
           });
+
+          vm.first_name = "",
+          vm.last_name = "",
+          vm.country = "",
+          vm.email = "",
+          vm.phone = "",
+          vm.whatsapp_num = "",
+          vm.cv = "",
+          vm.screenShot = "";
+          vm.$store.commit("SET_All_STUDENT", true);
+          vm.getStudent()
+          vm.$refs.cancel.click()
+       
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+          if (errors.response.data.errors.password) {
+            err += errors.response.data.errors.password;
+          }
+          if (errors)
+            this.$toast.error(err, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
         });
     },
-
-  }
+  },
 };
 </script>
 <style lang="scss"></style>

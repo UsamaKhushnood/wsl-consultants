@@ -244,14 +244,23 @@
     ...mapGetters(['getUser'])
     },
     methods:{
-      getStudent() {
+    getStudent() {
         const vm = this;
-        
+        console.log(vm.getUser.type)
+        let url ='';
+        if(vm.getUser.type =='Sales Agent'){
+            url = process.env.VUE_APP_API_URL +"/sales-agent/students";
+        }else if(vm.getUser.type =='Call Center Agent'){
+            url = process.env.VUE_APP_API_URL +"/call-agent/students";
+        }
+        else{
+            url = process.env.VUE_APP_API_URL +"/admin/students";
+        }
         axios
-          .get(process.env.VUE_APP_API_URL +"/admin/students")
+          .get(url)
           .then((response) => {
             console.log("data::", response.data.data);
-            vm.items = response.data.data.hold
+            vm.items = response.data.data.allLead
           })
           .catch((errors) => {
             var err = "";

@@ -13,6 +13,7 @@
               <button
                 class="btn btn-dark btn-sm ml-auto d-block mb-2"
                 v-b-modal="'create-lead-modal'"
+                v-if="getUser.type =='admin' || getUser.type =='Sales Agent'"
               >
                 Create New Lead
               </button>
@@ -236,7 +237,7 @@
   import AllPopups from "@/views/new-request-data/AllPopups.vue";
   import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
   import axios from 'axios';
-import { mapGetters } from 'vuex';
+import { mapGetters ,mapState} from 'vuex';
   export default {
     name: "NewRequest",
     components: { WidgetsDropdown, AllPopups, CreateNewLead },
@@ -246,7 +247,8 @@ import { mapGetters } from 'vuex';
       deleteStudentId: '',
     }),
     computed:{
-      ...mapGetters(['getUser'])
+      ...mapGetters(['getUser']),
+       ...mapState(['allStudent']),
     },
     methods:{
       getStudent() {
@@ -328,7 +330,23 @@ import { mapGetters } from 'vuex';
     setTimeout(function(){
       vm.getStudent();
     },1000)
+  
   },
+  watch:{
+      allStudent:{
+      handler:function(newVal,oldVal){
+        console.log(newVal,oldVal)
+          let vm = this
+        // this function will trigger when ever the value of `my_state` changes
+      if(newVal == true){
+          vm.getStudent()
+          vm.$store.commit("SET_All_STUDENT", null);
+        }
+      },
+      deep:true
+    }
+    
+  }
 };
 </script>
 

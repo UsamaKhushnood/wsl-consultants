@@ -20,64 +20,7 @@
       <div class="col-12 bg-white pt-4">
         <h3 class="text-bold mb-4">Login History</h3>
         <CDataTable
-          :items="[
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Call Center',
-            },
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Sales Team',
-            },
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Sales Team',
-            },
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Call Center',
-            },
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Call Center',
-            },
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Call Center',
-            },
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Call Center',
-            },
-            {
-              LoginTime: '8:00 AM',
-              LogoutTime: '5:00 PM',
-              AgentName: ' Agent Name',
-              Date: '12-12-2021',
-              Department: 'Call Center',
-            },
-          ]"
+          :items="[]"
           :fields="[
             'Date',
             'AgentName',
@@ -155,6 +98,45 @@ export default {
           });
         });
     },
+    getTime() {
+      const vm = this;
+      let  url = process.env.VUE_APP_API_URL +"/admin/get-time";
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("data::", response.data.data);
+          vm.startTime = response.data.data.login_time
+          vm.endTime = response.data.data.logout_time
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+        });
+    },
+    getAllLoginList() {
+      const vm = this;
+      let  url = process.env.VUE_APP_API_URL +"/admin/login-history";
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("data::", response.data.data);
+          vm.startTime = response.data.data.login_time
+          vm.endTime = response.data.data.logout_time
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+        });
+    },
+  },
+  created(){
+    this.getTime()
+    this.getAllLoginList()
   }
+
 };
 </script>

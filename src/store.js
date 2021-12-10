@@ -11,6 +11,7 @@ const state = {
   showSpinner: false,
   user: '',
   current_student: '',
+  allStudent: '',
 }
 
 
@@ -53,6 +54,9 @@ const mutations = {
   SET_REGISTER_DATA(state, data) {
     state.register_data = data;
   },
+  SET_All_STUDENT(state, data) {
+    state.allStudent = data;
+  },
 }
   const getters = {
     getSpinner(state) {
@@ -87,6 +91,9 @@ const mutations = {
     },
     getEvent(state) {
       return state.all_event;
+    },
+    callGetStudent(state) {
+      return state.allStudent;
     },
   }
   const actions = {
