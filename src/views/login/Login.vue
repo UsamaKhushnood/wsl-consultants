@@ -110,6 +110,11 @@ export default {
           });
           }
           var err =''
+          {  console.log('errors.response.data',errors.response.data)
+          if(errors.response.data.message =='Login Time Expire'){
+            console.log('errors.response.data',errors.response.data.message)
+            localStorage.setItem('token', null)
+          }}
           if(errors.response.data.errors.email){
             err+=errors.response.data.errors.email
           }
@@ -117,6 +122,7 @@ export default {
             err+=errors.response.data.errors.password
           }
           
+            
           if(errors)
           this.$toast.error(err, {
             position: "top-right",

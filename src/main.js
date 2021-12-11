@@ -33,7 +33,8 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 import Axios from 'axios';
-
+import Helpers from "./helper";
+Vue.use(Helpers);
 Vue.prototype.$http = Axios;
 
 Axios.defaults.baseURL = process.env.VUE_APP_API_URL
@@ -46,7 +47,9 @@ Axios.defaults.headers.common['Accept'] = 'application/json'
 Vue.config.performance = true;
 Vue.use(CoreuiVue);
 Vue.prototype.$log = console.log.bind(console);
+import {ServerTable, ClientTable, EventBus} from 'vue-tables-2-premium';
 
+Vue.use(ClientTable);
 new Vue({
   el: "#app",
   router,

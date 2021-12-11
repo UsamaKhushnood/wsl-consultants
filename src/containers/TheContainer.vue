@@ -31,6 +31,8 @@ export default {
   },
   created(){
     console.log('TheContainer',1)
+    console.log('Login Time Expire',1)
+
   }
 }
 </script>

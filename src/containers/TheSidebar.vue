@@ -455,6 +455,7 @@ export default {
     },
     nav() {
       return $options.nav;
+      
     },
     ...mapGetters(["getUser"]),
     ...mapState(["sidebarShow", "sidebarMinimize"]),

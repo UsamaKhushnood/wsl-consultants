@@ -144,10 +144,15 @@ export default {
     },
     addLead() {
       const vm = this;
-      let url =
-        vm.getUser.type == "admin"
-          ? process.env.VUE_APP_API_URL + "/admin/new-leads"
-          : process.env.VUE_APP_API_URL + "/sales-agent/new-leads";
+      let url ="";
+          if(vm.getUser.type =='Sales Agent'){
+            url = process.env.VUE_APP_API_URL +"/sales-agent/new-leads";
+          }else if(vm.getUser.type =='Call Center Agent'){
+            url = process.env.VUE_APP_API_URL +"/call-agent/new-leads";
+          }
+          else{
+            url = process.env.VUE_APP_API_URL +"/admin/new-leads";
+          }
       axios
         .post(url, {
           first_name: vm.first_name,
