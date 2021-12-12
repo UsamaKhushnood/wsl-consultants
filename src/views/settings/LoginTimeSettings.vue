@@ -22,11 +22,11 @@
         <CDataTable
           :items="[]"
           :fields="[
-            'Date',
-            'AgentName',
-            'Department',
-            'LoginTime',
-            'LogoutTime',
+            'created_at',
+            'agent.first_name',
+            'agent.type',
+            'login_time',
+            'logout_time',
           ]"
           columnFilter
           itemsPerPageSelect
@@ -45,7 +45,7 @@
                     ? 'badge-primary'
                     : 'badge-warning',
                 ]"
-                >{{ item.Department }}</span
+                >{{ item.agent.type }}</span
               >
             </td>
           </template>

@@ -34,7 +34,7 @@
                               <th>Whatsapp Number</th>
                               <th>Assigned to</th>
                               <th>Status</th>
-                              <!-- <th>Action</th> -->
+                              <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -214,7 +214,7 @@ import { mapGetters ,mapState} from 'vuex';
                     {data: 'whatsapp_num'},
                     {data: 'assigned_to'},
                     {data: 'status'},
-                    // {data: 'actions'}
+                    {data: 'actions'}
                 ],
                 // dom: 'lBfrtip',
                 // buttons: datatable_buttons,
