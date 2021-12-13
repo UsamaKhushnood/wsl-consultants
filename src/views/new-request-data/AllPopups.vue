@@ -5,6 +5,7 @@
     <DenyRequestPopup :propsindex="propsindex" />
     <ViewShopSidebar :propsindex="propsindex" />
     <ViewDetailsSidebar :propsindex="propsindex" />
+    <AddNotePopup :propsindex="propsindex" />
   </div>
 </template>
 <script>
@@ -13,6 +14,7 @@ import HoldRequestPopup from "./popups/HoldRequestPopup.vue";
 import DenyRequestPopup from "./popups/DenyRequestPopup.vue";
 import SuccessfullyAddedPopup from "./popups/SuccessfullyAddedPopup.vue";
 import ViewDetailsSidebar from "./popups/ViewDetailsSidebar.vue";
+import AddNotePopup from "./popups/AddNotePopup.vue";
 export default {
   components: {
     SuccessfullyAddedPopup,
@@ -20,6 +22,7 @@ export default {
     HoldRequestPopup,
     ViewShopSidebar,
     ViewDetailsSidebar,
+    AddNotePopup,
   },
   name: "AllPopups",
   props: ["propsindex"],

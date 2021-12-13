@@ -4,7 +4,7 @@
       <div class="vd_content clearfix">
         <div class="vd_title-section clearfix">
           <div class="vd_panel-header">
-            <h1><i class="fa fa-flag-o"></i> New Request</h1>
+            <h1><i class="fa fa-flag-o"></i> New Leads</h1>
           </div>
         </div>
 
@@ -169,18 +169,6 @@
                                 v-b-tooltip.hover
                                 title="Delete"
                                 class="fa fa-trash"
-                              ></i>
-                            </a>
-                            <a
-                              data-target="#holdRequest"
-                              data-toggle="modal"
-                              class="btn menu-icon vd_bd-red vd_red"
-                              v-b-modal="'hold-request-modal' + index"
-                            >
-                              <i
-                                class="fa fa-pause"
-                                v-b-tooltip.hover
-                                title="Hold"
                               ></i>
                             </a>
                             <AllPopups :propsindex="index"> </AllPopups>

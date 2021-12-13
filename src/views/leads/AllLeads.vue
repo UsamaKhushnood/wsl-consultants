@@ -161,7 +161,7 @@ import { mapGetters ,mapState} from 'vuex';
               icon: true,
               rtl: false,
             });
-          });
+        });
     },
     currentStudent(data) {
       this.$store.commit("SET_CURRENT_STUDENT", {});
@@ -170,8 +170,8 @@ import { mapGetters ,mapState} from 'vuex';
    
   },
   mounted() {
-     let vm = this
-    setTimeout(function(){
+    let vm = this;
+    setTimeout(function() {
       vm.getStudent();
     },1000)
     

@@ -39,7 +39,7 @@
           target="_self"
         >
           <i class="c-sidebar-nav-icon fa fa-flag-o" aria-hidden="true"></i> New
-          Request <span class="badge badge-primary"> NEW </span></router-link
+          Leads <span class="badge badge-primary"> NEW </span></router-link
         >
       </li>
       <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
@@ -56,7 +56,10 @@
           Add New Agent
         </router-link>
       </li>
-      <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
+      <li
+        class="c-sidebar-nav-item"
+        v-if="getUser.type == 'admin' || getUser.type == 'Call Center Agent'"
+      >
         <router-link
           active-class="c-active"
           to="/form"
@@ -214,7 +217,7 @@
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="time-setting"
+              to="/dashboard/time-setting"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -224,7 +227,6 @@
         </b-collapse>
       </li>
 
-      
       <li class="c-sidebar-nav-title" v-if="getUser.type == 'Sales Agent'">
         Sales Department
       </li>
@@ -309,7 +311,10 @@
         </b-collapse>
       </li>
 
-      <li class="c-sidebar-nav-title" v-if="getUser.type == 'Call Center Agent'">
+      <li
+        class="c-sidebar-nav-title"
+        v-if="getUser.type == 'Call Center Agent'"
+      >
         Call Center Department
       </li>
       <li class="c-sidebar-nav-item" v-if="getUser.type == 'Call Center Agent'">
@@ -341,7 +346,10 @@
         </router-link>
       </li>
 
-      <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'Call Center Agent'">
+      <li
+        class="c-sidebar-nav-dropdown"
+        v-if="getUser.type == 'Call Center Agent'"
+      >
         <a
           class="c-sidebar-nav-dropdown-toggle"
           v-b-toggle.accordion-call-center
