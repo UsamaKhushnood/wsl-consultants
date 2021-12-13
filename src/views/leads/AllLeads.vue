@@ -22,27 +22,221 @@
                 <div class="widget">
                   <div class="bg-white">
                     <div id="new-request-tab-c1">
-                         <table id="myTable" class="table table-striped table-bordered dt-responsive nowrap display">
-                            <thead>
-                            <tr>
-                              <th>Id</th>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Country</th>
-                              <th>Email</th>
-                              <th>Phone</th>
-                              <th>Whatsapp Number</th>
-                              <th>Assigned to</th>
-                              <th>Status</th>
-                              <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                         
-                            </tbody>
+                          <CDataTable
+                        responsive
+                        :hover="true"
+                        :striped="true"
+                        :border="true"
+                        :fixed="false"
+                        :items="items"
+                        columnFilter
+                        itemsPerPageSelect
+                        :itemsPerPage="20"
+                        class="leads-table"
+                        sorter
+                        :fields="[
+                          { key: 'CreateDate' },
+                          'StudentName',
+                          'Email',
+                          'Whatsapp',
+                          'PhoneNo',
+                          'PreferredCountry',
+                          'AssignedTo',
+                          'Status',
+                          {
+                            key: 'Actions',
+                            sorter: false,
+                          },
+                        ]"
+                        pagination
+                      >
+                        <template #AssignedTo="{item}">
+                          <td>
+                            <span
+                              v-if="item.agent == null"
+                              class="badge badge-pill badge-danger"
+                            >
+                              unassigned
+                            </span>
+                            <span v-else>
+                              {{
+                                item.agent == null
+                                  ? "unassigned"
+                                  : item.agent.first_name
+                              }}
+                            </span>
+                          </td>
+                        </template>
+                        <template #Whatsapp="{item}">
+                          <td>
+                            <a
+                              :href="
+                                'https://api.whatsapp.com/send?phone=' +
+                                  item.whatsapp_num
+                              "
+                              target="_blank"
+                              v-b-tooltip.hover
+                              title="Click To Open Whatsapp"
+                            >
+                              {{ item.whatsapp_num }}
+                            </a>
+                          </td>
+                        </template>
+                        <template #Email="{item}">
+                          <td>
+                            <a
+                              :href="'mailto:' + item.email"
+                              target="_blank"
+                              v-b-tooltip.hover
+                              title="Click To Send Email"
+                            >
+                              {{ item.email }}
+                            </a>
+                          </td>
+                        </template>
+                        <template #StudentName="{item}">
+                          <td>
+                            <p>
+                              {{ item.first_name + item.last_name }}
+                            </p>
+                          </td>
+                        </template>
+                        <template #CreateDate="{item}">
+                          <td>
+                            <p>
+                              {{ item.created_at }}
+                            </p>
+                          </td>
+                        </template>
+                        <template #PreferredCountry="{item}">
+                          <td>
+                            <p>
+                              {{ item.country }}
+                            </p>
+                          </td>
+                        </template>
+                        <template #PhoneNo="{item}">
+                          <td>
+                            <a
+                              :href="'tel:' + item.phone"
+                              v-b-tooltip.hover
+                              title="Click To Make Phone Call"
+                            >
+                              {{ item.phone }}
+                            </a>
+                          </td>
+                        </template>
+                        <template #Status="{item}">
+                          <td class="status text-center">
+                            <b-form-select
+                              v-if="
+                                getUser.type === 'Sales Agent' ||
+                                  getUser.type === 'admin'
+                              "
+                              size="sm"
+                              @change="changeStatus(item)"
+                              v-model="item.status"
+                              :options="[
+                                'New Lead',
+                                'in progress',
+                                'Expected',
+                                'Not Expected',
+                                'Applied',
+                              ]"
+                            ></b-form-select>
+                            <!-- <span
+                              class="badge badge-pill"
+                              :class="[
+                                item.status.toLowerCase() == 'in progress' ||
+                                item.status.toLowerCase() == 'new lead'
+                                  ? 'badge-info'
+                                  : item.status.toLowerCase() == 'expected' ||
+                                    item.status.toLowerCase() == 'applied'
+                                  ? 'badge-success'
+                                  : item.status.toLowerCase() == 'not expected'
+                                  ? 'badge-danger'
+                                  : 'badge-warning',
+                              ]"
+                            >
+                              {{ item.status }}
+                            </span> -->
+                          </td>
+                        </template>
+                        <template #Actions="{index,item}">
+                          <td class="menu-action">
+                            <a
+                              data-target="#viewAccept"
+                              data-toggle="modal"
+                              class="btn menu-icon vd_bd-green vd_green"
+                              v-b-toggle="'view-details-sidebar' + index"
+                              @click="currentStudent(item)"
+                            >
+                              <i
+                                class="fa fa-eye"
+                                v-b-tooltip.hover
+                                title="View Form"
+                              ></i>
+                            </a>
+                            <a
+                              data-target="#viewAccept"
+                              data-toggle="modal"
+                              class="btn menu-icon vd_bd-yellow vd_yellow"
+                              v-b-modal="'successfully-added-modal' + index"
+                              v-if="getUser.type === 'admin'"
+                              @click="currentStudent(item)"
+                            >
+                              <i
+                                class="fa fa-check"
+                                v-b-tooltip.hover
+                                title="Assign"
+                              ></i>
+                            </a>
 
-                        </table>
-                        
+                            <a
+                              data-target="#denyRequest"
+                              data-toggle="modal"
+                              class="btn menu-icon vd_bd-red vd_red"
+                              v-b-modal="'deny-request-modal' + index"
+                              :item="item.id"
+                              v-if="getUser.type == 'admin'"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Delete"
+                                @click="setStudent(item.id)"
+                                class="fa fa-trash"
+                              ></i>
+                            </a>
+                            <a
+                              data-target="#denyRequest"
+                              data-toggle="modal"
+                              class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
+                              v-b-modal="'add-note-modal' + index"
+                              :item="item.id"
+                              v-if="getUser.type == 'admin'"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Add Note"
+                                class="fa fa-pen"
+                              ></i>
+                            </a>
+                            <!-- <a
+                              data-target="#holdRequest"
+                              data-toggle="modal"
+                              class="btn menu-icon vd_bd-red vd_red"
+                              v-b-modal="'hold-request-modal' + index"
+                            >
+                              <i
+                                class="fa fa-pause"
+                                v-b-tooltip.hover
+                                title="Hold"
+                              ></i>
+                            </a> -->
+                            <AllPopups :propsindex="index"> </AllPopups>
+                          </td>
+                        </template>
+                      </CDataTable>
                     </div>
                   </div>
                 </div>
@@ -77,7 +271,40 @@ import { mapGetters ,mapState} from 'vuex';
        ...mapState(['allStudent']),
     },
     methods:{
-      getStudent() {
+      // getStudent() {
+      //   const vm = this;
+      //   console.log(vm.getUser.type)
+      //   let url ='';
+      //   if(vm.getUser.type =='Sales Agent'){
+      //       url = process.env.VUE_APP_API_URL +"/sales-agent/students";
+      //   }else if(vm.getUser.type =='Call Center Agent'){
+      //       url = process.env.VUE_APP_API_URL +"/call-agent/students";
+      //   }
+      //   else{
+      //       url = process.env.VUE_APP_API_URL +"/admin/students";
+      //   }
+      //   axios
+      //     .get(url)
+      //     .then((response) => {
+      //       console.log("data::", response.data.data);
+      //       vm.items = response.data.data
+      //     })
+      //     .catch((errors) => {
+      //       var err = "";
+      //      console.log('(error.response.status',errors.response.status)
+      //       console.log('errors.response.data',errors.response.data.errors)
+      //       if(errors.response.status == '401'){
+      //         localStorage.setItem('token', null)
+
+      //       }
+      //     console.log('errors.response.data',errors.response.data)
+      //     if(errors.response.data.message =='Login Time Expire'){
+      //       console.log('errors.response.data',errors.response.data.message)
+      //       localStorage.setItem('token', null)
+      //     }
+      //     });
+      // },
+       getStudent() {
         const vm = this;
         console.log(vm.getUser.type)
         let url ='';
@@ -97,17 +324,14 @@ import { mapGetters ,mapState} from 'vuex';
           })
           .catch((errors) => {
             var err = "";
-           console.log('(error.response.status',errors.response.status)
+            console.log('(error.response.status',error.response.status)
             console.log('errors.response.data',errors.response.data.errors)
-            if(errors.response.status == '401'){
-              localStorage.setItem('token', null)
 
+            if(errors.response.data.message =='Login Time Expire'){
+              console.log('errors.response.data',errors.response.data.message)
+              localStorage.setItem('token', null)
             }
-          console.log('errors.response.data',errors.response.data)
-          if(errors.response.data.message =='Login Time Expire'){
-            console.log('errors.response.data',errors.response.data.message)
-            localStorage.setItem('token', null)
-          }
+            
           });
       },
       setStudent(data) {
@@ -175,53 +399,7 @@ import { mapGetters ,mapState} from 'vuex';
       vm.getStudent();
     },1000)
     
-      $(function () {
-        let url="";
-        if(vm.getUser.type =='Sales Agent'){
-            url = process.env.VUE_APP_API_URL +"/sales-agent/students";
-        }else if(vm.getUser.type =='Call Center Agent'){
-            url = process.env.VUE_APP_API_URL +"/call-agent/students";
-        }
-        else{
-            url = process.env.VUE_APP_API_URL +"/admin/students";
-        }
-            // datatable-buttons
-            var table = $('#myTable').DataTable({
-                processing: true,
-                serverSide: true,
-                "scrollX": true,
-                // dom: 'Bfrtip',
-                buttons: [
-                    'excel'
-                ],
-                ajax: {
-                    url: url,
-                    dataType: "json",
-                    type: "GET",
-                    paging: true,
-                    "beforeSend": function(xhr){
-                    xhr.setRequestHeader("Authorization",
-                      "Bearer " + localStorage.getItem('token'));
-                }
-                },
-                columns: [
-                    {data: 'id'},
-                    {data: 'first_name'},
-                    {data: 'last_name'},
-                    {data: 'country'},
-                    {data: 'email'},
-                    {data: 'phone'},
-                    {data: 'whatsapp_num'},
-                    {data: 'assigned_to'},
-                    {data: 'status'},
-                    {data: 'actions'}
-                ],
-                // dom: 'lBfrtip',
-                // buttons: datatable_buttons,
-                ordering: true,
-            });
-        })
-    
+     
   
   },
   watch:{

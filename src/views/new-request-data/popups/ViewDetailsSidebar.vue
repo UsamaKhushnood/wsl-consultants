@@ -37,8 +37,8 @@
           </div>
           <div class="col-md-2 pdng5-0 text-center">
             <h6 class="mrgn0">
-              Status:
-              <span>{{getSelectedStudent.status}}</span>
+              <!-- Status: -->
+              <!-- <span>{{getSelectedStudent.status}}</span> -->
             </h6>
           </div>
         </div>

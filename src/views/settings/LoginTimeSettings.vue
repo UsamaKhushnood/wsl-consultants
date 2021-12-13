@@ -20,11 +20,11 @@
       <div class="col-12 bg-white pt-4">
         <h3 class="text-bold mb-4">Login History</h3>
         <CDataTable
-          :items="[]"
+          :items="items"
           :fields="[
             'created_at',
-            'agent.first_name',
-            'agent.type',
+            'first_name',
+            'type',
             'login_time',
             'logout_time',
           ]"
@@ -36,6 +36,22 @@
           sorter
           pagination
         >
+        
+        <template #first_name="{item}">
+          <td>
+            <p>
+              {{  item.agent.first_name }}
+            </p>
+          </td>
+        </template>
+
+        <template #type="{item}">
+          <td>
+            <p>
+              {{  item.agent.type }}
+            </p>
+          </td>
+        </template>
           <template #Department="{item}">
             <td>
               <span
@@ -59,6 +75,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      items: [],
       startTime: "08:00:00",
       endTime: "17:00:00",
     };
@@ -122,8 +139,7 @@ export default {
         .get(url)
         .then((response) => {
           console.log("data::", response.data.data);
-          vm.startTime = response.data.data.login_time
-          vm.endTime = response.data.data.logout_time
+          vm.items=response.data.data      
         })
         .catch((errors) => {
           var err = "";
