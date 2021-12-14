@@ -33,7 +33,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 import Axios from 'axios';
-import Helpers from "./helper";
+import Helpers from './helper';
 Vue.use(Helpers);
 Vue.prototype.$http = Axios;
 
