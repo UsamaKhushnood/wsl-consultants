@@ -23,16 +23,16 @@
         <div
           class="d-flex align-items-center justify-content-center bg-danger vd_white headerSecondary"
         >
-          <div class="col-md-2 pdng5-0 col-md-offset-3 text-center" >
+          <div class="col-md-2 pdng5-0 col-md-offset-3 text-center">
             <h6 class="mrgn0">
               Student Form ID:
-              <span>{{getSelectedStudent.id}}</span>
+              <span>{{ getSelectedStudent.id }}</span>
             </h6>
           </div>
           <div class="col-md-2 pdng5-0 text-center">
             <h6 class="mrgn0">
               Preferred Country:
-              <span>{{getSelectedStudent.country}}</span>
+              <span>{{ getSelectedStudent.country }}</span>
             </h6>
           </div>
           <div class="col-md-2 pdng5-0 text-center">
@@ -55,7 +55,13 @@
                   <b-avatar variant="danger" size="80"></b-avatar>
                 </div>
 
-                <h4>{{ getSelectedStudent.first_name +' '+getSelectedStudent.last_name}}</h4>
+                <h4>
+                  {{
+                    getSelectedStudent.first_name +
+                      " " +
+                      getSelectedStudent.last_name
+                  }}
+                </h4>
               </div>
 
               <!-- Panel widget start -->
@@ -126,7 +132,18 @@
               <div
                 class="row messageArea vd_bd-light-grey panel pdng10 align-items-center border"
               >
-                <div class="col-sm-4"></div>
+                <div class="col-sm-4 align-self-baseline">
+                  <h6
+                    class="font-bold bg-warning d-flex justify-content-center p-1 radius-10 text-dark"
+                    style="width: fit-content"
+                    v-if="getSelectedStudent.created_at"
+                  >
+                    Created Date:
+                  </h6>
+                  <p v-if="getSelectedStudent.created_at">
+                    {{ getSelectedStudent.created_at }}
+                  </p>
+                </div>
                 <div class="col-sm-4 brdLeft">
                   <h6
                     class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
@@ -179,24 +196,22 @@
                   </div>
                 </div>
               </div>
-         
+
               <hr class="mrgn10-0" />
               <h5>Student Email</h5>
-               <p>{{getSelectedStudent.email}}</p>
+              <p>{{ getSelectedStudent.email }}</p>
               <h5>Student Phone</h5>
-              <p>{{getSelectedStudent.phone}}</p>
+              <p>{{ getSelectedStudent.phone }}</p>
               <div class="" v-if="getSelectedStudent.student_info">
                 <h5>Qualification</h5>
-                <p>{{getSelectedStudent.student_info.qualification}}</p>
+                <p>{{ getSelectedStudent.student_info.qualification }}</p>
                 <h5>CGPA</h5>
-                <p>{{getSelectedStudent.student_info.cgpa}}</p>
-                 <h5>Major Subjects</h5>
-                <p>{{getSelectedStudent.student_info.major_sub}}</p>
-                 <h5>Passing Year</h5>
-                <p>{{getSelectedStudent.student_info.passing_year}}</p>
-               
+                <p>{{ getSelectedStudent.student_info.cgpa }}</p>
+                <h5>Major Subjects</h5>
+                <p>{{ getSelectedStudent.student_info.major_sub }}</p>
+                <h5>Passing Year</h5>
+                <p>{{ getSelectedStudent.student_info.passing_year }}</p>
               </div>
-         
             </div>
           </div>
         </div>

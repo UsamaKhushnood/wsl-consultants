@@ -8,8 +8,12 @@ const Dashboard = () => import("@/views/Dashboard");
 const NewRequest = () => import("@/views/NewRequest");
 const AddNewAgent = () => import("@/views/dashboard/AddNewAgent");
 const LoginTimeSettings = () => import("@/views/settings/LoginTimeSettings");
+const Agents = () => import("@/views/settings/Agents");
 const AllLeads = () => import("@/views/leads/AllLeads");
-const ApprovedLeads = () => import("@/views/leads/Approved");
+const Applied = () => import("@/views/leads/Applied");
+const Expected = () => import("@/views/leads/Expected");
+const NotExpected = () => import("@/views/leads/NotExpected");
+const NewLeads = () => import("@/views/leads/NewLeads");
 const InProgress = () => import("@/views/leads/InProgress");
 const OnHold = () => import("@/views/leads/OnHold");
 const Rejected = () => import("@/views/leads/Rejected");
@@ -51,14 +55,34 @@ function configRoutes() {
           component: LoginTimeSettings,
         },
         {
+          path: "agents",
+          name: "All Agents",
+          component: Agents,
+        },
+        {
           path: "all-leads",
           name: "All Leads",
           component: AllLeads,
         },
         {
-          path: "leads/approved",
-          name: "Approved Leads",
-          component: ApprovedLeads,
+          path: "leads/applied",
+          name: "Applied Leads",
+          component: Applied,
+        },
+        {
+          path: "leads/expected",
+          name: "Expected Leads",
+          component: Expected,
+        },
+        {
+          path: "leads/not-expected",
+          name: "Not Expected Leads",
+          component: NotExpected,
+        },
+        {
+          path: "leads/new-leads",
+          name: "New Leads",
+          component: NewLeads,
         },
         {
           path: "leads/in-progress",
@@ -123,8 +147,7 @@ function configRoutes() {
   ];
 }
 
-
-let  router =  new Router({
+let router = new Router({
   mode: "history",
   linkActiveClass: "active",
   scrollBehavior: () => ({ y: 0 }),
@@ -132,16 +155,19 @@ let  router =  new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  
-  if (!localStorage.getItem('token')) {
-      // checking to avoid loop
-      if (to.name === 'Login' || to.name === 'ForgetPassword' ||to.name ==='Student Form'  ) return next();
-      next({
-          path: '/'
-      });
-  }
-  else {
-     next();
+  if (!localStorage.getItem("token")) {
+    // checking to avoid loop
+    if (
+      to.name === "Login" ||
+      to.name === "ForgetPassword" ||
+      to.name === "Student Form"
+    )
+      return next();
+    next({
+      path: "/",
+    });
+  } else {
+    next();
   }
 });
 

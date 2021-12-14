@@ -10,8 +10,8 @@
             </h4>
             <h1 class="mb-0 Greetings">
               Good {{ getGreetings }}, <br />
-              <span>
-                {{getUser.first_name +' '+ getUser.last_name}}
+              <span class="text-capitalize">
+                {{ getUser.first_name + " " + getUser.last_name }}
               </span>
             </h1>
           </div>
