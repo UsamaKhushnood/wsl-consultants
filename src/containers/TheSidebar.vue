@@ -31,7 +31,7 @@
           Dashboard
         </router-link>
       </li>
-      <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
+      <!-- <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
         <router-link
           active-class="c-active"
           to="/dashboard/newrequest"
@@ -41,7 +41,7 @@
           <i class="c-sidebar-nav-icon fa fa-flag-o" aria-hidden="true"></i> New
           Leads <span class="badge badge-primary"> NEW </span></router-link
         >
-      </li>
+      </li> -->
       <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
         <router-link
           active-class="c-active"
@@ -91,27 +91,32 @@
               class="c-sidebar-nav-link"
               target="_self"
             >
-              All Leads
+              <span v-if="getUser.type == 'admin'">
+                All Leads
+              </span>
+              <span v-else>
+                My Leads
+              </span>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/approved"
+              to="/dashboard/leads/new-leads"
               class="c-sidebar-nav-link"
               target="_self"
             >
-              Approved
+              New Leads
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/rejected"
+              to="/dashboard/leads/in-progress"
               class="c-sidebar-nav-link"
               target="_self"
             >
-              Rejected
+              In Progress
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -124,14 +129,45 @@
               On Hold
             </router-link>
           </li>
+
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/in-progress"
+              to="/dashboard/leads/expected"
               class="c-sidebar-nav-link"
               target="_self"
             >
-              In Progress
+              Expected
+            </router-link>
+          </li>
+          <li class="c-sidebar-nav-item">
+            <router-link
+              active-class="c-active"
+              to="/dashboard/leads/not-expected"
+              class="c-sidebar-nav-link"
+              target="_self"
+            >
+              Not Expected
+            </router-link>
+          </li>
+          <li class="c-sidebar-nav-item bg-success">
+            <router-link
+              active-class="c-active"
+              to="/dashboard/leads/applied"
+              class="c-sidebar-nav-link"
+              target="_self"
+            >
+              Applied
+            </router-link>
+          </li>
+          <li class="c-sidebar-nav-item bg-danger">
+            <router-link
+              active-class="c-active"
+              to="/dashboard/leads/rejected"
+              class="c-sidebar-nav-link"
+              target="_self"
+            >
+              Rejected
             </router-link>
           </li>
         </b-collapse>
@@ -207,7 +243,7 @@
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/"
+              to="/dashboard/agents"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -463,7 +499,6 @@ export default {
     },
     nav() {
       return $options.nav;
-      
     },
     ...mapGetters(["getUser"]),
     ...mapState(["sidebarShow", "sidebarMinimize"]),
