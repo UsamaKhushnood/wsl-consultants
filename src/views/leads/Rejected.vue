@@ -27,21 +27,20 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="items"
+                        :items="items.rejected"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                        :fields="[
-                          { key: 'CreateDate' },
-                          'StudentName',
-                          'Email',
-                          'Whatsapp',
-                          'PhoneNo',
-                          'PreferredCountry',
-                          'AssignedTo',
-                          'Status',
+                         :fields="[
+                         'created_at',
+                          'first_name',
+                          'whatsapp_num',
+                          'phone',
+                          'country',
+                          'assigned_to',
+                          'status',
                           {
                             key: 'Actions',
                             sorter: false,

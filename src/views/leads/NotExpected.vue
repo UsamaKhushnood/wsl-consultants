@@ -33,14 +33,14 @@
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                        :fields="[
-                          { key: 'CreateDate' },
-                          'StudentName',
-                          'Whatsapp',
-                          'PhoneNo',
-                          'PreferredCountry',
-                          'AssignedTo',
-                          'Status',
+                          :fields="[
+                         'created_at',
+                          'first_name',
+                          'whatsapp_num',
+                          'phone',
+                          'country',
+                          'assigned_to',
+                          'status',
                           {
                             key: 'Actions',
                             sorter: false,

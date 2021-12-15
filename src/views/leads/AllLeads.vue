@@ -27,20 +27,20 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="items"
+                        :items="items.data"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                        :fields="[
-                          { key: 'CreateDate' },
-                          'StudentName',
-                          'Whatsapp',
-                          'PhoneNo',
-                          'PreferredCountry',
-                          'AssignedTo',
-                          'Status',
+                          :fields="[
+                         'created_at',
+                          'first_name',
+                          'whatsapp_num',
+                          'phone',
+                          'country',
+                          'assigned_to',
+                          'status',
                           {
                             key: 'Actions',
                             sorter: false,
@@ -223,6 +223,7 @@
                             </a> -->
                             <AllPopups :propsindex="index"> </AllPopups>
                           </td>
+                          <!-- <button v-for="pageNumber in items" :key="pageNumber" class="w3-button" v-bind:key="pageNumber" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }} </button> -->
                         </template>
                       </CDataTable>
                     </div>
@@ -238,6 +239,8 @@
 </template>
 
 <script>
+
+
 import $ from "jquery";
 import "datatables.net-buttons-bs4";
 import tableData from "../tableData";
@@ -249,14 +252,41 @@ import { mapGetters, mapState } from "vuex";
 export default {
   name: "NewRequest",
   components: { WidgetsDropdown, AllPopups, CreateNewLead },
+
+  
   data: () => ({
     // items: tableData,
+
     items: [],
     deleteStudentId: "",
+    currentPage: 1,
+  itemsPerPage: 3,
+  resultCount: 0
   }),
   computed: {
     ...mapGetters(["getUser"]),
     ...mapState(["allStudent"]),
+    /* eslint-disable */
+      totalPages: function() {
+        if (this.resultCount == 0){
+          return 1
+        }
+        else {
+        return Math.ceil(this.resultCount / this.itemsPerPage)
+      }
+      },
+      /* eslint-disable */
+      paginate: function() {
+          if (!this.articles || this.articles.length != this.articles.length) {
+              return
+          }
+          this.resultCount = this.articles.length
+          if (this.currentPage >= this.totalPages) {
+            this.currentPage = this.totalPages
+          }
+          var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+          return this.articles.slice(index, index + this.itemsPerPage)
+      }
   },
   methods: {
     // getStudent() {
@@ -292,6 +322,9 @@ export default {
     //     }
     //     });
     // },
+    setPage: function(pageNumber) {
+      this.currentPage = pageNumber
+    },
     getStudent() {
       const vm = this;
       console.log(vm.getUser.type);
@@ -306,8 +339,8 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          console.log("data::", response.data.data);
-          vm.items = response.data.data;
+            console.log("data::1", response.data.data.allLead.data);
+            vm.items = response.data.data.allLead
         })
         .catch((errors) => {
           var err = "";
@@ -413,5 +446,10 @@ export default {
       padding: 10px 10px 0 0;
     }
   }
+}
+</style>
+<style lang="css">
+.current {
+color: teal;
 }
 </style>

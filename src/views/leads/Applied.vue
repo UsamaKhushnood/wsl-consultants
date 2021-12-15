@@ -33,15 +33,14 @@
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                        :fields="[
-                          { key: 'CreateDate' },
-                          'StudentName',
-                          'Email',
-                          'Whatsapp',
-                          'PhoneNo',
-                          'PreferredCountry',
-                          'AssignedTo',
-                          'Status',
+                          :fields="[
+                         'created_at',
+                          'first_name',
+                          'whatsapp_num',
+                          'phone',
+                          'country',
+                          'assigned_to',
+                          'status',
                           {
                             key: 'Actions',
                             sorter: false,
@@ -259,8 +258,8 @@ export default {
         axios
           .get(url)
           .then((response) => {
-            console.log("data::", response.data.data);
-            vm.items = response.data.data.allLead
+            console.log("data::1", response.data.data.allLead.data);
+            vm.items = response.data.data.allLead.data
           })
           .catch((errors) => {
             var err = "";

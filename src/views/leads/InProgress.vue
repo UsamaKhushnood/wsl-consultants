@@ -27,7 +27,7 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="items"
+                        :items="items.inProgress"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"
