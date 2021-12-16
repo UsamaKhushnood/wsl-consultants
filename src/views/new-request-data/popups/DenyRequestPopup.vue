@@ -12,7 +12,7 @@
         <div class="modal-body">
           <h4>Are you Sure?</h4>
           <div class="row mt-4 mr-2 justify-content-end">
-            <b-button variant="dark" class="mr-2" squared @click="hide"
+            <b-button variant="dark" ref="cancel" class="mr-2" squared @click="hide"
               >Cancel</b-button
             >
             <b-button variant="danger" squared @click="deleteStudent"
@@ -30,16 +30,16 @@ import { mapGetters } from 'vuex';
 export default {
   props: ["propsindex","item"],
   computed:{
-    ...mapGetters(['getSelectedStudent'])
+    ...mapGetters(['getSelectedStudentId'])
   },
 
   methods:{
       deleteStudent() {
       const vm = this;
       axios
-        .delete(process.env.VUE_APP_API_URL +"/admin/students/"+this.getSelectedStudent)
+        .delete(process.env.VUE_APP_API_URL +"/admin/students/"+this.getSelectedStudentId)
         .then((response) => {
-           vm.isModalVisible = false;
+             vm.$refs.cancel.click();
            vm.$toast.success(response.data.message, {
               position: "top-right",
               closeButton: "button",

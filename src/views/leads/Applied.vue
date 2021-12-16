@@ -34,7 +34,7 @@
                         class="leads-table"
                         sorter
                           :fields="[
-                         'created_at',
+                        
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -48,7 +48,7 @@
                         ]"
                         pagination
                       >
-                        <template #AssignedTo="{item}">
+                        <template #assigned_to="{item}">
                           <td>
                             <span
                               v-if="item.agent == null"
@@ -95,13 +95,7 @@
                             </p>
                           </td>
                         </template>
-                        <template #CreateDate="{item}">
-                          <td>
-                            <p>
-                              {{  item.created_at }}
-                            </p>
-                          </td>
-                        </template>
+             
                         <template #PreferredCountry="{item}">
                           <td>
                             <p>
@@ -120,35 +114,40 @@
                             </a>
                           </td>
                         </template>
-                        <template #Status="{item}">
+                        <template #status="{item}">
                           <td class="status text-center">
+                            <!-- new is the default status  -->
                             <b-form-select
-                              v-if="getUser.type === 'Sales Agent' || getUser.type === 'admin' "
+                             
                               size="sm"
-                              v-model="item.status"
                               @change="changeStatus(item)"
+                              v-model="item.status"
                               :options="[
-                                'Matured',
-                                'in progress',
+                                'New Lead',
+                                'In Progress',
+                                'Expected',
+                                'Not Expected',
                                 'Approved',
-                                'Rejected',
                                 'On Hold',
+                                'Rejected',
                               ]"
                             ></b-form-select>
-                            <span
+                           <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'in progress'
+                                item.status == 'In Progress' || item.status == 'Rejected' ||
+                                item.status == 'New Lead'|| item.status == 'On Hold'
                                   ? 'badge-info'
-                                  : item.status == 'approved'
+                                  : item.status == 'Expected' ||
+                                    item.status == 'Approved'
                                   ? 'badge-success'
-                                  : item.status == 'rejected'
+                                  : item.status == 'Not Expected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
                               {{ item.status }}
-                            </span>
+                            </span> 
                           </td>
                         </template>
                         <template #Actions="{index,item}">
@@ -259,7 +258,7 @@ export default {
           .get(url)
           .then((response) => {
             console.log("data::1", response.data.data.allLead.data);
-            vm.items = response.data.data.allLead.data
+            vm.items = response.data.data
           })
           .catch((errors) => {
             var err = "";

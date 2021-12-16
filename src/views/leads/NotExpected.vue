@@ -34,7 +34,6 @@
                         class="leads-table"
                         sorter
                           :fields="[
-                         'created_at',
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -48,7 +47,7 @@
                         ]"
                         pagination
                       >
-                        <template #AssignedTo="{item}">
+                        <template #assigned_to="{item}">
                           <td>
                             <span
                               v-if="item.agent == null"
@@ -88,13 +87,6 @@
                             </p>
                           </td>
                         </template>
-                        <template #CreateDate="{item}">
-                          <td>
-                            <p>
-                              {{ item.created_at }}
-                            </p>
-                          </td>
-                        </template>
                         <template #PreferredCountry="{item}">
                           <td>
                             <p>
@@ -113,14 +105,11 @@
                             </a>
                           </td>
                         </template>
-                        <template #Status="{item}">
+                        <template #status="{item}">
                           <td class="status text-center">
                             <!-- new is the default status  -->
                             <b-form-select
-                              v-if="
-                                getUser.type === 'Sales Agent' ||
-                                  getUser.type === 'admin'
-                              "
+                             
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
@@ -129,27 +118,27 @@
                                 'In Progress',
                                 'Expected',
                                 'Not Expected',
-                                'Applied',
+                                'Approved',
                                 'On Hold',
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                            <!-- <span
+                           <span
                               class="badge badge-pill"
                               :class="[
-                                item.status.toLowerCase() == 'in progress' ||
-                                item.status.toLowerCase() == 'new lead'
+                                item.status == 'In Progress' || item.status == 'Rejected' ||
+                                item.status == 'New Lead'|| item.status == 'On Hold'
                                   ? 'badge-info'
-                                  : item.status.toLowerCase() == 'expected' ||
-                                    item.status.toLowerCase() == 'applied'
+                                  : item.status == 'Expected' ||
+                                    item.status == 'Approved'
                                   ? 'badge-success'
-                                  : item.status.toLowerCase() == 'not expected'
+                                  : item.status == 'Not Expected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
                               {{ item.status }}
-                            </span> -->
+                            </span> 
                           </td>
                         </template>
                         <template #Actions="{index,item}">
@@ -297,11 +286,11 @@ export default {
       console.log(vm.getUser.type);
       let url = "";
       if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/students";
+        url = process.env.VUE_APP_API_URL + "/sales-agent/notexpected-leads";
       } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/students";
+        url = process.env.VUE_APP_API_URL + "/call-agent/notexpected-leads";
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/students";
+        url = process.env.VUE_APP_API_URL + "/admin/notexpected-leads";
       }
       axios
         .get(url)

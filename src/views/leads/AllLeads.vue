@@ -27,14 +27,15 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="items.data"
+                        :items="getAllStudentData"
                         columnFilter
+                        
                         itemsPerPageSelect
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
                           :fields="[
-                         'created_at',
+         
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -42,13 +43,13 @@
                           'assigned_to',
                           'status',
                           {
-                            key: 'Actions',
+                            key: 'action',
                             sorter: false,
                           },
                         ]"
                         pagination
                       >
-                        <template #AssignedTo="{item}">
+                        <template #assigned_to="{item}">
                           <td>
                             <span
                               v-if="item.agent == null"
@@ -88,13 +89,7 @@
                             </p>
                           </td>
                         </template>
-                        <template #CreateDate="{item}">
-                          <td>
-                            <p>
-                              {{ item.created_at }}
-                            </p>
-                          </td>
-                        </template>
+                       
                         <template #PreferredCountry="{item}">
                           <td>
                             <p>
@@ -113,14 +108,11 @@
                             </a>
                           </td>
                         </template>
-                        <template #Status="{item}">
+                        <template #status="{item}">
                           <td class="status text-center">
                             <!-- new is the default status  -->
                             <b-form-select
-                              v-if="
-                                getUser.type === 'Sales Agent' ||
-                                  getUser.type === 'admin'
-                              "
+                             
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
@@ -129,30 +121,30 @@
                                 'In Progress',
                                 'Expected',
                                 'Not Expected',
-                                'Applied',
+                                'Approved',
                                 'On Hold',
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                            <!-- <span
+                           <span
                               class="badge badge-pill"
                               :class="[
-                                item.status.toLowerCase() == 'in progress' ||
-                                item.status.toLowerCase() == 'new lead'
+                                item.status == 'In Progress' || item.status == 'Rejected' ||
+                                item.status == 'New Lead'|| item.status == 'On Hold'
                                   ? 'badge-info'
-                                  : item.status.toLowerCase() == 'expected' ||
-                                    item.status.toLowerCase() == 'applied'
+                                  : item.status == 'Expected' ||
+                                    item.status == 'Approved'
                                   ? 'badge-success'
-                                  : item.status.toLowerCase() == 'not expected'
+                                  : item.status == 'Not Expected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
                               {{ item.status }}
-                            </span> -->
+                            </span> 
                           </td>
                         </template>
-                        <template #Actions="{index,item}">
+                        <template #action="{index,item}">
                           <td class="menu-action">
                             <a
                               data-target="#viewAccept"
@@ -187,6 +179,7 @@
                               class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
                               v-b-modal="'add-note-modal' + index"
                               :item="item.id"
+                              @click="setStudent(item)"
                             >
                               <i
                                 v-b-tooltip.hover
@@ -205,7 +198,7 @@
                               <i
                                 v-b-tooltip.hover
                                 title="Delete"
-                                @click="setStudent(item.id)"
+                                @click="setStudent(item)"
                                 class="fa fa-trash"
                               ></i>
                             </a>
@@ -264,7 +257,7 @@ export default {
   resultCount: 0
   }),
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["getUser","getAllStudent","getAllStudentData"]),
     ...mapState(["allStudent"]),
     /* eslint-disable */
       totalPages: function() {
@@ -325,36 +318,10 @@ export default {
     setPage: function(pageNumber) {
       this.currentPage = pageNumber
     },
-    getStudent() {
-      const vm = this;
-      console.log(vm.getUser.type);
-      let url = "";
-      if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/students";
-      } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/students";
-      } else {
-        url = process.env.VUE_APP_API_URL + "/admin/students";
-      }
-      axios
-        .get(url)
-        .then((response) => {
-            console.log("data::1", response.data.data.allLead.data);
-            vm.items = response.data.data.allLead
-        })
-        .catch((errors) => {
-          var err = "";
-          console.log("(error.response.status", error.response.status);
-          console.log("errors.response.data", errors.response.data.errors);
-
-          if (errors.response.data.message == "Login Time Expire") {
-            console.log("errors.response.data", errors.response.data.message);
-            localStorage.setItem("token", null);
-          }
-        });
-    },
+   
     setStudent(data) {
       // this.deleteStudentId = data
+      this.$store.commit("SET_CURRENT_STUDENT", null);
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
     changeStatus(item) {
@@ -378,7 +345,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          vm.getStudent();
+          vm.$getStudent()
         })
         .catch((errors) => {
           var err = "";
@@ -412,24 +379,11 @@ export default {
   },
   mounted() {
     let vm = this;
-    setTimeout(function() {
-      vm.getStudent();
-    }, 1000);
+  
   },
-  watch: {
-    allStudent: {
-      handler: function(newVal, oldVal) {
-        console.log(newVal, oldVal);
-        let vm = this;
-        // this function will trigger when ever the value of `my_state` changes
-        if (newVal == true) {
-          vm.getStudent();
-          vm.$store.commit("SET_All_STUDENT", null);
-        }
-      },
-      deep: true,
-    },
-  },
+  created(){
+    this.$getStudent()
+  }
 };
 </script>
 

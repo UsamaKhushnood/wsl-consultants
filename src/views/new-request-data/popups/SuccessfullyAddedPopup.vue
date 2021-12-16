@@ -56,7 +56,7 @@ export default {
     };
   },
   computed:{
-    ...mapGetters(['getSelectedStudent','getUser'])
+    ...mapGetters(['getSelectedStudentId','getUser'])
   },
    methods:{
     getAgents() {
@@ -85,7 +85,7 @@ export default {
     assignedTo() {
       const vm = this;
       axios
-        .post(process.env.VUE_APP_API_URL +"/admin/assigned/"+this.getSelectedStudent.id,{
+        .post(process.env.VUE_APP_API_URL +"/admin/assigned/"+this.getSelectedStudentId,{
           assigned_to: vm.selected,
         })
         .then((response) => {

@@ -10,7 +10,7 @@
     >
       <template #default>
         <div class="modal-body">
-          <form class="form-group">
+          <form class="form-group" id="myLead">
             <div class="row">
               <div class="col-6">
                 <div class="form-element">
@@ -27,7 +27,7 @@
             </div>
             <div class="form-element">
               <label for="country">Preferred Country:</label>
-              <input type="text" v-model="country" id="country" />
+              <input type="text" required v-model="country" id="country" />
             </div>
             <div class="form-element">
               <label for="phone">Phone Number:</label>
@@ -35,18 +35,19 @@
             </div>
             <div class="form-element">
               <label for="whatsapp_num">Whatsapp Number:</label>
-              <input type="text" v-model="whatsapp_num" id="whatsapp_num" />
+              <input type="text" required  v-model="whatsapp_num" id="whatsapp_num" />
             </div>
             <div class="form-element">
               <label for="email">Email:</label>
-              <input type="text" v-model="email" id="email" />
+              <input type="text" required v-model="email" id="email" />
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
               <input
                 type="file"
                 ref="file"
-                @change="handleCvUpload($event)"
+                required
+               
                 id="cv"
               />
             </div>
@@ -55,8 +56,9 @@
               <input
                 type="file"
                 ref="screen"
-                @change="handleScreenshot($event)"
-                id="agentFirstName"
+                required
+                
+                id="scr"
               />
             </div>
           </form>
@@ -117,31 +119,7 @@ export default {
         console.log(this.screenShot);
       };
     },
-    getStudent() {
-      const vm = this;
-      console.log(vm.getUser.type)
-      let url ='';
-      if(vm.getUser.type =='Sales Agent'){
-          url = process.env.VUE_APP_API_URL +"/sales-agent/students";
-      }else if(vm.getUser.type =='Call Center Agent'){
-          url = process.env.VUE_APP_API_URL +"/call-agent/students";
-      }
-      else{
-          url = process.env.VUE_APP_API_URL +"/admin/students";
-      }
-      axios
-        .get(url)
-        .then((response) => {
-          console.log("data::", response.data.data);
-          vm.items = response.data.data.allLead
-        })
-        .catch((errors) => {
-          var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-        });
-    },
+   
     addLead() {
       const vm = this;
       let url ="";
@@ -153,17 +131,23 @@ export default {
           else{
             url = process.env.VUE_APP_API_URL +"/admin/new-leads";
           }
+      
+     
+          var formData = new FormData();
+          var cv = document.querySelector('#cv');
+          var scr = document.querySelector('#scr');
+          formData.append('first_name',vm.first_name)
+          formData.append('last_name',vm.last_name)
+          formData.append('country',vm.country)
+          formData.append('email',vm.email)
+          formData.append('cv',cv.files[0])
+          formData.append('screen_shot',scr.files[0])
+          formData.append('whatsapp_num',vm.whatsapp_num)
+          formData.append('phone',vm.phone)
       axios
-        .post(url, {
-          first_name: vm.first_name,
-          last_name: vm.last_name,
-          country: vm.country,
-          email: vm.email,
-          phone: vm.phone,
-          whatsapp_num: vm.whatsapp_num,
-          cv: vm.cv,
-          screen_shot: vm.screenShot,
-        })
+        .post(url ,formData,{headers: {
+                    'Content-Type': 'multipart/form-data',
+                }})
         .then((response) => {
           console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
@@ -182,7 +166,7 @@ export default {
           vm.cv = "",
           vm.screenShot = "";
           vm.$store.commit("SET_All_STUDENT", true);
-          vm.getStudent()
+          vm.$getStudent()
           vm.$refs.cancel.click()
        
         })

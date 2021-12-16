@@ -107,7 +107,7 @@
                 </b-card-text>
               </b-card>
               <b-card
-                v-show="getSelectedStudent.student_info != null"
+                v-show="getSelectedStudent.notes != null"
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -116,11 +116,9 @@
                 class="mt-2 mb-2"
               >
                 <b-card-text>
-                  <p>
+                  <p v-for="(data,index) in getSelectedStudent.notes" :key="index">
                     {{
-                      getSelectedStudent.student_info != null
-                        ? getSelectedStudent.student_info.query
-                        : ""
+                       data.note
                     }}
                   </p>
                 </b-card-text>
@@ -202,6 +200,16 @@
               <p>{{ getSelectedStudent.email }}</p>
               <h5>Student Phone</h5>
               <p>{{ getSelectedStudent.phone }}</p>
+                <h5>Cv</h5>
+                <p><a :href="ImageUrl+'/student/'+getSelectedStudent.cv" download="">Download</a></p>
+                <h5>Screenshot</h5>
+                <p><a :href="ImageUrl+'/screen-shot/'+getSelectedStudent.screen_shot" download="">Download</a>
+                  <span>
+                    <div class="">
+                  <img :src="ImageUrl+'/screen-shot/'+getSelectedStudent.screen_shot" alt="" />
+                </div>
+                  </span>
+                </p>
               <div class="" v-if="getSelectedStudent.student_info">
                 <h5>Qualification</h5>
                 <p>{{ getSelectedStudent.student_info.qualification }}</p>
@@ -210,7 +218,8 @@
                 <h5>Major Subjects</h5>
                 <p>{{ getSelectedStudent.student_info.major_sub }}</p>
                 <h5>Passing Year</h5>
-                <p>{{ getSelectedStudent.student_info.passing_year }}</p>
+               <p>{{ getSelectedStudent.student_info.passing_year }}</p>
+                
               </div>
             </div>
           </div>
@@ -229,6 +238,9 @@ export default {
   }),
   computed: {
     ...mapGetters(["getSelectedStudent"]),
+    ImageUrl() {
+      return process.env.VUE_APP_IMAGE_STORAGE_URL;
+    },
   },
   methods: {
     getBadge(status) {

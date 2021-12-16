@@ -12,6 +12,7 @@ const state = {
   user: '',
   current_student: '',
   allStudent: '',
+  allStudentData: '',
 }
 
 
@@ -21,6 +22,8 @@ axios.defaults.headers.common['Authorization'] = 'Bearer '+token;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 axios.defaults.headers.common['Accept'] = 'application/json'
+
+
 
 
 const mutations = {
@@ -57,6 +60,9 @@ const mutations = {
   SET_All_STUDENT(state, data) {
     state.allStudent = data;
   },
+  SET_ALL_STUDENT_DATA(state, data) {
+    state.allStudentData = data;
+  },
 }
   const getters = {
     getSpinner(state) {
@@ -65,8 +71,14 @@ const mutations = {
     getUser(state) {
       return state.user;
     },
+    getSelectedStudentId(state) {
+      return state.current_student.id;
+    },
     getSelectedStudent(state) {
       return state.current_student;
+    },
+    getAllStudentData(state) {
+      return state.allStudentData;
     },
     getReceiver(state) {
       return state.receiver_data;

@@ -19,10 +19,10 @@
             ></b-form-textarea>
           </div>
           <div class="row mt-4 mr-2 justify-content-end">
-            <b-button variant="dark" class="mr-2" squared @click="hide"
+            <b-button variant="dark" ref="cancel" class="mr-2" squared @click="hide"
               >Cancel</b-button
             >
-            <b-button variant="primary" squared @click="deleteStudent"
+            <b-button variant="primary" squared @click="addNote"
               >Add Note</b-button
             >
           </div>
@@ -37,7 +37,7 @@ import { mapGetters } from "vuex";
 export default {
   props: ["propsindex", "item"],
   computed: {
-    ...mapGetters(["getSelectedStudent"]),
+    ...mapGetters(["getSelectedStudentId"]),
   },
   data() {
     return {
@@ -45,16 +45,19 @@ export default {
     };
   },
   methods: {
-    deleteStudent() {
+    addNote() {
       const vm = this;
       axios
-        .delete(
+        .post(
           process.env.VUE_APP_API_URL +
-            "/admin/students/" +
-            this.getSelectedStudent
+            "/admin/notes" ,
+            {
+              note:vm.text,
+              student_id:vm.getSelectedStudentId,
+            }
         )
         .then((response) => {
-          vm.isModalVisible = false;
+            vm.$refs.cancel.click()
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
