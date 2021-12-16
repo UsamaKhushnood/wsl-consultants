@@ -59,7 +59,12 @@ const Helpers = {
           .get(url)
           .then((response) => {
               console.log("data::1", response.data.data);
+              vm.$store.commit('SET_ALL_STUDENT_DATA',null)
               vm.$store.commit('SET_ALL_STUDENT_DATA',response.data.data)
+              vm.$forceUpdate()
+              // vm.$watch(response.data.data, callback, {
+              //   immediate: true
+              // })
               // vm.items = 
           })
           .catch((errors) => {

@@ -1,6 +1,6 @@
 <template>
   <div class="student-form-page mt-5 ">
-    <form class="form-group pb-5 position-relative">
+    <form class="form-group pb-5 position-relative" id="formStudent">
       <div class="row bg-white p-5">
         <div class="col-md-12 mb-4">
           <div class="d-flex align-items-center">
@@ -130,9 +130,9 @@
             <label for="cv">Upload your CV</label>
             <input
               type="file"
-              id="test"
-              @change="handleCvUpload($event)"
+              id="cv"
               name="test"
+              @change="changeBtnStatus()"
               accept=".pdf,.doc"
             />
             <!-- <VueFileAgent
@@ -185,6 +185,7 @@ export default {
   data() {
     return {
       selected: null,
+      showBtn: false,
       fileRecords: "",
       uploadUrl: "",
       uploadHeaders: { "X-Test-Header": "vue-file-agent" },
@@ -214,11 +215,35 @@ export default {
   },
   computed: {
     ...mapGetters(["getUser"]),
+    // 	isDisabled: function(){
+    // 	return !this.showBtn;
+    // }
   },
 
   methods: {
     trigger() {
       this.$refs.sendReq.click();
+    },
+    changeBtnStatus() {
+      this.showBtn =true;
+    },
+    resetfeilds() {
+      let vm =this;
+       vm.first_name = ''; 
+       vm.last_name = ''; 
+      vm.country = ''; 
+       vm.qualification = ''; 
+       vm.cgpa = ''; 
+       vm.major_sub = ''; 
+       vm.passing = ''; 
+       vm.occupation = ''; 
+       vm.question = ''; 
+       vm.country = ''; 
+        vm.city = ''; 
+        vm.email = ''; 
+       vm.cv = ''; 
+       vm.whatsapp_num = ''; 
+       vm.phone = ''; 
     },
     addStudent() {
       // this.uploadFiles();
@@ -234,88 +259,67 @@ export default {
       } else {
         url = process.env.VUE_APP_API_URL + "/students";
       }
-      axios
-        .post(url, {
-          cv: vm.fileRecords,
-          first_name: this.first_name,
-          last_name: this.last_name,
-          email: this.email,
-          phone: this.phone,
-          whatsapp_num: this.whatsapp_num,
-          qualification: this.qualification,
-          passing_year: this.passing,
-          cgpa: this.cgpa,
-          major_sub: this.major_sub,
-          occupation: this.occupation,
-          question: this.question,
-          city: this.city_name,
-          country: this.country_name,
-          call_agent_id: this.$route.query.call_agent_id
+       var formData = new FormData();
+      var cv = document.querySelector("#cv");
+      formData.append("first_name", vm.first_name);
+      formData.append("last_name", vm.last_name);
+      formData.append("qualification", vm.qualification);
+      formData.append("cgpa", vm.cgpa);
+      formData.append("major_sub", vm.major_sub);
+      formData.append("passing_year", vm.passing);
+      formData.append("occupation", vm.occupation);
+      formData.append("question", vm.question);
+      formData.append("country", vm.country_name);
+      formData.append("city", vm.city_name);
+      formData.append("email", vm.email);
+      formData.append("whatsapp_num", vm.whatsapp_num);
+      formData.append("phone", vm.phone);
+      formData.append("call_agent_id", this.$route.query.call_agent_id
             ? atob(this.$route.query.call_agent_id)
-            : vm.getUser.id,
+            : vm.getUser.id);
+            if(typeof cv.files[0] != "undefined"){
+              console.log(typeof cv.files[0])
+              formData.append("cv", cv.files ? cv.files[0] : "");
+            }
+      axios
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
         .then((response) => {
           console.log("data::", response.data);
-          this.formOverlay = false;
+          vm.formOverlay = false;
+          vm.BtnStatus = false;
           // vm.$store.commit("SET_SPINNER", false);
+          vm.$getStudent();
           vm.$toast.success("Add Student Successfully", {
             position: "top-right",
             closeButton: "button",
             icon: true,
             rtl: false,
           });
+          vm.resetfeilds()
+          vm.$refs.formStudent.reset() 
           // vm.$store.commit('SET_SPINNER',false);
         })
         .catch((errors) => {
-          this.formOverlay = false;
-          console.log("c", errors.response.data.message);
-          vm.$toast.error(errors.response.data.message, {
-            position: "top-right",
-            closeButton: "button",
-            icon: true,
-            rtl: false,
-          });
+          vm.formOverlay = false;
+          if(errors.response){
+            vm.$toast.error(errors.response.data.message, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+          }
           // vm.$store.commit('SET_SPINNER',false);
         });
     },
     sendTo(url) {
       window.open(url, "_blank");
     },
-    // getCities() {
-    //   const vm = this;
-    //   axios
-    //     .post(process.env.VUE_APP_API_URL + "/cities", {
-    //       country_name: "Pakistan",
-    //     })
-    //     .then((response) => {
-    //       console.log("data::", response.data);
-    //       vm.cities_options = response.data.data;
-    //     })
-    //     .catch((errors) => {
-    //       var err = "";
-    //       if (errors.response.data.errors.email) {
-    //         err += errors.response.data.errors.email;
-    //       }
-    //     });
-    // },
-    // getCountries() {
-    //   const vm = this;
-    //   axios
-    //     .get(process.env.VUE_APP_API_URL + "/countries")
-    //     .then((response) => {
-    //       console.log("data::", response.data.data);
-    //       const token = response.data.token;
-    //       // vm.$store.commit("SET_SPINNER", false);
-    //       vm.options = response.data.data;
-    //       // vm.$router.push({ name: "Dashboard" });
-    //     })
-    //     .catch((errors) => {
-    //       var err = "";
-    //       if (errors.response.data.errors.email) {
-    //         err += errors.response.data.errors.email;
-    //       }
-    //     });
-    // },
+
     getUrl() {
       const vm = this;
       // first name will replace with password

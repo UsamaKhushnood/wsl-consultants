@@ -1,7 +1,7 @@
 <template>
   <CRow>
     <CCol sm="6" lg="3">
-      <CWidgetDropdown color="primary" header="9.823" text="Members online">
+      <CWidgetDropdown color="primary" :header="allLeadHeader" text="All Leads">
         <template #default>
           <CDropdown
             color="transparent p-0"
@@ -30,7 +30,7 @@
       </CWidgetDropdown>
     </CCol>
     <CCol sm="6" lg="3">
-      <CWidgetDropdown color="info" header="9.823" text="Members online">
+      <CWidgetDropdown color="info" :header="allAppliedHeader" text="Applied">
         <template #default>
           <CDropdown
             color="transparent p-0"
@@ -54,7 +54,7 @@
             :data-points="[1, 18, 9, 17, 34, 22, 11]"
             point-hover-background-color="info"
             :options="{ elements: { line: { tension: 0.00001 }}}"
-            label="Members"
+            label="All Leads"
             labels="months"
           />
         </template>
@@ -63,8 +63,8 @@
     <CCol sm="6" lg="3">
       <CWidgetDropdown
         color="warning"
-        header="9.823"
-        text="Members online"
+        :header="allExpectedHeader"
+        text="Expected"
       >
         <template #default>
           <CDropdown
@@ -97,8 +97,8 @@
     <CCol sm="6" lg="3">
       <CWidgetDropdown
         color="danger"
-        header="9.823"
-        text="Members online"
+        :header="allProgressHeader"
+        text="In Progress"
       >
         <template #default>
           <CDropdown
@@ -130,9 +130,52 @@
 
 <script>
 import { CChartLineSimple, CChartBarSimple } from '../charts/index.js'
+import axios from 'axios'
 
 export default {
   name: 'WidgetsDropdown',
-  components: { CChartLineSimple, CChartBarSimple }
+  components: { CChartLineSimple, CChartBarSimple },
+  data(){
+    return{
+      allLeadHeader:'',
+      allProgressHeader:'',
+      allAppliedHeader:'',
+      allExpectedHeader:'',
+
+    }
+  },
+   mounted(){
+    this.getCounts()
+  },
+    methods:{
+    getCounts(){
+      const vm = this;
+      let url = "";
+        url = process.env.VUE_APP_API_URL + "/admin/counter";
+      axios
+        .get(url)
+        .then((response) => {
+            console.log("data::1", response.data.data);
+            vm.allLeadHeader = response.data.data.allLeads.toString()
+            vm.allProgressHeader = response.data.data.inProgress.toString()
+            vm.allExpectedHeader = response.data.data.expected.toString()
+            vm.allAppliedHeader = response.data.data.applied.toString()
+            // vm.$watch(response.data.data, callback, {
+            //   immediate: true
+            // })
+            // vm.items = 
+        })
+        .catch((errors) => {
+          var err = "";
+          console.log("(error.response.status", error.response.status);
+          console.log("errors.response.data", errors.response.data.errors);
+
+          if (errors.response.data.message == "Login Time Expire") {
+            console.log("errors.response.data", errors.response.data.message);
+            localStorage.setItem("token", null);
+          }
+        });
+    }
+  }
 }
 </script>

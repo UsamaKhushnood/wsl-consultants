@@ -34,6 +34,7 @@ export default {
     pointed: Boolean,
     pointHoverBackgroundColor: String
   },
+ 
   computed: {
     pointHoverColor () {
       if (this.pointHoverBackgroundColor) {
@@ -131,6 +132,7 @@ export default {
     computedOptions () {
       return deepObjectsMerge(this.defaultOptions, this.options || {})
     }
-  }
+  },
+
 }
 </script>
