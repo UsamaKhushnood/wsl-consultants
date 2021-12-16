@@ -1,25 +1,24 @@
 <template>
-  <div class="student-form-page mt-5">
-    <form class="form-group pb-5">
+  <div class="student-form-page mt-5 ">
+    <form class="form-group pb-5 position-relative">
       <div class="row bg-white p-5">
         <div class="col-md-12 mb-4">
           <div class="d-flex align-items-center">
             <div class="mr-3">
               <img src="@/assets/logo.png" width="80" />
-                 
             </div>
             <div>
               <h3 class="mb-0">Student Assessment Form</h3>
               <p class="mb-0">Fill out the form carefully for registration</p>
             </div>
-             <b-button
-                  v-if="getUser.id"
-                  variant="success"
-                  @click="getUrl()"
-                  class="w-25 mt-4 ml-auto "
-                  squared
-                  >Copy Url</b-button
-                >
+            <b-button
+              v-if="getUser.id"
+              variant="success"
+              @click="getUrl()"
+              class="w-25 mt-4 ml-auto "
+              squared
+              >Copy Url</b-button
+            >
           </div>
           <hr />
         </div>
@@ -54,14 +53,30 @@
           </div>
         </div>
         <div class="col-md-6 mt-2">
-           <div class="form-element">
+          <div class="form-element">
             <label for="preferredCountry">Preffered Country</label>
-            <b-form-select
+            <!-- <b-form-select
               id="preferredCountry"
               @change="getCities()"
-              v-model="country_name"
               :options="options"
-            ></b-form-select>
+            ></b-form-select> -->
+            <b-form-select
+              required
+              v-model="country_name"
+              :options="[
+                'Austria ',
+                'Europe',
+                'Canada',
+                'Italy',
+                'Itly MBBS',
+                'Turkey MBBS',
+                'UK',
+                'USA',
+                'Visit Canada',
+                'Visit USA',
+              ]"
+            >
+            </b-form-select>
           </div>
         </div>
         <div class="col-12 mt-3 mb-0">
@@ -106,7 +121,6 @@
               :options="cities_options"
             ></b-form-select>
           </div>
-         
         </div>
         <div class="col-12 mt-3 mb-0">
           <hr />
@@ -114,7 +128,13 @@
         <div class="col-md-12 mt-2">
           <div class="form-element">
             <label for="cv">Upload your CV</label>
-            <input type="file" id="test" @change="handleCvUpload($event)" name="test" accept=".pdf,.doc"/>
+            <input
+              type="file"
+              id="test"
+              @change="handleCvUpload($event)"
+              name="test"
+              accept=".pdf,.doc"
+            />
             <!-- <VueFileAgent
               ref="vueFileAgent"
               :theme="'list'"
@@ -153,19 +173,21 @@
           >
         </div>
       </div>
+      <b-overlay :show="formOverlay" no-wrap class="overlayModal"> </b-overlay>
     </form>
   </div>
 </template>
 <script>
-import axios from 'axios'
-import { mapGetters } from 'vuex';
+import axios from "axios";
+import { mapGetters } from "vuex";
+import pakistan_cities from "./cities";
 export default {
   data() {
     return {
       selected: null,
-      fileRecords: '',
-      uploadUrl: '',
-      uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
+      fileRecords: "",
+      uploadUrl: "",
+      uploadHeaders: { "X-Test-Header": "vue-file-agent" },
       fileRecordsForUpload: [], // maintain an upload queue
       first_name: null,
       last_name: null,
@@ -185,27 +207,32 @@ export default {
       city_name: null,
       options: [],
       cities_options: [],
-      uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
+      formOverlay: false,
+      uploadHeaders: { "X-Test-Header": "vue-file-agent" },
       // options: ["Lahore", "Karachi", "Islamabad", "Multan"],
     };
   },
-  computed:{
-    ...mapGetters(['getUser'])
+  computed: {
+    ...mapGetters(["getUser"]),
   },
+
   methods: {
     trigger() {
       this.$refs.sendReq.click();
     },
     addStudent() {
       // this.uploadFiles();
-      let call_agent_id ="";
+      this.formOverlay = true;
+      let call_agent_id = "";
       const vm = this;
-      let url ="";
-      if(vm.getUser.type){
-       url = vm.getUser.type =='admin' ? process.env.VUE_APP_API_URL + "/admin/students" : process.env.VUE_APP_API_URL + "/call-agent/students"
-      }else{
-        
-       url = process.env.VUE_APP_API_URL + "/students"
+      let url = "";
+      if (vm.getUser.type) {
+        url =
+          vm.getUser.type == "admin"
+            ? process.env.VUE_APP_API_URL + "/admin/students"
+            : process.env.VUE_APP_API_URL + "/call-agent/students";
+      } else {
+        url = process.env.VUE_APP_API_URL + "/students";
       }
       axios
         .post(url, {
@@ -223,10 +250,13 @@ export default {
           question: this.question,
           city: this.city_name,
           country: this.country_name,
-          call_agent_id: this.$route.query.call_agent_id ? atob(this.$route.query.call_agent_id) : vm.getUser.id
+          call_agent_id: this.$route.query.call_agent_id
+            ? atob(this.$route.query.call_agent_id)
+            : vm.getUser.id,
         })
         .then((response) => {
           console.log("data::", response.data);
+          this.formOverlay = false;
           // vm.$store.commit("SET_SPINNER", false);
           vm.$toast.success("Add Student Successfully", {
             position: "top-right",
@@ -237,59 +267,62 @@ export default {
           // vm.$store.commit('SET_SPINNER',false);
         })
         .catch((errors) => {
-          console.log('c',errors.response.data.message)
-            vm.$toast.error(errors.response.data.message, {
-              position: "top-right",
-              closeButton: "button",
-              icon: true,
-              rtl: false,
-            });
+          this.formOverlay = false;
+          console.log("c", errors.response.data.message);
+          vm.$toast.error(errors.response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
           // vm.$store.commit('SET_SPINNER',false);
         });
     },
     sendTo(url) {
       window.open(url, "_blank");
     },
-    getCities() {
-      const vm = this;
-      axios
-        .post(process.env.VUE_APP_API_URL +"/cities",{
-         'country_name' :vm.country_name 
-        })
-        .then((response) => {
-          console.log("data::", response.data);
-          vm.cities_options = response.data.data
-        })
-        .catch((errors) => {
-          var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-        });
-    },
-    getCountries() {
-      const vm = this;
-      axios
-        .get(process.env.VUE_APP_API_URL + "/countries")
-        .then((response) => {
-          console.log("data::", response.data.data);
-          const token = response.data.token;
-          // vm.$store.commit("SET_SPINNER", false);
-          vm.options = response.data.data
-          // vm.$router.push({ name: "Dashboard" });
-        })
-        .catch((errors) => {
-          var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-        });
-    },
+    // getCities() {
+    //   const vm = this;
+    //   axios
+    //     .post(process.env.VUE_APP_API_URL + "/cities", {
+    //       country_name: "Pakistan",
+    //     })
+    //     .then((response) => {
+    //       console.log("data::", response.data);
+    //       vm.cities_options = response.data.data;
+    //     })
+    //     .catch((errors) => {
+    //       var err = "";
+    //       if (errors.response.data.errors.email) {
+    //         err += errors.response.data.errors.email;
+    //       }
+    //     });
+    // },
+    // getCountries() {
+    //   const vm = this;
+    //   axios
+    //     .get(process.env.VUE_APP_API_URL + "/countries")
+    //     .then((response) => {
+    //       console.log("data::", response.data.data);
+    //       const token = response.data.token;
+    //       // vm.$store.commit("SET_SPINNER", false);
+    //       vm.options = response.data.data;
+    //       // vm.$router.push({ name: "Dashboard" });
+    //     })
+    //     .catch((errors) => {
+    //       var err = "";
+    //       if (errors.response.data.errors.email) {
+    //         err += errors.response.data.errors.email;
+    //       }
+    //     });
+    // },
     getUrl() {
       const vm = this;
       // first name will replace with password
-      
-      var credentials = `${process.env.VUE_APP_URL+'form?call_agent_id=' + btoa(this.getUser.id)}`;
+
+      var credentials = `${process.env.VUE_APP_URL +
+        "form?call_agent_id=" +
+        btoa(this.getUser.id)}`;
       navigator.clipboard.writeText(credentials).then(
         function() {
           vm.isModalVisible = false;
@@ -299,7 +332,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          console.log(credentials)
+          console.log(credentials);
         },
         function() {
           vm.isModalVisible = false;
@@ -312,61 +345,73 @@ export default {
         }
       );
     },
-     handleCvUpload(event){
-      let vm = this
+    handleCvUpload(event) {
+      let vm = this;
       var image = event.target.files[0];
       const reader = new FileReader();
-              reader.readAsDataURL(image);
-              reader.onload = e =>{
-                  vm.fileRecords = e.target.result;
-                  console.log(this.fileRecords);
-              };
+      reader.readAsDataURL(image);
+      reader.onload = (e) => {
+        vm.fileRecords = e.target.result;
+        console.log(this.fileRecords);
+      };
     },
-      uploadFiles: function () {
-        // Using the default uploader. You may use another uploader instead.
-        this.$refs.vueFileAgent.upload(this.uploadUrl, this.uploadHeaders, this.fileRecordsForUpload);
-        this.fileRecordsForUpload = [];
-      },
-      deleteUploadedFile: function (fileRecord) {
-        // Using the default uploader. You may use another uploader instead.
-        this.$refs.vueFileAgent.deleteUpload(this.uploadUrl, this.uploadHeaders, fileRecord);
-      },
-      filesSelected: function (fileRecordsNewlySelected) {
-        var validFileRecords = fileRecordsNewlySelected.filter((fileRecord) => !fileRecord.error);
-        this.fileRecordsForUpload = this.fileRecordsForUpload.concat(validFileRecords);
-      },
-      onBeforeDelete: function (fileRecord) {
-        var i = this.fileRecordsForUpload.indexOf(fileRecord);
-        if (i !== -1) {
+    uploadFiles: function() {
+      // Using the default uploader. You may use another uploader instead.
+      this.$refs.vueFileAgent.upload(
+        this.uploadUrl,
+        this.uploadHeaders,
+        this.fileRecordsForUpload
+      );
+      this.fileRecordsForUpload = [];
+    },
+    deleteUploadedFile: function(fileRecord) {
+      // Using the default uploader. You may use another uploader instead.
+      this.$refs.vueFileAgent.deleteUpload(
+        this.uploadUrl,
+        this.uploadHeaders,
+        fileRecord
+      );
+    },
+    filesSelected: function(fileRecordsNewlySelected) {
+      var validFileRecords = fileRecordsNewlySelected.filter(
+        (fileRecord) => !fileRecord.error
+      );
+      this.fileRecordsForUpload = this.fileRecordsForUpload.concat(
+        validFileRecords
+      );
+    },
+    onBeforeDelete: function(fileRecord) {
+      var i = this.fileRecordsForUpload.indexOf(fileRecord);
+      if (i !== -1) {
         // queued file, not yet uploaded. Just remove from the arrays
-          this.fileRecordsForUpload.splice(i, 1);
-          var k = this.fileRecords.indexOf(fileRecord);
-          if (k !== -1) this.fileRecords.splice(k, 1);
-        } else {
-          if (confirm('Are you sure you want to delete?')) {
-            this.$refs.vueFileAgent.deleteFileRecord(fileRecord); // will trigger 'delete' event
-          }
+        this.fileRecordsForUpload.splice(i, 1);
+        var k = this.fileRecords.indexOf(fileRecord);
+        if (k !== -1) this.fileRecords.splice(k, 1);
+      } else {
+        if (confirm("Are you sure you want to delete?")) {
+          this.$refs.vueFileAgent.deleteFileRecord(fileRecord); // will trigger 'delete' event
         }
-      },
-      fileDeleted: function (fileRecord) {
-        var i = this.fileRecordsForUpload.indexOf(fileRecord);
-        if (i !== -1) {
-          this.fileRecordsForUpload.splice(i, 1);
-        } else {
-          this.deleteUploadedFile(fileRecord);
-        }
-      },  
+      }
+    },
+    fileDeleted: function(fileRecord) {
+      var i = this.fileRecordsForUpload.indexOf(fileRecord);
+      if (i !== -1) {
+        this.fileRecordsForUpload.splice(i, 1);
+      } else {
+        this.deleteUploadedFile(fileRecord);
+      }
+    },
   },
   created() {
     //  this.$store.commit('SET_SPINNER',false);
-    this.getCountries()
-    if( !this.$route.query.call_agent_id ){
-        if(!this.getUser){
-            this.$router.push({ path: '/login' })
-        }
+    // this.getCountries();
+    this.cities_options = pakistan_cities;
+    if (!this.$route.query.call_agent_id) {
+      if (!this.getUser) {
+        this.$router.push({ path: "/login" });
+      }
     }
-  }
-
+  },
 };
 </script>
 <style lang="scss">
@@ -375,6 +420,6 @@ export default {
   margin: 0 auto;
 }
 button.btn.w-25.mt-4.ml-auto.btn-success.rounded-0 {
-    float: right;
+  float: right;
 }
 </style>

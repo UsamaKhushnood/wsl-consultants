@@ -1,8 +1,8 @@
 <template>
   <div class="c-app">
-    <TheSidebar/>
+    <TheSidebar />
     <CWrapper>
-      <TheHeader/>
+      <TheHeader />
       <div class="c-body">
         <main class="c-main">
           <CContainer fluid>
@@ -10,31 +10,39 @@
               <router-view :key="$route.path"></router-view>
             </transition>
           </CContainer>
+          <b-overlay
+            :show="false"
+            variant="light"
+            opacity="0.7"
+            spinner-variant="primary"
+            no-wrap
+            class="overlayModal"
+          >
+          </b-overlay>
         </main>
       </div>
-      <TheFooter/>
+      <TheFooter />
     </CWrapper>
   </div>
 </template>
 
 <script>
-import TheSidebar from './TheSidebar'
-import TheHeader from './TheHeader'
-import TheFooter from './TheFooter'
+import TheSidebar from "./TheSidebar";
+import TheHeader from "./TheHeader";
+import TheFooter from "./TheFooter";
 
 export default {
-  name: 'TheContainer',
+  name: "TheContainer",
   components: {
     TheSidebar,
     TheHeader,
-    TheFooter
+    TheFooter,
   },
-  created(){
-    console.log('TheContainer',1)
-    console.log('Login Time Expire',1)
-
-  }
-}
+  created() {
+    console.log("TheContainer", 1);
+    console.log("Login Time Expire", 1);
+  },
+};
 </script>
 
 <style scoped>
@@ -47,7 +55,12 @@ export default {
   opacity: 0;
 }
 
-.c-body{
+.c-body {
   margin-top: 40px;
+}
+
+.c-main {
+  overflow: auto;
+  height: calc(100vh - 160px);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="cerate-new-lead-popup">
+  <div class="cerate-new-lead-popup position-relative ">
     <b-modal
       :id="'create-lead-modal'"
       title="Create New Lead"
@@ -27,7 +27,23 @@
             </div>
             <div class="form-element">
               <label for="country">Preferred Country:</label>
-              <input type="text" required v-model="country" id="country" />
+              <b-form-select
+                v-model="country"
+                required
+                :options="[
+                  'Austria ',
+                  'Europe',
+                  'Canada',
+                  'Italy',
+                  'Itly MBBS',
+                  'Turkey MBBS',
+                  'UK',
+                  'USA',
+                  'Visit Canada',
+                  'Visit USA',
+                ]"
+              >
+              </b-form-select>
             </div>
             <div class="form-element">
               <label for="phone">Phone Number:</label>
@@ -35,7 +51,12 @@
             </div>
             <div class="form-element">
               <label for="whatsapp_num">Whatsapp Number:</label>
-              <input type="text" required  v-model="whatsapp_num" id="whatsapp_num" />
+              <input
+                type="text"
+                required
+                v-model="whatsapp_num"
+                id="whatsapp_num"
+              />
             </div>
             <div class="form-element">
               <label for="email">Email:</label>
@@ -43,23 +64,11 @@
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
-              <input
-                type="file"
-                ref="file"
-                required
-               
-                id="cv"
-              />
+              <input type="file" ref="file" required id="cv" />
             </div>
             <div class="form-element">
               <label for="agentFirstName">Screenshots:</label>
-              <input
-                type="file"
-                ref="screen"
-                required
-                
-                id="scr"
-              />
+              <input type="file" ref="screen" required id="scr" />
             </div>
           </form>
         </div>
@@ -67,7 +76,12 @@
       <template #modal-footer="{hide}">
         <div>
           <div class="row mt-4 mr-2 justify-content-end">
-            <b-button variant="dark" class="mr-2" ref="cancel" squared @click="hide"
+            <b-button
+              variant="dark"
+              class="mr-2"
+              ref="cancel"
+              squared
+              @click="hide"
               >Cancel</b-button
             >
             <b-button variant="success" squared @click="addLead"
@@ -75,6 +89,8 @@
             >
           </div>
         </div>
+        <b-overlay :show="formOverlay" no-wrap class="overlayModal">
+        </b-overlay>
       </template>
     </b-modal>
   </div>
@@ -94,6 +110,7 @@ export default {
     whatsapp_num: "",
     cv: "",
     screenShot: "",
+    formOverlay: false,
   }),
   computed: {
     ...mapGetters(["getUser"]),
@@ -119,36 +136,38 @@ export default {
         console.log(this.screenShot);
       };
     },
-   
+
     addLead() {
       const vm = this;
-      let url ="";
-          if(vm.getUser.type =='Sales Agent'){
-            url = process.env.VUE_APP_API_URL +"/sales-agent/new-leads";
-          }else if(vm.getUser.type =='Call Center Agent'){
-            url = process.env.VUE_APP_API_URL +"/call-agent/new-leads";
-          }
-          else{
-            url = process.env.VUE_APP_API_URL +"/admin/new-leads";
-          }
-      
-     
-          var formData = new FormData();
-          var cv = document.querySelector('#cv');
-          var scr = document.querySelector('#scr');
-          formData.append('first_name',vm.first_name)
-          formData.append('last_name',vm.last_name)
-          formData.append('country',vm.country)
-          formData.append('email',vm.email)
-          formData.append('cv',cv.files[0])
-          formData.append('screen_shot',scr.files[0])
-          formData.append('whatsapp_num',vm.whatsapp_num)
-          formData.append('phone',vm.phone)
+      let url = "";
+      if (vm.getUser.type == "Sales Agent") {
+        url = process.env.VUE_APP_API_URL + "/sales-agent/new-leads";
+      } else if (vm.getUser.type == "Call Center Agent") {
+        url = process.env.VUE_APP_API_URL + "/call-agent/new-leads";
+      } else {
+        url = process.env.VUE_APP_API_URL + "/admin/new-leads";
+      }
+
+      var formData = new FormData();
+      var cv = document.querySelector("#cv");
+      var scr = document.querySelector("#scr");
+      formData.append("first_name", vm.first_name);
+      formData.append("last_name", vm.last_name);
+      formData.append("country", vm.country);
+      formData.append("email", vm.email);
+      formData.append("cv", cv.files[0]);
+      formData.append("screen_shot", scr.files[0]);
+      formData.append("whatsapp_num", vm.whatsapp_num);
+      formData.append("phone", vm.phone);
+      this.formOverlay = true;
       axios
-        .post(url ,formData,{headers: {
-                    'Content-Type': 'multipart/form-data',
-                }})
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
+          this.formOverlay = false;
           console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
             position: "top-right",
@@ -157,21 +176,22 @@ export default {
             rtl: false,
           });
 
-          vm.first_name = "",
-          vm.last_name = "",
-          vm.country = "",
-          vm.email = "",
-          vm.phone = "",
-          vm.whatsapp_num = "",
-          vm.cv = "",
-          vm.screenShot = "";
+          (vm.first_name = ""),
+            (vm.last_name = ""),
+            (vm.country = ""),
+            (vm.email = ""),
+            (vm.phone = ""),
+            (vm.whatsapp_num = ""),
+            (vm.cv = ""),
+            (vm.screenShot = "");
           vm.$store.commit("SET_All_STUDENT", true);
-          vm.$getStudent()
-          vm.$refs.cancel.click()
-       
+          vm.$getStudent();
+          vm.$refs.cancel.click();
         })
         .catch((errors) => {
+          this.formOverlay = false;
           var err = "";
+          console.log(errors, "create new lead errors");
           if (errors.response.data.errors.email) {
             err += errors.response.data.errors.email;
           }

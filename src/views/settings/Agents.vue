@@ -2,7 +2,7 @@
   <div class="all-agents-list">
     <div class="agents-list">
       <div
-        class="agent bg-white mr-1 p-3 bg-gray-100 mb-2 align-items-center"
+        class="agent bg-white mr-1 p-3  mb-2 align-items-center"
         v-for="(i, x) in [1, 2, 3, 4, 5]"
         :key="x"
       >

@@ -1,6 +1,6 @@
 <template>
   <div id="new-request-all-popups">
-    <SuccessfullyAddedPopup :propsindex="propsindex" />
+    <AssignLeadPopup :propsindex="propsindex" />
     <HoldRequestPopup :propsindex="propsindex" />
     <DenyRequestPopup :propsindex="propsindex" />
     <ViewShopSidebar :propsindex="propsindex" />
@@ -12,12 +12,12 @@
 import ViewShopSidebar from "./popups/ViewShopSidebar.vue";
 import HoldRequestPopup from "./popups/HoldRequestPopup.vue";
 import DenyRequestPopup from "./popups/DenyRequestPopup.vue";
-import SuccessfullyAddedPopup from "./popups/SuccessfullyAddedPopup.vue";
+import AssignLeadPopup from "./popups/AssignLeadPopup.vue";
 import ViewDetailsSidebar from "./popups/ViewDetailsSidebar.vue";
 import AddNotePopup from "./popups/AddNotePopup.vue";
 export default {
   components: {
-    SuccessfullyAddedPopup,
+    AssignLeadPopup,
     DenyRequestPopup,
     HoldRequestPopup,
     ViewShopSidebar,

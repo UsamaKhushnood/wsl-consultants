@@ -29,13 +29,11 @@
                         :fixed="false"
                         :items="getAllStudentData"
                         columnFilter
-                        
                         itemsPerPageSelect
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                          :fields="[
-         
+                        :fields="[
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -66,7 +64,7 @@
                             </span>
                           </td>
                         </template>
-                        <template #Whatsapp="{item}">
+                        <template #whatsapp_num="{item}">
                           <td>
                             <a
                               :href="
@@ -81,15 +79,6 @@
                             </a>
                           </td>
                         </template>
-
-                        <template #StudentName="{item}">
-                          <td>
-                            <p>
-                              {{ item.first_name + item.last_name }}
-                            </p>
-                          </td>
-                        </template>
-                       
                         <template #PreferredCountry="{item}">
                           <td>
                             <p>
@@ -112,7 +101,6 @@
                           <td class="status text-center">
                             <!-- new is the default status  -->
                             <b-form-select
-                             
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
@@ -121,16 +109,18 @@
                                 'In Progress',
                                 'Expected',
                                 'Not Expected',
-                                'Approved',
+                                'Applied',
                                 'On Hold',
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                           <span
+                            <!-- <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'In Progress' || item.status == 'Rejected' ||
-                                item.status == 'New Lead'|| item.status == 'On Hold'
+                                item.status == 'In Progress' ||
+                                item.status == 'Rejected' ||
+                                item.status == 'New Lead' ||
+                                item.status == 'On Hold'
                                   ? 'badge-info'
                                   : item.status == 'Expected' ||
                                     item.status == 'Approved'
@@ -141,7 +131,7 @@
                               ]"
                             >
                               {{ item.status }}
-                            </span> 
+                            </span> -->
                           </td>
                         </template>
                         <template #action="{index,item}">
@@ -232,8 +222,6 @@
 </template>
 
 <script>
-
-
 import $ from "jquery";
 import "datatables.net-buttons-bs4";
 import tableData from "../tableData";
@@ -246,40 +234,38 @@ export default {
   name: "NewRequest",
   components: { WidgetsDropdown, AllPopups, CreateNewLead },
 
-  
   data: () => ({
     // items: tableData,
 
     items: [],
     deleteStudentId: "",
     currentPage: 1,
-  itemsPerPage: 3,
-  resultCount: 0
+    itemsPerPage: 3,
+    resultCount: 0,
   }),
   computed: {
-    ...mapGetters(["getUser","getAllStudent","getAllStudentData"]),
+    ...mapGetters(["getUser", "getAllStudent", "getAllStudentData"]),
     ...mapState(["allStudent"]),
     /* eslint-disable */
-      totalPages: function() {
-        if (this.resultCount == 0){
-          return 1
-        }
-        else {
-        return Math.ceil(this.resultCount / this.itemsPerPage)
+    totalPages: function() {
+      if (this.resultCount == 0) {
+        return 1;
+      } else {
+        return Math.ceil(this.resultCount / this.itemsPerPage);
       }
-      },
-      /* eslint-disable */
-      paginate: function() {
-          if (!this.articles || this.articles.length != this.articles.length) {
-              return
-          }
-          this.resultCount = this.articles.length
-          if (this.currentPage >= this.totalPages) {
-            this.currentPage = this.totalPages
-          }
-          var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
-          return this.articles.slice(index, index + this.itemsPerPage)
+    },
+    /* eslint-disable */
+    paginate: function() {
+      if (!this.articles || this.articles.length != this.articles.length) {
+        return;
       }
+      this.resultCount = this.articles.length;
+      if (this.currentPage >= this.totalPages) {
+        this.currentPage = this.totalPages;
+      }
+      var index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
+      return this.articles.slice(index, index + this.itemsPerPage);
+    },
   },
   methods: {
     // getStudent() {
@@ -316,9 +302,9 @@ export default {
     //     });
     // },
     setPage: function(pageNumber) {
-      this.currentPage = pageNumber
+      this.currentPage = pageNumber;
     },
-   
+
     setStudent(data) {
       // this.deleteStudentId = data
       this.$store.commit("SET_CURRENT_STUDENT", null);
@@ -345,7 +331,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          vm.$getStudent()
+          vm.$getStudent();
         })
         .catch((errors) => {
           var err = "";
@@ -379,11 +365,10 @@ export default {
   },
   mounted() {
     let vm = this;
-  
   },
-  created(){
-    this.$getStudent()
-  }
+  created() {
+    this.$getStudent();
+  },
 };
 </script>
 
@@ -404,6 +389,6 @@ export default {
 </style>
 <style lang="css">
 .current {
-color: teal;
+  color: teal;
 }
 </style>

@@ -18,7 +18,16 @@
       style="position: relative; overflow: auto !important;"
     >
       <li class="c-sidebar-nav-title" v-if="getUser.type == 'admin'">Admin</li>
-      <li class="c-sidebar-nav-item" v-if="getUser.type == 'admin'">
+      <li class="c-sidebar-nav-title" v-if="getUser.type == 'Sales Agent'">
+        Sales Department
+      </li>
+      <li
+        class="c-sidebar-nav-title"
+        v-if="getUser.type == 'Call Center Agent'"
+      >
+        Call Center Department
+      </li>
+      <li class="c-sidebar-nav-item">
         <router-link
           active-class="c-active"
           to="/dashboard"
@@ -64,7 +73,7 @@
           active-class="c-active"
           to="/form"
           class="c-sidebar-nav-link"
-          target="_self"
+          target="_blank"
         >
           <i
             class="c-sidebar-nav-icon fa fa-align-justify"
@@ -73,7 +82,7 @@
           Student Form
         </router-link>
       </li>
-      <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'admin'">
+      <li class="c-sidebar-nav-dropdown">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-1>
           <i class="c-sidebar-nav-icon fa fa-cubes" aria-hidden="true"></i>
           Leads
@@ -173,62 +182,6 @@
         </b-collapse>
       </li>
 
-      <!-- <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'admin'">
-        <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-3>
-          <i
-            class="c-sidebar-nav-icon fas fa-graduation-cap"
-            aria-hidden="true"
-          ></i>
-          Registered Students
-        </a>
-        <b-collapse
-          id="accordion-3"
-          visible
-          accordion="my-accordion"
-          class="c-sidebar-nav-dropdown-items-custom"
-        >
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              New Students
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              Recent Students
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              Active Students
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              Intrested Students
-            </router-link>
-          </li>
-        </b-collapse>
-      </li> -->
       <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'admin'">
         <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-6>
           <i class="c-sidebar-nav-icon fa fa-gear" aria-hidden="true"></i>
@@ -262,196 +215,6 @@
           </li>
         </b-collapse>
       </li>
-
-      <li class="c-sidebar-nav-title" v-if="getUser.type == 'Sales Agent'">
-        Sales Department
-      </li>
-
-      <li class="c-sidebar-nav-item" v-if="getUser.type == 'Sales Agent'">
-        <!-- Dashboard/Sales  -->
-        <router-link
-          active-class="c-active"
-          to="/dashboard"
-          aria-current="page"
-          class="router-link-exact-active c-sidebar-nav-link"
-          target="_self"
-        >
-          <i
-            class="c-sidebar-nav-icon fa fa-bar-chart-o"
-            aria-hidden="true"
-          ></i>
-          Dashboard
-        </router-link>
-      </li>
-      <li class="c-sidebar-nav-dropdown" v-if="getUser.type == 'Sales Agent'">
-        <a class="c-sidebar-nav-dropdown-toggle" v-b-toggle.accordion-sales>
-          <i class="c-sidebar-nav-icon fa fa-cubes" aria-hidden="true"></i>
-          Leads
-        </a>
-        <b-collapse
-          id="accordion-sales"
-          accordion="my-accordion"
-          visible
-          class="c-sidebar-nav-dropdown-items-custom"
-        >
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/all-leads"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              All Leads
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/approved"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              Approved
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/rejected"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              Rejected
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/on-hold"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              On Hold
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/in-progress"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              In Progress
-            </router-link>
-          </li>
-        </b-collapse>
-      </li>
-
-      <li
-        class="c-sidebar-nav-title"
-        v-if="getUser.type == 'Call Center Agent'"
-      >
-        Call Center Department
-      </li>
-      <li class="c-sidebar-nav-item" v-if="getUser.type == 'Call Center Agent'">
-        <!-- Dashboard/CallCenter -->
-        <router-link
-          active-class="c-active"
-          to="/dashboard"
-          aria-current="page"
-          class="router-link-exact-active c-sidebar-nav-link"
-          target="_self"
-        >
-          <i class="c-sidebar-nav-icon fa fa-users" aria-hidden="true"></i>
-          Dashboard
-        </router-link>
-      </li>
-
-      <li class="c-sidebar-nav-item" v-if="getUser.type == 'Call Center Agent'">
-        <router-link
-          active-class="c-active"
-          to="/form"
-          class="c-sidebar-nav-link"
-          target="_self"
-        >
-          <i
-            class="c-sidebar-nav-icon fa fa-align-justify"
-            aria-hidden="true"
-          ></i>
-          Student Form
-        </router-link>
-      </li>
-
-      <li
-        class="c-sidebar-nav-dropdown"
-        v-if="getUser.type == 'Call Center Agent'"
-      >
-        <a
-          class="c-sidebar-nav-dropdown-toggle"
-          v-b-toggle.accordion-call-center
-        >
-          <i class="c-sidebar-nav-icon fa fa-cubes" aria-hidden="true"></i>
-          Leads
-        </a>
-        <b-collapse
-          id="accordion-call-center"
-          accordion="my-accordion"
-          visible
-          class="c-sidebar-nav-dropdown-items-custom"
-        >
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/all-leads"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              All Leads
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/approved"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              Approved
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/rejected"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              Rejected
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/on-hold"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              On Hold
-            </router-link>
-          </li>
-          <li class="c-sidebar-nav-item">
-            <router-link
-              active-class="c-active"
-              to="/dashboard/leads/in-progress"
-              class="c-sidebar-nav-link"
-              target="_self"
-            >
-              In Progress
-            </router-link>
-          </li>
-        </b-collapse>
-      </li>
-
       <div
         class="ps__rail-x"
         style="left: 0px; bottom: 0px;"

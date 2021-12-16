@@ -42,7 +42,7 @@
                 <div class="row">
                   <div class="col-8">
                     <label for="password">Enter password:</label>
-                    <PasswordInput :value="password" />
+                    <PasswordInput :value="password" v-model="password" />
                   </div>
                   <div class="col-4 d-flex align-items-end">
                     <b-button variant="dark" block @click="getPassword"
@@ -175,8 +175,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          vm.getAgents()
-          (vm.first_name = ""),
+          vm.getAgents()((vm.first_name = "")),
             (vm.last_name = ""),
             (vm.email = ""),
             (vm.password = "");
@@ -253,7 +252,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          console.log(credentials)
+          console.log(credentials);
         },
         function() {
           vm.isModalVisible = false;

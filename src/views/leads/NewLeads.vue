@@ -65,7 +65,7 @@
                             </span>
                           </td>
                         </template>
-                        <template #Whatsapp="{item}">
+                        <template #whatsapp_num="{item}">
                           <td>
                             <a
                               :href="
@@ -124,7 +124,7 @@
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                           <span
+                           <!-- <span
                               class="badge badge-pill"
                               :class="[
                                 item.status == 'In Progress' || item.status == 'Rejected' ||
@@ -139,7 +139,7 @@
                               ]"
                             >
                               {{ item.status }}
-                            </span> 
+                            </span>  -->
                           </td>
                         </template>
                         <template #Actions="{index,item}">

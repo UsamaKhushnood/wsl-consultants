@@ -33,7 +33,7 @@
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                         :fields="[
+                        :fields="[
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -53,14 +53,18 @@
                               v-if="item.agent == null"
                               class="badge badge-pill badge-danger"
                             >
-                             unassigned
+                              unassigned
                             </span>
                             <span v-else>
-                              {{ item.agent == null ? "unassigned" :item.agent.first_name }}
+                              {{
+                                item.agent == null
+                                  ? "unassigned"
+                                  : item.agent.first_name
+                              }}
                             </span>
                           </td>
                         </template>
-                        <template #Whatsapp="{item}">
+                        <template #whatsapp_num="{item}">
                           <td>
                             <a
                               :href="
@@ -90,15 +94,15 @@
                         <template #StudentName="{item}">
                           <td>
                             <p>
-                              {{  item.first_name+item.last_name }}
+                              {{ item.first_name + item.last_name }}
                             </p>
                           </td>
                         </template>
- 
+
                         <template #PreferredCountry="{item}">
                           <td>
                             <p>
-                              {{  item.country }}
+                              {{ item.country }}
                             </p>
                           </td>
                         </template>
@@ -117,7 +121,6 @@
                           <td class="status text-center">
                             <!-- new is the default status  -->
                             <b-form-select
-                             
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
@@ -131,11 +134,13 @@
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                           <span
+                            <!-- <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'In Progress' || item.status == 'Rejected' ||
-                                item.status == 'New Lead'|| item.status == 'On Hold'
+                                item.status == 'In Progress' ||
+                                item.status == 'Rejected' ||
+                                item.status == 'New Lead' ||
+                                item.status == 'On Hold'
                                   ? 'badge-info'
                                   : item.status == 'Expected' ||
                                     item.status == 'Approved'
@@ -146,7 +151,7 @@
                               ]"
                             >
                               {{ item.status }}
-                            </span> 
+                            </span> -->
                           </td>
                         </template>
                         <template #Actions="{index,item}">
@@ -185,7 +190,7 @@
                               class="btn menu-icon vd_bd-red vd_red"
                               v-b-modal="'deny-request-modal' + index"
                               :item="item.id"
-                                v-if="getUser.type =='admin'"
+                              v-if="getUser.type == 'admin'"
                             >
                               <i
                                 v-b-tooltip.hover
@@ -222,109 +227,104 @@
   </div>
 </template>
 
-
 <script>
-  import { mapGetters } from 'vuex';
-  import tableData from "../tableData";
-  import WidgetsDropdown from "../widgets/WidgetsDropdown";
-  import AllPopups from "@/views/new-request-data/AllPopups.vue";
-  import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-  import axios from 'axios';
-  export default {
-    name: "NewRequest",
-    components: { WidgetsDropdown, AllPopups, CreateNewLead },
-    data: () => ({
-      // items: tableData,
-      items: [],
-      deleteStudentId: '',
-    }),
-    computed:{
-     ...mapGetters(['getUser'])
+import { mapGetters } from "vuex";
+import tableData from "../tableData";
+import WidgetsDropdown from "../widgets/WidgetsDropdown";
+import AllPopups from "@/views/new-request-data/AllPopups.vue";
+import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
+import axios from "axios";
+export default {
+  name: "NewRequest",
+  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  data: () => ({
+    // items: tableData,
+    items: [],
+    deleteStudentId: "",
+  }),
+  computed: {
+    ...mapGetters(["getUser"]),
+  },
+  methods: {
+    getStudent() {
+      const vm = this;
+      console.log(vm.getUser.type);
+      let url = "";
+      if (vm.getUser.type == "Sales Agent") {
+        url = process.env.VUE_APP_API_URL + "/sales-agent/rejected-leads";
+      } else if (vm.getUser.type == "Call Center Agent") {
+        url = process.env.VUE_APP_API_URL + "/call-agent/rejected-leads";
+      } else {
+        url = process.env.VUE_APP_API_URL + "/admin/rejected-leads";
+      }
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("data::", response.data.data);
+          vm.items = response.data.data;
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+        });
     },
-    methods:{
-      getStudent() {
-        const vm = this;
-        console.log(vm.getUser.type)
-        let url ='';
-        if(vm.getUser.type =='Sales Agent'){
-            url = process.env.VUE_APP_API_URL +"/sales-agent/rejected-leads";
-        }else if(vm.getUser.type =='Call Center Agent'){
-            url = process.env.VUE_APP_API_URL +"/call-agent/rejected-leads";
-        }
-        else{
-            url = process.env.VUE_APP_API_URL +"/admin/rejected-leads";
-        }
-        axios
-          .get(url)
-          .then((response) => {
-            console.log("data::", response.data.data);
-            vm.items = response.data.data
-          })
-          .catch((errors) => {
-            var err = "";
-            if (errors.response.data.errors.email) {
-              err += errors.response.data.errors.email;
-            }
-          });
-       },
-      setStudent(data) {
-        // this.deleteStudentId = data
-        this.$store.commit('SET_CURRENT_STUDENT',data)
-      },
+    setStudent(data) {
+      // this.deleteStudentId = data
+      this.$store.commit("SET_CURRENT_STUDENT", data);
+    },
 
-      currentStudent(data){
-        console.log(data)
-        this.$store.commit('SET_CURRENT_STUDENT',data)
-      },
-      changeStatus(item) {
-        const vm = this;
-        console.log(item.status)
-        let url ="";
-        if(vm.getUser.type =='admin'){
-          url =process.env.VUE_APP_API_URL +"/admin/status/"+item.id;
-        }else{
-          url =process.env.VUE_APP_API_URL +"/sales-agent/status/"+item.id;
-        }
-        axios
-          .post(url,{
-            status: item.status,
-            })
-          .then((response) => {
-            console.log("data::", response.data);
-              vm.$toast.success(response.data.message, {
-                position: "top-right",
-                closeButton: "button",
-                icon: true,
-                rtl: false,
-              });
-              vm.getStudent()
-          })
-          .catch((errors) => {
-          var err =''
-            if(errors.response.data.errors.email){
-              err+=errors.response.data.errors.email
-            }
-            if(errors.response.data.errors.password){
-              err+=errors.response.data.errors.password
-            }
-            if(errors)
+    currentStudent(data) {
+      console.log(data);
+      this.$store.commit("SET_CURRENT_STUDENT", data);
+    },
+    changeStatus(item) {
+      const vm = this;
+      console.log(item.status);
+      let url = "";
+      if (vm.getUser.type == "admin") {
+        url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
+      } else {
+        url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
+      }
+      axios
+        .post(url, {
+          status: item.status,
+        })
+        .then((response) => {
+          console.log("data::", response.data);
+          vm.$toast.success(response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          vm.getStudent();
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+          if (errors.response.data.errors.password) {
+            err += errors.response.data.errors.password;
+          }
+          if (errors)
             this.$toast.error(err, {
               position: "top-right",
               closeButton: "button",
               icon: true,
               rtl: false,
             });
-          });
+        });
     },
-    },
-    mounted(){
-      this.getStudent()
-    }
-
-  };
+  },
+  mounted() {
+    this.getStudent();
+  },
+};
 </script>
-
-
 
 <style lang="scss">
 #newrequest .col-sm-6.p-0.offset-sm-6 {
