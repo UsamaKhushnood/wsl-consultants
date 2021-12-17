@@ -119,7 +119,7 @@
                                 'In Progress',
                                 'Expected',
                                 'Not Expected',
-                                'Approved',
+                                'Applied',
                                 'On Hold',
                                 'Rejected',
                               ]"
@@ -131,7 +131,7 @@
                                 item.status == 'New Lead'|| item.status == 'On Hold'
                                   ? 'badge-info'
                                   : item.status == 'Expected' ||
-                                    item.status == 'Approved'
+                                    item.status == 'Applied'
                                   ? 'badge-success'
                                   : item.status == 'Not Expected'
                                   ? 'badge-danger'

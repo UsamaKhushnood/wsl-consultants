@@ -71,7 +71,7 @@
                 header-bg-variant="dark"
                 header-text-variant="white"
                 align="center"
-                class="mt-2"
+                class="mt-2 mb-2"
               >
                 <b-card-text>
                   <a
@@ -108,6 +108,24 @@
               </b-card>
               <b-card
                 v-show="getSelectedStudent.notes != null"
+                border-variant="dark"
+                header="Student Query"
+                header-bg-variant="danger"
+                header-text-variant="white"
+                align="center"
+                class="mt-2 mb-2"
+              >
+                <b-card-text>
+                  <p
+                    v-for="(data, index) in getSelectedStudent.notes"
+                    :key="index"
+                  >
+                    {{ data.note }}
+                  </p>
+                </b-card-text>
+              </b-card>
+              <b-card
+                v-show="getSelectedStudent.notes != null"
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -116,10 +134,11 @@
                 class="mt-2 mb-2"
               >
                 <b-card-text>
-                  <p v-for="(data,index) in getSelectedStudent.notes" :key="index">
-                    {{
-                       data.note
-                    }}
+                  <p
+                    v-for="(data, index) in getSelectedStudent.notes"
+                    :key="index"
+                  >
+                    {{ data.note }}
                   </p>
                 </b-card-text>
               </b-card>
@@ -200,17 +219,8 @@
               <p>{{ getSelectedStudent.email }}</p>
               <h5>Student Phone</h5>
               <p>{{ getSelectedStudent.phone }}</p>
-                <h5>Cv</h5>
-                <p><a :href="ImageUrl+'/student/'+getSelectedStudent.cv" download="">Download</a></p>
-                <h5>Screenshot</h5>
-                <p><a :href="ImageUrl+'/screen-shot/'+getSelectedStudent.screen_shot" download="">Download</a>
-                  <span>
-                    <div class="">
-                  <img :src="ImageUrl+'/screen-shot/'+getSelectedStudent.screen_shot" alt="" />
-                </div>
-                  </span>
-                </p>
-              <div class="" v-if="getSelectedStudent.student_info">
+              <h5>Cv</h5>
+              <div v-if="getSelectedStudent.student_info">
                 <h5>Qualification</h5>
                 <p>{{ getSelectedStudent.student_info.qualification }}</p>
                 <h5>CGPA</h5>
@@ -218,8 +228,45 @@
                 <h5>Major Subjects</h5>
                 <p>{{ getSelectedStudent.student_info.major_sub }}</p>
                 <h5>Passing Year</h5>
-               <p>{{ getSelectedStudent.student_info.passing_year }}</p>
-                
+                <p>{{ getSelectedStudent.student_info.passing_year }}</p>
+              </div>
+              <div>
+                <a
+                  :href="ImageUrl + '/student/' + getSelectedStudent.cv"
+                  download=""
+                  >Download</a
+                >
+              </div>
+              <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
+              <div>
+                <div class="screenshotsGallery">
+                  <a
+                    :href="
+                      ImageUrl +
+                        '/screen-shot/' +
+                        getSelectedStudent.screen_shot
+                    "
+                    target="_blank"
+                    class="position-relative"
+                    v-b-tooltip.hover
+                    title="Click to view full"
+                  >
+                    <div
+                      class="screenShotWrapper"
+                      v-b-modal="'imgModal' + propsindex"
+                      :style="{
+                        backgroundImage: `url(${ImageUrl}/screen-shot/${getSelectedStudent.screen_shot})`,
+                      }"
+                    ></div>
+                    <b-button
+                      variant="outline-danger"
+                      size="sm"
+                      class="screenShotTrash"
+                    >
+                      <i class="fa fa-trash"></i>
+                    </b-button>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -233,8 +280,35 @@ import { mapGetters } from "vuex";
 import usersData from "./userData";
 export default {
   props: ["propsindex"],
+  components: {},
   data: () => ({
     items: usersData,
+    gallery: [
+      {
+        src: "../../../assets/images/auth-background.png",
+        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
+        alt: "Blue starry night photo.",
+        thumbnailWidth: "220px",
+      },
+      {
+        src: "../../../assets/images/auth-background.png",
+        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
+        alt: "Blue starry night photo.",
+        thumbnailWidth: "220px",
+      },
+      {
+        src: "../../../assets/images/auth-background.png",
+        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
+        alt: "Blue starry night photo.",
+        thumbnailWidth: "220px",
+      },
+      {
+        src: "../../../assets/images/auth-background.png",
+        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
+        alt: "Blue starry night photo.",
+        thumbnailWidth: "220px",
+      },
+    ],
   }),
   computed: {
     ...mapGetters(["getSelectedStudent"]),
@@ -267,5 +341,29 @@ export default {
 .headerSecondary h6 {
   font-size: 13px;
   padding: 5px 0;
+}
+
+.screenshotsGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 150px);
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.screenShotWrapper {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2),
+    0 11px 15px 1px rgba(0, 0, 0, 0.14), 0 4px 20px 3px rgba(0, 0, 0, 0.12) !important;
+}
+
+.screenShotTrash {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 </style>

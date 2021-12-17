@@ -110,7 +110,7 @@
                               :options="[
                                 'Matured',
                                 'in progress',
-                                'Approved',
+                                'Applied',
                                 'Rejected',
                                 'On Hold',
                               ]"
@@ -121,7 +121,7 @@
                               :class="[
                                 item.Status.toLowerCase() == 'in progress'
                                   ? 'badge-info'
-                                  : item.Status.toLowerCase() == 'approved'
+                                  : item.Status.toLowerCase() == 'Applied'
                                   ? 'badge-success'
                                   : item.Status.toLowerCase() == 'rejected'
                                   ? 'badge-danger'
