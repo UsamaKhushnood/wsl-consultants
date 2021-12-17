@@ -33,7 +33,7 @@
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                         :fields="[
+                        :fields="[
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -87,7 +87,7 @@
                             </p>
                           </td>
                         </template>
-                       
+
                         <template #PreferredCountry="{item}">
                           <td>
                             <p>
@@ -106,11 +106,10 @@
                             </a>
                           </td>
                         </template>
-                       <template #status="{item}">
+                        <template #status="{item}">
                           <td class="status text-center">
                             <!-- new is the default status  -->
                             <b-form-select
-                             
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
@@ -119,19 +118,19 @@
                                 'In Progress',
                                 'Expected',
                                 'Not Expected',
-                                'Approved',
+                                'Appllied',
                                 'On Hold',
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                           <!-- <span
+                            <!-- <span
                               class="badge badge-pill"
                               :class="[
                                 item.status == 'In Progress' || item.status == 'Rejected' ||
                                 item.status == 'New Lead'|| item.status == 'On Hold'
                                   ? 'badge-info'
                                   : item.status == 'Expected' ||
-                                    item.status == 'Approved'
+                                    item.status == 'Applied'
                                   ? 'badge-success'
                                   : item.status == 'Not Expected'
                                   ? 'badge-danger'

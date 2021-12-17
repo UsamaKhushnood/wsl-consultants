@@ -45,11 +45,13 @@
     "jquery": "^3.6.0",
     "process": "^0.11.10",
     "vue": "~2.6.12",
+    "vue-cool-lightbox": "^2.7.4",
     "vue-file-agent": "^1.7.3",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.4.9",
     "vue-tables-2-premium": "^2.3.6",
     "vue-toastification": "^1.7.14",
+    "vue-upload-multiple-image": "^1.1.6",
     "vuex": "~3.6.0",
     "vuex-persist": "^3.1.3"
   },

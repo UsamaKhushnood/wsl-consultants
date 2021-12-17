@@ -123,7 +123,7 @@
                                 item.status == 'On Hold'
                                   ? 'badge-info'
                                   : item.status == 'Expected' ||
-                                    item.status == 'Approved'
+                                    item.status == 'Applied'
                                   ? 'badge-success'
                                   : item.status == 'Not Expected'
                                   ? 'badge-danger'

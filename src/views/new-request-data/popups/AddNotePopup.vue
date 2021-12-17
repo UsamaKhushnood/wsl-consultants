@@ -18,8 +18,31 @@
               rows="5"
             ></b-form-textarea>
           </div>
+          <div class="form-element">
+            <label for="agentFirstName" class="label-divider"
+              ><span class="labelTxt">Add Screenshots</span></label
+            >
+            <!-- check documentation here  -->
+            <!-- https://vuejsexamples.com/a-simple-upload-multiple-image-component-for-vuejs/ -->
+            <div class="text-center">
+              <VueUploadMultipleImage
+                :data-images="uploadedImages"
+                @upload-success="uploadImageSuccess"
+                @edit-image="editImage"
+                @data-change="dataChange"
+              />
+              <p class="badge mb-0 text-capitalize text-secondary">
+                max uplaod limit is 5
+              </p>
+            </div>
+          </div>
           <div class="row mt-4 mr-2 justify-content-end">
-            <b-button variant="dark" ref="cancel" class="mr-2" squared @click="hide"
+            <b-button
+              variant="dark"
+              ref="cancel"
+              class="mr-2"
+              squared
+              @click="hide"
               >Cancel</b-button
             >
             <b-button variant="primary" squared @click="addNote"
@@ -34,30 +57,31 @@
 <script>
 import axios from "axios";
 import { mapGetters } from "vuex";
+import VueUploadMultipleImage from "vue-upload-multiple-image";
 export default {
   props: ["propsindex", "item"],
   computed: {
     ...mapGetters(["getSelectedStudentId"]),
   },
+  components: {
+    VueUploadMultipleImage,
+  },
   data() {
     return {
       text: "",
+      uploadedImages: [],
     };
   },
   methods: {
     addNote() {
       const vm = this;
       axios
-        .post(
-          process.env.VUE_APP_API_URL +
-            "/admin/notes" ,
-            {
-              note:vm.text,
-              student_id:vm.getSelectedStudentId,
-            }
-        )
+        .post(process.env.VUE_APP_API_URL + "/admin/notes", {
+          note: vm.text,
+          student_id: vm.getSelectedStudentId,
+        })
         .then((response) => {
-            vm.$refs.cancel.click()
+          vm.$refs.cancel.click();
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
@@ -72,7 +96,19 @@ export default {
           }
         });
     },
+    uploadImageSuccess(formData, index, fileList) {
+      console.log(formData, "index:", index, fileList, "upload success");
+    },
+    // beforeRemove(index, done, fileList) {
+    //   console.log("index:", index, done, fileList, "before remove");
+    // },
+    editImage(formData, index, fileList) {
+      console.log(formData, "index:", index, fileList, "edit image");
+    },
+    dataChange(data) {
+      console.log(data, "dataChange");
+    },
   },
 };
 </script>
-<style lang="scsss"></style>
+<style lang="scss"></style>

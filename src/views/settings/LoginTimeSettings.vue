@@ -13,7 +13,9 @@
         <b-form-timepicker v-model="endTime" locale="en"></b-form-timepicker>
       </div>
       <div class="col-12">
-        <b-button variant="dark" size="sm" @click="changeTime()" class="mt-4">Save Changes</b-button>
+        <b-button variant="dark" size="sm" @click="changeTime()" class="mt-4"
+          >Save Changes</b-button
+        >
       </div>
     </div>
     <div class="row mt-5">
@@ -36,22 +38,21 @@
           sorter
           pagination
         >
-        
-        <template #first_name="{item}">
-          <td>
-            <p>
-              {{  item.agent.first_name }}
-            </p>
-          </td>
-        </template>
+          <template #first_name="{item}">
+            <td>
+              <p>
+                {{ item.agent.first_name }}
+              </p>
+            </td>
+          </template>
 
-        <template #type="{item}">
-          <td>
-            <p>
-              {{  item.agent.type }}
-            </p>
-          </td>
-        </template>
+          <template #type="{item}">
+            <td>
+              <p>
+                {{ item.agent.type }}
+              </p>
+            </td>
+          </template>
           <template #Department="{item}">
             <td>
               <span
@@ -71,7 +72,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   data() {
     return {
@@ -80,50 +81,50 @@ export default {
       endTime: "17:00:00",
     };
   },
-  methods:{
+  methods: {
     changeTime() {
       const vm = this;
 
       axios
-        .post(process.env.VUE_APP_API_URL +"/admin/login-time",{
+        .post(process.env.VUE_APP_API_URL + "/admin/login-time", {
           login_time: vm.startTime,
           logout_time: vm.endTime,
-          })
+        })
         .then((response) => {
           console.log("data::", response.data);
-            vm.$toast.success(response.data.message, {
-              position: "top-right",
-              closeButton: "button",
-              icon: true,
-              rtl: false,
-            });
-        })
-        .catch((errors) => {
-        var err =''
-          if(errors.response.data.errors.email){
-            err+=errors.response.data.errors.email
-          }
-          if(errors.response.data.errors.password){
-            err+=errors.response.data.errors.password
-          }
-          if(errors)
-          this.$toast.error(err, {
+          vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
             icon: true,
             rtl: false,
           });
+        })
+        .catch((errors) => {
+          var err = "";
+          if (errors.response.data.errors.email) {
+            err += errors.response.data.errors.email;
+          }
+          if (errors.response.data.errors.password) {
+            err += errors.response.data.errors.password;
+          }
+          if (errors)
+            this.$toast.error(err, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
         });
     },
     getTime() {
       const vm = this;
-      let  url = process.env.VUE_APP_API_URL +"/admin/get-time";
+      let url = process.env.VUE_APP_API_URL + "/admin/get-time";
       axios
         .get(url)
         .then((response) => {
           console.log("data::", response.data.data);
-          vm.startTime = response.data.data.login_time
-          vm.endTime = response.data.data.logout_time
+          vm.startTime = response.data.data.login_time;
+          vm.endTime = response.data.data.logout_time;
         })
         .catch((errors) => {
           var err = "";
@@ -134,28 +135,27 @@ export default {
     },
     getAllLoginList() {
       const vm = this;
-      let  url = process.env.VUE_APP_API_URL +"/admin/login-history";
+      let url = process.env.VUE_APP_API_URL + "/admin/login-history";
       axios
         .get(url)
         .then((response) => {
           console.log("data::", response.data.data);
-          vm.items=response.data.data      
+          vm.items = response.data.data;
         })
         .catch((errors) => {
           var err = "";
           if (errors.response.data.errors.email) {
             err += errors.response.data.errors.email;
           }
-          if(errors.response.data.message=='Login Time Expire'){
-            localStorage.setItem('token', null)
+          if (errors.response.data.message == "Login Time Expire") {
+            localStorage.setItem("token", null);
           }
         });
     },
   },
-  created(){
-    this.getTime()
-    this.getAllLoginList()
-  }
-
+  created() {
+    this.getTime();
+    this.getAllLoginList();
+  },
 };
 </script>

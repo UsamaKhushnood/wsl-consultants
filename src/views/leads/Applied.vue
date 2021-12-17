@@ -129,7 +129,7 @@
                                 'In Progress',
                                 'Expected',
                                 'Not Expected',
-                                'Approved',
+                                'Applied',
                                 'On Hold',
                                 'Rejected',
                               ]"
@@ -143,7 +143,7 @@
                                 item.status == 'On Hold'
                                   ? 'badge-info'
                                   : item.status == 'Expected' ||
-                                    item.status == 'Approved'
+                                    item.status == 'Applied'
                                   ? 'badge-success'
                                   : item.status == 'Not Expected'
                                   ? 'badge-danger'
@@ -251,11 +251,11 @@ export default {
       console.log(vm.getUser.type);
       let url = "";
       if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/students";
+        url = process.env.VUE_APP_API_URL + "/sales-agent/applied";
       } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/students";
+        url = process.env.VUE_APP_API_URL + "/call-agent/applied";
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/students";
+        url = process.env.VUE_APP_API_URL + "/admin/applied";
       }
       axios
         .get(url)
