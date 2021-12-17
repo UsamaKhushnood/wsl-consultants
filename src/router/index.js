@@ -9,6 +9,7 @@ const NewRequest = () => import("@/views/NewRequest");
 const AddNewAgent = () => import("@/views/dashboard/AddNewAgent");
 const LoginTimeSettings = () => import("@/views/settings/LoginTimeSettings");
 const Agents = () => import("@/views/settings/Agents");
+const Agent = () => import("@/views/profiles/agent");
 const AllLeads = () => import("@/views/leads/AllLeads");
 const Applied = () => import("@/views/leads/Applied");
 const Expected = () => import("@/views/leads/Expected");
@@ -24,6 +25,11 @@ const Page500 = () => import("@/views/pages/Page500");
 const Login = () => import("@/views/login/Login");
 const Register = () => import("@/views/pages/Register");
 
+// charts
+const MainChartExample = () => import("@/views/charts/MainChartExample");
+const Charts = () => import("@/views/charts/Charts");
+const Widgets = () => import("@/views/widgets/Widgets");
+
 Vue.use(Router);
 
 function configRoutes() {
@@ -34,6 +40,21 @@ function configRoutes() {
       name: "Home",
       component: TheContainer,
       children: [
+        {
+          path: "/widgets",
+          name: "Widgets",
+          component: Widgets,
+        },
+        {
+          path: "/charts",
+          name: "Charts",
+          component: Charts,
+        },
+        {
+          path: "/charts-example",
+          name: "MainChartExample",
+          component: MainChartExample,
+        },
         {
           path: "/dashboard",
           name: "Dashboard",
@@ -58,6 +79,11 @@ function configRoutes() {
           path: "agents",
           name: "All Agents",
           component: Agents,
+        },
+        {
+          path: "agent/:id",
+          name: "Agents Profile",
+          component: Agent,
         },
         {
           path: "all-leads",
