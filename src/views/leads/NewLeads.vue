@@ -304,10 +304,10 @@ export default {
           console.log("(error.response.status", error.response.status);
           console.log("errors.response.data", errors.response.data.errors);
 
-          if (errors.response.data.message == "Login Time Expire") {
-            console.log("errors.response.data", errors.response.data.message);
-            localStorage.setItem("token", null);
-          }
+          // if (errors.response.data.message == "Login Time Expire") {
+          //   console.log("errors.response.data", errors.response.data.message);
+          //   localStorage.setItem("token", null);
+          // }
         });
     },
     setStudent(data) {
@@ -342,10 +342,10 @@ export default {
           console.log("(error.response.status", errors.response.status);
           console.log("errors.response.data", errors.response.data.errors);
           console.log("errors.response.data", errors.response.data);
-          if (errors.response.data.message == "Login Time Expire") {
-            console.log("errors.response.data", errors.response.data.message);
-            localStorage.setItem("token", null);
-          }
+          // if (errors.response.data.message == "Login Time Expire") {
+          //   console.log("errors.response.data", errors.response.data.message);
+          //   localStorage.setItem("token", null);
+          // }
           if (errors.response.data.errors.email) {
             err += errors.response.data.errors.email;
           }

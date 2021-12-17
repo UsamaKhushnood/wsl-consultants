@@ -64,11 +64,19 @@
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
-              <input type="file" ref="file" required id="cv" />
+              <input type="file" ref="file" @change="handleCvUpload($event)" required id="cv" />
             </div>
             <div class="form-element">
               <label for="agentFirstName">Screenshots:</label>
-              <input type="file" ref="screen" required id="scr" />
+                 <VueUploadMultipleImage
+                :data-images="uploadedImages"
+                @upload-success="uploadImageSuccess"
+                @edit-image="editImage"
+                @data-change="dataChange"
+              />
+              <p class="badge mb-0 text-capitalize text-secondary">
+                max uplaod limit is 5
+              </p>
             </div>
           </form>
         </div>
@@ -96,6 +104,7 @@
   </div>
 </template>
 <script>
+import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
@@ -110,10 +119,15 @@ export default {
     whatsapp_num: "",
     cv: "",
     screenShot: "",
+    imageList: [],
+    uploadedImages: [],
     formOverlay: false,
   }),
   computed: {
     ...mapGetters(["getUser"]),
+  },
+   components: {
+    VueUploadMultipleImage,
   },
   methods: {
     handleCvUpload(event) {
@@ -151,21 +165,28 @@ export default {
       var formData = new FormData();
       var cv = document.querySelector("#cv");
       var scr = document.querySelector("#scr");
-      formData.append("first_name", vm.first_name);
-      formData.append("last_name", vm.last_name);
-      formData.append("country", vm.country);
-      formData.append("email", vm.email);
-      formData.append("cv", cv.files[0]);
-      formData.append("screen_shot", scr.files[0]);
-      formData.append("whatsapp_num", vm.whatsapp_num);
-      formData.append("phone", vm.phone);
+      
+      // formData.append("first_name", vm.first_name);
+      // formData.append("last_name", vm.last_name);
+      // formData.append("country", vm.country);
+      // formData.append("email", vm.email);
+      // formData.append("cv", cv.files[0]);
+      // formData.append("screen_shot", vm.imageList);
+      // formData.append("whatsapp_num", vm.whatsapp_num);
+      // formData.append("phone", vm.phone);
       this.formOverlay = true;
       axios
-        .post(url, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(url, {
+          first_name:vm.first_name,
+         last_name: vm.last_name,
+         country:vm.country,
+          email:vm.email,
+          cv:vm.cv,
+          screen_shot:vm.imageList,
+          whatsapp_num:vm.whatsapp_num,
+          phone:vm.phone}
+        
+        )
         .then((response) => {
           this.formOverlay = false;
           console.log("data::", response.data);
@@ -206,6 +227,19 @@ export default {
               rtl: false,
             });
         });
+    },
+    uploadImageSuccess(formData, index, fileList) {
+      console.log(formData, "index:", index, fileList, "upload success");
+      this.imageList.push(fileList[0].path)
+    },
+    // beforeRemove(index, done, fileList) {
+    //   console.log("index:", index, done, fileList, "before remove");
+    // },
+    editImage(formData, index, fileList) {
+      console.log(formData, "index:", index, fileList, "edit image");
+    },
+    dataChange(data) {
+      console.log(data, "dataChange");
     },
   },
 };

@@ -147,9 +147,9 @@ export default {
           if (errors.response.data.errors.email) {
             err += errors.response.data.errors.email;
           }
-          if (errors.response.data.message == "Login Time Expire") {
-            localStorage.setItem("token", null);
-          }
+          // if (errors.response.data.message == "Login Time Expire") {
+          //   localStorage.setItem("token", null);
+          // }
         });
     },
   },

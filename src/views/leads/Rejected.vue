@@ -27,7 +27,7 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="items.rejected"
+                        :items="items"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"

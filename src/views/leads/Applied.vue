@@ -251,16 +251,16 @@ export default {
       console.log(vm.getUser.type);
       let url = "";
       if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/applied";
+        url = process.env.VUE_APP_API_URL + "/sales-agent/applied-leads";
       } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/applied";
+        url = process.env.VUE_APP_API_URL + "/call-agent/applied-leads";
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/applied";
+        url = process.env.VUE_APP_API_URL + "/admin/applied-leads";
       }
       axios
         .get(url)
         .then((response) => {
-          console.log("data::1", response.data.data.allLead.data);
+          console.log("data::1", response.data.data);
           vm.items = response.data.data;
         })
         .catch((errors) => {
@@ -268,10 +268,10 @@ export default {
           console.log("(error.response.status", error.response.status);
           console.log("errors.response.data", errors.response.data.errors);
 
-          if (errors.response.data.message == "Login Time Expire") {
-            console.log("errors.response.data", errors.response.data.message);
-            localStorage.setItem("token", null);
-          }
+          // if (errors.response.data.message == "Login Time Expire") {
+          //   console.log("errors.response.data", errors.response.data.message);
+          //   localStorage.setItem("token", null);
+          // }
         });
     },
     setStudent(data) {

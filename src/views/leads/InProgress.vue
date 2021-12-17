@@ -27,7 +27,7 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="items.inProgress"
+                        :items="items"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"
@@ -261,7 +261,7 @@ export default {
         .get(url)
         .then((response) => {
           console.log("data::", response.data.data);
-          vm.items = response.data.data.allLead;
+          vm.items = response.data.data;
         })
         .catch((errors) => {
           var err = "";

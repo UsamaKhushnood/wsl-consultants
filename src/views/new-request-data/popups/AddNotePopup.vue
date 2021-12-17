@@ -70,24 +70,33 @@ export default {
     return {
       text: "",
       uploadedImages: [],
+      imageList: [],
     };
   },
   methods: {
     addNote() {
       const vm = this;
+
+      if(vm.text=="" && vm.imageList.length == 0){
+        alert("please Add one Value")
+        return;
+      }else{
       axios
         .post(process.env.VUE_APP_API_URL + "/admin/notes", {
           note: vm.text,
           student_id: vm.getSelectedStudentId,
+          screen_shot:vm.imageList,
         })
         .then((response) => {
           vm.$refs.cancel.click();
-          vm.$toast.success(response.data.message, {
+          vm.$toast.success("Notes Add Successfully", {
             position: "top-right",
             closeButton: "button",
             icon: true,
             rtl: false,
           });
+          vm.text=''
+          vm.imageList=[]
         })
         .catch((errors) => {
           var err = "";
@@ -95,9 +104,11 @@ export default {
             err += errors.response.data.errors.email;
           }
         });
+     }
     },
     uploadImageSuccess(formData, index, fileList) {
       console.log(formData, "index:", index, fileList, "upload success");
+      this.imageList.push(fileList[0].path)
     },
     // beforeRemove(index, done, fileList) {
     //   console.log("index:", index, done, fileList, "before remove");
