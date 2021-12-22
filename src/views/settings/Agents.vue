@@ -3,8 +3,8 @@
     <div class="agents-list">
       <div
         class="agent bg-white mr-1 p-3  mb-2 align-items-center"
-        v-for="(i, x) in [1, 2, 3, 4, 5]"
-        :key="x"
+        v-for="(data, i) in items"
+        :key="i"
       >
         <div class="d-flex">
           <div class="mr-3">
@@ -20,39 +20,47 @@
             </b-avatar>
           </div>
           <div>
-            <h5 class="mb-0">Agent Name</h5>
-            <p class="m-0 text-primary text-bold" v-if="x == 2">
+            <h5 class="mb-0">{{data.name}}</h5>
+            <p class="m-0 text-primary text-bold" v-if="data.type == 'Call Center Agent'">
               Call Center Agent
             </p>
             <p class="m-0 text-success text-bold" v-else>Sales Agent</p>
           </div>
           <div class="ml-auto align-self-baseline">
-            <b-button size="sm" variant="link">
-              View Profile
-            </b-button>
+            <router-link
+            active-class="c-active"
+            :to="'/dashboard/agents/'+data.id"
+            class="c-sidebar-nav-link"
+            target="_self"
+            
+            >
+              <b-button size="sm" variant="link">
+                View Profile
+              </b-button>
+          </router-link>
           </div>
         </div>
         <hr />
         <div>
           <!-- for call center agent  -->
-          <div class="performance" v-if="x == 2">
+          <div class="performance" v-if="data.type == 'Call Center Agent'">
             <div
               class="stats d-flex align-items-center justify-content-between mb-2"
             >
               <h6 class="f-14 text-bold mb-0">Last Month's Leads</h6>
-              <h6 class="f-14 text-bold mb-0">80</h6>
+              <h6 class="f-14 text-bold mb-0">{{data.callAgent.last_month_leads}}</h6>
             </div>
             <div
               class="stats d-flex align-items-center justify-content-between mb-2"
             >
               <h6 class="f-14 text-bold mb-0">This Month's Leads</h6>
-              <h6 class="f-14 text-bold mb-0">50</h6>
+              <h6 class="f-14 text-bold mb-0">{{data.callAgent.current_month_leads}}</h6>
             </div>
             <div
               class="stats d-flex align-items-center justify-content-between mb-2"
             >
               <h6 class="f-14 text-bold mb-0">Overall Leads</h6>
-              <h6 class="f-14 text-bold mb-0">130</h6>
+              <h6 class="f-14 text-bold mb-0">{{data.callAgent.total_leads}}</h6>
             </div>
           </div>
           <!-- for sales agent  -->
@@ -61,19 +69,19 @@
               class="stats d-flex align-items-center justify-content-between mb-2"
             >
               <h6 class="f-14 text-bold text-primary mb-0">In Progress</h6>
-              <h6 class="f-14 text-bold mb-0">80</h6>
+              <h6 class="f-14 text-bold mb-0">{{data.saleAgent.in_progress}}</h6>
             </div>
             <div
               class="stats d-flex align-items-center justify-content-between mb-2"
             >
               <h6 class="f-14 text-bold text-blue mb-0">Expected</h6>
-              <h6 class="f-14 text-bold mb-0">50</h6>
+              <h6 class="f-14 text-bold mb-0">{{data.saleAgent.expected}}</h6>
             </div>
             <div
               class="stats d-flex align-items-center justify-content-between mb-2"
             >
               <h6 class="f-14 text-bold text-success mb-0">Applied</h6>
-              <h6 class="f-14 text-bold mb-0">130</h6>
+              <h6 class="f-14 text-bold mb-0">{{data.saleAgent.applied}}</h6>
             </div>
           </div>
         </div>
@@ -83,7 +91,7 @@
             size="sm"
             variant="dark"
             class="ml-auto"
-            @click="copyCredentials(x)"
+            @click="copyCredentials(data)"
             >Copy Credentials</b-button
           >
           <b-button
@@ -100,10 +108,73 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data() {
-    return {};
+    return {
+      items:[]
+    };
   },
+  methods:{
+    getAgent() {
+      const vm = this;
+      let url = "";
+      url = process.env.VUE_APP_API_URL + "/admin/all-agents" ;
+      axios
+        .get(url)
+        .then((response) => {
+          vm.items = response.data.data
+          vm.$toast.success(response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+    
+        })
+        .catch((errors) => {
+          var err = "";
+
+          if (errors)
+            this.$toast.error(errors.response.data.message, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+        });
+    },
+    
+    copyCredentials(data) {
+      const vm = this;
+      // first name will replace with password
+      var credentials = `Email: ${data.email}\nPassword: ${data.encrypt_password}`;
+      navigator.clipboard.writeText(credentials).then(
+        function() {
+          vm.isModalVisible = false;
+          vm.$toast.success("Successfully Copied", {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          console.log(credentials);
+        },
+        function() {
+          vm.isModalVisible = false;
+          vm.$toast.error("Something went wrong", {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+        }
+      );
+    },
+  },
+  created(){
+    this.getAgent();
+  }
 };
 </script>
 <style scoped>

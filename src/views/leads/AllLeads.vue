@@ -17,6 +17,7 @@
                 Create New Lead
               </button>
               <CreateNewLead />
+              <EditLead />
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
@@ -164,6 +165,18 @@
                             </a>
 
                             <a
+                              class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
+                              v-b-modal="'edit-lead-modal'"
+                              :item="item.id"
+                              @click="setStudent(item)"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Edit Lead"
+                                class="fa fa-pen"
+                              ></i>
+                            </a>
+                            <a
                               data-target="#denyRequest"
                               data-toggle="modal"
                               class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
@@ -174,7 +187,7 @@
                               <i
                                 v-b-tooltip.hover
                                 title="Add Note"
-                                class="fa fa-pen"
+                                class="fa fa-book"
                               ></i>
                             </a>
                             <a
@@ -228,11 +241,12 @@ import tableData from "../tableData";
 import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
+import EditLead from "@/views/new-request-data/popups/EditLead.vue";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
   name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead },
 
   data: () => ({
     // items: tableData,
@@ -244,7 +258,7 @@ export default {
     resultCount: 0,
   }),
   computed: {
-    ...mapGetters(["getUser", "getAllStudent", "getAllStudentData"]),
+    ...mapGetters(["getUser", "getAllStudentData"]),
     ...mapState(["allStudent","allStudentData"]),
     /* eslint-disable */
     totalPages: function() {
@@ -309,13 +323,6 @@ export default {
           //   console.log("errors.response.data", errors.response.data.message);
           //   localStorage.setItem("token", null);
           // }
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-          if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
-          }
-
           if (errors)
             this.$toast.error(err, {
               position: "top-right",

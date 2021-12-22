@@ -1,12 +1,12 @@
 <template>
-  <div class="cerate-new-lead-popup position-relative ">
+  <div class="edit-lead-popup position-relative ">
     <b-modal
-      :id="'create-lead-modal'"
-      title="Create New Lead"
+      :id="'edit-lead-modal'"
+      title="Edit Lead"
       header-bg-variant="dark"
       header-text-variant="light"
       centered
-      ref="create_lead_modal"
+      ref="edit_lead_modal"
     >
       <template #default>
         <div class="modal-body">
@@ -106,7 +106,7 @@
 <script>
 import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   data: () => ({
     // items: tableData,
@@ -124,10 +124,21 @@ export default {
     formOverlay: false,
   }),
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["getUser","getSelectedStudent"]),
+    ...mapState(["allStudentData"]),
+  
   },
    components: {
     VueUploadMultipleImage,
+  },
+  mounted(){
+    let vm = this;
+  //  this.first_name = vm.getSelectedStudent.first_name,
+  //  this.last_name = vm.getSelectedStudent.last_name,
+  //  this.country = vm.getSelectedStudent.country,
+  //  this.email = vm.getSelectedStudent.email,
+  //  this.phone = vm.getSelectedStudent.phone,
+  //  this.whatsapp_num = vm.getSelectedStudent.whatsapp_num
   },
   methods: {
     handleCvUpload(event) {
@@ -159,7 +170,7 @@ export default {
       } else if (vm.getUser.type == "Call Center Agent") {
         url = process.env.VUE_APP_API_URL + "/call-agent/new-leads";
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/new-leads/";
+        url = process.env.VUE_APP_API_URL + "/admin/new-leads";
       }
 
       var formData = new FormData();
@@ -242,6 +253,10 @@ export default {
       console.log(data, "dataChange");
     },
   },
+
+  destroyed(){
+    this.$store.commit('SET_ALL_STUDENT_DATA',null)
+  }
 };
 </script>
 <style lang="scss"></style>

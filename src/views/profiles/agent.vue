@@ -41,6 +41,7 @@
               </h6>
               <CChartPie
                 :datasets="salesAgentData"
+                
                 :labels="[
                   'New Leads',
                   'In Progress',
@@ -75,7 +76,7 @@
             :striped="true"
             :border="true"
             :fixed="false"
-            :items="[...allStudentData]"
+            :items="items"
             columnFilter
             itemsPerPageSelect
             :itemsPerPage="5"
@@ -214,30 +215,10 @@
             Agent's Login History
           </h5>
           <CDataTable
-            :items="[
-              { Day: 'Monday', LoginTime: '8:00AM', LogoutTime: '4:00PM' },
-              { Day: 'Tuesday', LoginTime: '8:00AM', LogoutTime: '4:00PM' },
-              {
-                Day: 'Wednesday',
-                LoginTime: '8:00AM',
-                LogoutTime: '4:00PM',
-              },
-              {
-                Day: 'Thursday',
-                LoginTime: '8:00AM',
-                LogoutTime: '4:00PM',
-              },
-              { Day: 'Friday', LoginTime: '8:00AM', LogoutTime: '4:00PM' },
-              {
-                Day: 'Saturday',
-                LoginTime: '8:00AM',
-                LogoutTime: '4:00PM',
-              },
-              { Day: 'Sunday', LoginTime: '8:00AM', LogoutTime: '4:00PM' },
-            ]"
-            :fields="['Day', 'LoginTime', 'LogoutTime']"
+            :items="history"
+            :fields="['day', 'login_time', 'logout_time']"
             itemsPerPageSelect
-            itemsPerPage="7"
+            :itemsPerPage="itemsPerPage"
             striped
             hover
             sorter
@@ -254,6 +235,7 @@ import { CChartPie } from "@coreui/vue-chartjs";
 import { CChartBar } from "@coreui/vue-chartjs";
 import AllPopups from "@/views/new-request-data/AllPopups";
 import { mapGetters, mapState } from "vuex";
+import axios from 'axios'
 export default {
   components: { CChartPie, CChartBar, AllPopups },
   data() {
@@ -263,12 +245,15 @@ export default {
       currentPage: 1,
       itemsPerPage: 3,
       resultCount: 0,
+      history: [],
+      salesAgentDataArr:[],
+      callCenterAgentDataArr:[]
     };
   },
   computed: {
-    ...mapGetters(["getUser", "getAllStudent", "getAllStudentData"]),
+    ...mapGetters(["getUser", "getAllStudent"]),
     ...mapState(["allStudent", "allStudentData"]),
-    /* eslint-disable */
+    /* eslint-disable */  // "getAllStudentData"
     totalPages: function() {
       if (this.resultCount == 0) {
         return 1;
@@ -301,7 +286,7 @@ export default {
             "#27ae60",
             "#c0392b",
           ],
-          data: [10, 25, 15, 5, 2, 10, 1],
+          data: this.salesAgentDataArr,
         },
       ];
     },
@@ -310,7 +295,7 @@ export default {
         {
           label: "Total Leads",
           backgroundColor: "#130f40",
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93, 54],
+          data: this.callCenterAgentDataArr,
         },
       ];
     },
@@ -340,7 +325,6 @@ export default {
           status: item.status,
         })
         .then((response) => {
-          console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
@@ -351,22 +335,9 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-          console.log("(error.response.status", errors.response.status);
-          console.log("errors.response.data", errors.response.data.errors);
-          console.log("errors.response.data", errors.response.data);
-          // if (errors.response.data.message == "Login Time Expire") {
-          //   console.log("errors.response.data", errors.response.data.message);
-          //   localStorage.setItem("token", null);
-          // }
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-          if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
-          }
 
           if (errors)
-            this.$toast.error(err, {
+            this.$toast.error(errors.response.data.message, {
               position: "top-right",
               closeButton: "button",
               icon: true,
@@ -378,9 +349,71 @@ export default {
       this.$store.commit("SET_CURRENT_STUDENT", {});
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
+     getAgentHistory(id) {
+       const vm = this;
+       console.log(vm.getAllStudentData)
+      axios
+        .get(process.env.VUE_APP_API_URL +"/admin/agent-login-history/"+id)
+        // .get(process.env.VUE_APP_API_URL +"/admin/agent-login-history/"+vm.getAllStudentData)
+        .then((response) => {
+          console.log("data::", response.data.data);
+           vm.history=response.data.data;
+          
+         
+        })
+        .catch((errors) => {
+          var err = "";
+         
+        });
+    },
+     getAgentLeads(id) {
+       const vm = this;
+      axios
+        .get(process.env.VUE_APP_API_URL +"/admin/agent-leads/"+id)
+        .then((response) => {
+          console.log("data::", response.data.data);
+           vm.items=response.data.data;
+        })
+        .catch((errors) => {
+          var err = "";
+          
+        });
+    },
+     getSaleAgentCounts(id) {
+       const vm = this;
+      axios
+        .get(process.env.VUE_APP_API_URL +"/admin/sale-agent-chart/"+id)
+        .then((response) => {
+          console.log("salesAgentDataArr::", response.data.data);
+           vm.salesAgentDataArr=response.data.data;
+         
+        })
+        .catch((errors) => {
+          var err = "";
+          
+        });
+    },
+
+     getCallAgentCounts(id) {
+       const vm = this;
+      axios
+        .get(process.env.VUE_APP_API_URL +"/admin/call-agent-chart/"+id)
+        .then((response) => {
+          console.log("callCenterAgentDataArr::", response.data.data);
+           vm.callCenterAgentDataArr=response.data.data;
+
+        })
+        .catch((errors) => {
+          var err = "";
+          
+        });
+    },
+
   },
   mounted() {
     let vm = this;
+    // this.getAgentLeads(id);
+
   },
   watch: {
     // getAllStudentData: function (val) {
@@ -388,7 +421,12 @@ export default {
     // },
   },
   created() {
+    var id = this.$route.params.id;
     this.$getStudent();
+    this.getAgentHistory(id);
+    this.getAgentLeads(id);
+    this.getSaleAgentCounts(id);
+    this.getCallAgentCounts(id);
   },
 };
 </script>

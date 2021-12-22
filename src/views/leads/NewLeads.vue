@@ -346,15 +346,9 @@ export default {
           //   console.log("errors.response.data", errors.response.data.message);
           //   localStorage.setItem("token", null);
           // }
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-          if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
-          }
 
           if (errors)
-            this.$toast.error(err, {
+            this.$toast.error(errors.response.data.errors, {
               position: "top-right",
               closeButton: "button",
               icon: true,

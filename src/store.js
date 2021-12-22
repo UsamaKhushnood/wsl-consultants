@@ -61,7 +61,6 @@ const mutations = {
     state.allStudent = data;
   },
   SET_ALL_STUDENT_DATA(state, data) {
-
     state.allStudentData = data;
   },
 }

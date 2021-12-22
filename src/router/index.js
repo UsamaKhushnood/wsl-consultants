@@ -81,7 +81,7 @@ function configRoutes() {
           component: Agents,
         },
         {
-          path: "agent/:id",
+          path: "agents/:id",
           name: "Agents Profile",
           component: Agent,
         },

@@ -308,14 +308,9 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-          if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
-          }
+         
           if (errors)
-            this.$toast.error(err, {
+            this.$toast.error(errors.message, {
               position: "top-right",
               closeButton: "button",
               icon: true,

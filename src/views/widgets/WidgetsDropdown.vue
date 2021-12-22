@@ -131,6 +131,7 @@
 <script>
 import { CChartLineSimple, CChartBarSimple } from '../charts/index.js'
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'WidgetsDropdown',
@@ -144,6 +145,9 @@ export default {
 
     }
   },
+  computed:{
+    ...mapGetters(["getUser"])
+  },
    mounted(){
     this.getCounts()
   },
@@ -151,7 +155,14 @@ export default {
     getCounts(){
       const vm = this;
       let url = "";
-        url = process.env.VUE_APP_API_URL + "/admin/counter";
+      if (vm.getUser.type == "admin") {
+        url = process.env.VUE_APP_API_URL + "/admin/counter" ;
+      }else if(vm.getUser.type == "Sales Agent"){
+        url = process.env.VUE_APP_API_URL + "/sales-agent/counter";
+      }
+       else {
+        url = process.env.VUE_APP_API_URL + "/call-agent/counter";
+      }
       axios
         .get(url)
         .then((response) => {
