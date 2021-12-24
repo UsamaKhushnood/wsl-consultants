@@ -15,7 +15,7 @@
     <CDropdownHeader tag="div" class="text-center" color="light">
       <strong v-if="getUser.first_name">{{getUser.first_name}} Account</strong>
     </CDropdownHeader>
-    <CDropdownItem>
+    <!-- <CDropdownItem> -->
     <!-- <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>{{getUser.first_name}} Account</strong>
     </CDropdownHeader> -->
