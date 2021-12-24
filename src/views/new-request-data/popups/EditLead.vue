@@ -15,7 +15,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="form-element">
-                  <label for="agentFirstName">First Name:{{items.first_name}}</label>
+                  <label for="agentFirstName">First Name:</label>
                   <input type="text" v-model="first_name" id="agentFirstName" />
                 </div>
               </div>
@@ -146,12 +146,12 @@ import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
-  props: ["items"],
+  props: ["items","propsindex"],
   data ()  {
     return{
        // items: tableData,
     visibleLiveDemo: false,
-    first_name:items.first_name,
+    first_name:"",
     last_name: "",
     country: "",
     email: "",
@@ -171,6 +171,9 @@ export default {
     getItems() {
       return this.$props.items;
     },
+    ImageUrl(){
+      return process.env.VUE_APP_IMAGE_URL
+    }
   },
   components: {
     VueUploadMultipleImage,

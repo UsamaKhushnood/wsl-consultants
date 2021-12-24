@@ -244,11 +244,12 @@ import tableData from "../tableData";
 import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
+import EditLead from "@/views/new-request-data/popups/EditLead.vue";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
   name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead },
 
   data: () => ({
     // items: tableData,
