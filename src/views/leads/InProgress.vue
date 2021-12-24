@@ -183,6 +183,32 @@
                                 title="Assign"
                               ></i>
                             </a>
+                            <a
+                              class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
+                              v-b-modal="'edit-lead-modal' + index"
+                              :item="item.id"
+                              @click="setStudent(item)"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Edit Lead"
+                                class="fa fa-pen"
+                              ></i>
+                            </a>
+                            <a
+                              data-target="#denyRequest"
+                              data-toggle="modal"
+                              class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
+                              v-b-modal="'add-note-modal' + index"
+                              :item="item.id"
+                              @click="setStudent(item)"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Add Note"
+                                class="fa fa-book"
+                              ></i>
+                            </a>
 
                             <a
                               data-target="#denyRequest"

@@ -6,6 +6,7 @@
     <ViewShopSidebar :propsindex="propsindex" />
     <ViewDetailsSidebar :propsindex="propsindex" />
     <AddNotePopup :propsindex="propsindex" />
+    <EditLead :propsindex="propsindex" />
   </div>
 </template>
 <script>
@@ -15,6 +16,7 @@ import DenyRequestPopup from "./popups/DenyRequestPopup.vue";
 import AssignLeadPopup from "./popups/AssignLeadPopup.vue";
 import ViewDetailsSidebar from "./popups/ViewDetailsSidebar.vue";
 import AddNotePopup from "./popups/AddNotePopup.vue";
+import EditLead from "./popups/EditLead.vue";
 export default {
   components: {
     AssignLeadPopup,
@@ -23,6 +25,7 @@ export default {
     ViewShopSidebar,
     ViewDetailsSidebar,
     AddNotePopup,
+    EditLead,
   },
   name: "AllPopups",
   props: ["propsindex"],

@@ -17,7 +17,6 @@
                 Create New Lead
               </button>
               <CreateNewLead />
-              <EditLead />
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
@@ -166,7 +165,7 @@
 
                             <a
                               class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
-                              v-b-modal="'edit-lead-modal'"
+                              v-b-modal="'edit-lead-modal' + index"
                               :item="item.id"
                               @click="setStudent(item)"
                             >
@@ -241,12 +240,11 @@ import tableData from "../tableData";
 import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-import EditLead from "@/views/new-request-data/popups/EditLead.vue";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
   name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead },
+  components: { WidgetsDropdown, AllPopups, CreateNewLead },
 
   data: () => ({
     // items: tableData,
@@ -259,7 +257,7 @@ export default {
   }),
   computed: {
     ...mapGetters(["getUser", "getAllStudentData"]),
-    ...mapState(["allStudent","allStudentData"]),
+    ...mapState(["allStudent", "allStudentData"]),
     /* eslint-disable */
     totalPages: function() {
       if (this.resultCount == 0) {
@@ -339,13 +337,11 @@ export default {
   },
   mounted() {
     let vm = this;
-
   },
-   watch: {
+  watch: {
     // getAllStudentData: function (val) {
-    //   this.getAllStudentData = val 
+    //   this.getAllStudentData = val
     // },
-   
   },
   created() {
     this.$getStudent();

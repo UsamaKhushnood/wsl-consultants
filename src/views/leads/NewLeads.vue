@@ -33,8 +33,7 @@
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                         :fields="[
-                
+                        :fields="[
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -110,7 +109,6 @@
                           <td class="status text-center">
                             <!-- new is the default status  -->
                             <b-form-select
-                             
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
@@ -124,7 +122,7 @@
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                           <!-- <span
+                            <!-- <span
                               class="badge badge-pill"
                               :class="[
                                 item.status == 'In Progress' || item.status == 'Rejected' ||
@@ -170,18 +168,30 @@
                                 title="Assign"
                               ></i>
                             </a>
-
+                            <a
+                              class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
+                              v-b-modal="'edit-lead-modal' + index"
+                              :item="item.id"
+                              @click="setStudent(item)"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Edit Lead"
+                                class="fa fa-pen"
+                              ></i>
+                            </a>
                             <a
                               data-target="#denyRequest"
                               data-toggle="modal"
                               class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
                               v-b-modal="'add-note-modal' + index"
                               :item="item.id"
+                              @click="setStudent(item)"
                             >
                               <i
                                 v-b-tooltip.hover
                                 title="Add Note"
-                                class="fa fa-pen"
+                                class="fa fa-book"
                               ></i>
                             </a>
                             <a
@@ -297,7 +307,7 @@ export default {
         .get(url)
         .then((response) => {
           console.log("data::", response.data.data);
-          vm.items = response.data.data
+          vm.items = response.data.data;
         })
         .catch((errors) => {
           var err = "";

@@ -345,14 +345,14 @@ export default {
 
 .screenshotsGallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 150px);
+  grid-template-columns: repeat(auto-fit, 120px);
   column-gap: 10px;
   row-gap: 10px;
 }
 
 .screenShotWrapper {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   overflow: hidden;
   border-radius: 5px;
   background-repeat: no-repeat;
@@ -365,5 +365,11 @@ export default {
   position: absolute;
   bottom: 5px;
   right: 5px;
+  width: 25px;
+  height: 25px;
+  font-size: 13px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

@@ -20,7 +20,7 @@
       </div>
     </div>
     <WidgetsDropdown />
-    <CRow>
+    <CRow>  
       <CCol md="12">
         <CCard>
           <CCardHeader>
@@ -323,7 +323,7 @@
           </CCardBody>
         </CCard>
       </CCol>
-    </CRow>
+    </CRow> 
     <WidgetsBrand />
   </div>
 </template>
