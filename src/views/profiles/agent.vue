@@ -41,7 +41,6 @@
               </h6>
               <CChartPie
                 :datasets="salesAgentData"
-                
                 :labels="[
                   'New Leads',
                   'In Progress',
@@ -132,7 +131,7 @@
                 </p>
               </td>
             </template>
-            <template #PhoneNo="{item}">
+            <template #phone="{item}">
               <td>
                 <a
                   :href="'tel:' + item.phone"
@@ -148,11 +147,15 @@
                 <span
                   class="badge badge-pill"
                   :class="[
-                    item.status == 'In Progress' || item.status == 'New Lead'
+                    item.status == 'In Progress'
+                      ? 'badge-success'
+                      : item.status == 'New Lead'
                       ? 'badge-info'
                       : item.status == 'On Hold'
                       ? 'badge-warning'
-                      : item.status == 'Expected' || item.status == 'Applied'
+                      : item.status == 'Expected'
+                      ? 'badge-dark'
+                      : item.status == 'Applied'
                       ? 'badge-success'
                       : item.status == 'Not Expected' ||
                         item.status == 'Rejected'
@@ -235,7 +238,7 @@ import { CChartPie } from "@coreui/vue-chartjs";
 import { CChartBar } from "@coreui/vue-chartjs";
 import AllPopups from "@/views/new-request-data/AllPopups";
 import { mapGetters, mapState } from "vuex";
-import axios from 'axios'
+import axios from "axios";
 export default {
   components: { CChartPie, CChartBar, AllPopups },
   data() {
@@ -246,15 +249,14 @@ export default {
       itemsPerPage: 3,
       resultCount: 0,
       history: [],
-      salesAgentDataArr:[],
-      callCenterAgentDataArr:[]
+      salesAgentDataArr: [],
+      callCenterAgentDataArr: [],
     };
   },
   computed: {
     ...mapGetters(["getUser", "getAllStudent"]),
-    ...mapState(["allStudent", "allStudentData"]),
-    /* eslint-disable */  // "getAllStudentData"
-    totalPages: function() {
+    ...mapState(["allStudent", "allStudentData"]), // "getAllStudentData"
+    /* eslint-disable */ totalPages: function() {
       if (this.resultCount == 0) {
         return 1;
       } else {
@@ -349,71 +351,61 @@ export default {
       this.$store.commit("SET_CURRENT_STUDENT", {});
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
-     getAgentHistory(id) {
-       const vm = this;
-       console.log(vm.getAllStudentData)
+    getAgentHistory(id) {
+      const vm = this;
+      console.log(vm.getAllStudentData);
       axios
-        .get(process.env.VUE_APP_API_URL +"/admin/agent-login-history/"+id)
+        .get(process.env.VUE_APP_API_URL + "/admin/agent-login-history/" + id)
         // .get(process.env.VUE_APP_API_URL +"/admin/agent-login-history/"+vm.getAllStudentData)
         .then((response) => {
           console.log("data::", response.data.data);
-           vm.history=response.data.data;
-          
-         
+          vm.history = response.data.data;
         })
         .catch((errors) => {
           var err = "";
-         
         });
     },
-     getAgentLeads(id) {
-       const vm = this;
+    getAgentLeads(id) {
+      const vm = this;
       axios
-        .get(process.env.VUE_APP_API_URL +"/admin/agent-leads/"+id)
+        .get(process.env.VUE_APP_API_URL + "/admin/agent-leads/" + id)
         .then((response) => {
           console.log("data::", response.data.data);
-           vm.items=response.data.data;
+          vm.items = response.data.data;
         })
         .catch((errors) => {
           var err = "";
-          
         });
     },
-     getSaleAgentCounts(id) {
-       const vm = this;
+    getSaleAgentCounts(id) {
+      const vm = this;
       axios
-        .get(process.env.VUE_APP_API_URL +"/admin/sale-agent-chart/"+id)
+        .get(process.env.VUE_APP_API_URL + "/admin/sale-agent-chart/" + id)
         .then((response) => {
           console.log("salesAgentDataArr::", response.data.data);
-           vm.salesAgentDataArr=response.data.data;
-         
+          vm.salesAgentDataArr = response.data.data;
         })
         .catch((errors) => {
           var err = "";
-          
         });
     },
 
-     getCallAgentCounts(id) {
-       const vm = this;
+    getCallAgentCounts(id) {
+      const vm = this;
       axios
-        .get(process.env.VUE_APP_API_URL +"/admin/call-agent-chart/"+id)
+        .get(process.env.VUE_APP_API_URL + "/admin/call-agent-chart/" + id)
         .then((response) => {
           console.log("callCenterAgentDataArr::", response.data.data);
-           vm.callCenterAgentDataArr=response.data.data;
-
+          vm.callCenterAgentDataArr = response.data.data;
         })
         .catch((errors) => {
           var err = "";
-          
         });
     },
-
   },
   mounted() {
     let vm = this;
     // this.getAgentLeads(id);
-
   },
   watch: {
     // getAllStudentData: function (val) {

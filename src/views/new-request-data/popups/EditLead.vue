@@ -109,6 +109,7 @@
                     variant="outline-danger"
                     size="sm"
                     class="screenShotTrash"
+                    @click.prevent
                   >
                     <i class="fa fa-trash"></i>
                   </b-button>

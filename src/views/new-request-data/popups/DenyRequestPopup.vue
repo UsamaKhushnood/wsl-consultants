@@ -6,6 +6,7 @@
       header-bg-variant="danger"
       header-text-variant="light"
       centered
+      scrollable
       hide-footer
     >
       <template #default="{hide}">

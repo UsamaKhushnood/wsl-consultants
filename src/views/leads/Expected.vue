@@ -95,7 +95,7 @@
                             </p>
                           </td>
                         </template>
-                        <template #PhoneNo="{item}">
+                        <template #phone="{item}">
                           <td>
                             <a
                               :href="'tel:' + item.phone"
@@ -126,19 +126,24 @@
                             <!-- <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'In Progress' || item.status == 'Rejected' ||
-                                item.status == 'New Lead'|| item.status == 'On Hold'
-                                  ? 'badge-info'
-                                  : item.status == 'Expected' ||
-                                    item.status == 'Applied'
+                                item.status == 'In Progress'
                                   ? 'badge-success'
-                                  : item.status == 'Not Expected'
+                                  : item.status == 'New Lead'
+                                  ? 'badge-info'
+                                  : item.status == 'On Hold'
+                                  ? 'badge-warning'
+                                  : item.status == 'Expected'
+                                  ? 'badge-dark'
+                                  : item.status == 'Applied'
+                                  ? 'badge-success'
+                                  : item.status == 'Not Expected' ||
+                                    item.status == 'Rejected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
                               {{ item.status }}
-                            </span>  -->
+                            </span> -->
                           </td>
                         </template>
                         <template #Actions="{index,item}">

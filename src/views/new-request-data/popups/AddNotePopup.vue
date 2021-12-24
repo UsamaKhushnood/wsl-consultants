@@ -6,6 +6,7 @@
       header-bg-variant="primary"
       header-text-variant="light"
       centered
+      scrollable
       hide-footer
     >
       <template #default="{hide}">
@@ -56,6 +57,8 @@
             >
           </div>
         </div>
+        <b-overlay :show="formOverlay" no-wrap class="overlayModal">
+        </b-overlay>
       </template>
     </b-modal>
   </div>
@@ -77,6 +80,7 @@ export default {
       text: "",
       uploadedImages: [],
       imageList: [],
+      formOverlay: false,
     };
   },
   methods: {
@@ -87,6 +91,7 @@ export default {
         alert("please Add one Value");
         return;
       } else {
+        this.formOverlay = true;
         let url = vm.getUser.type == "admin" ? "/admin/notes" : "/notes";
         axios
           .post(process.env.VUE_APP_API_URL + url, {
@@ -96,6 +101,7 @@ export default {
           })
           .then((response) => {
             vm.$refs.cancel.click();
+            this.formOverlay = false;
             vm.$toast.success("Notes Add Successfully", {
               position: "top-right",
               closeButton: "button",
@@ -107,6 +113,7 @@ export default {
           })
           .catch((errors) => {
             var err = "";
+            this.formOverlay = false;
             if (errors.response.data.errors.email) {
               err += errors.response.data.errors.email;
             }

@@ -19,8 +19,38 @@
         <!-- <div class="col-4"></div> -->
       </div>
     </div>
-    <WidgetsDropdown />
-    <CRow>  
+    <WidgetsDropdown
+      v-if="getUser.type == 'admin' || getUser.type === 'Sales Agent'"
+    />
+    <div class="bg-white radius-10 py-3 px-3" v-if="getUser.type !== 'admin'">
+      <h5 class="agent-progress text-black text-bold">Your Progress</h5>
+      <div class="row">
+        <div class="col-6" v-if="getUser.type == 'Sales Agent'">
+          <h6 class="text-text badge badge-success">
+            For Sales Agent
+          </h6>
+          <CChartPie
+            :datasets="salesAgentData"
+            :labels="[
+              'New Leads',
+              'In Progress',
+              'On Hold',
+              'Expected',
+              'Not Expected',
+              'Applied',
+              'Rejected',
+            ]"
+          />
+        </div>
+        <div class="col-6" v-else>
+          <h6 class="text-text badge badge-success">
+            For Call Center Agent
+          </h6>
+          <CChartBar :datasets="callCenterAgentData" labels="months" />
+        </div>
+      </div>
+    </div>
+    <CRow v-if="getUser.type == 'admin'">
       <CCol md="12">
         <CCard>
           <CCardHeader>
@@ -323,8 +353,8 @@
           </CCardBody>
         </CCard>
       </CCol>
-    </CRow> 
-    <WidgetsBrand />
+    </CRow>
+    <WidgetsBrand v-if="getUser.type == 'admin'" />
   </div>
 </template>
 
@@ -332,6 +362,7 @@
 import MainChartExample from "./charts/MainChartExample";
 import WidgetsDropdown from "./widgets/WidgetsDropdown";
 import WidgetsBrand from "./widgets/WidgetsBrand";
+import { CChartPie, CChartBar } from "@coreui/vue-chartjs";
 import { mapGetters } from "vuex";
 
 export default {
@@ -340,10 +371,13 @@ export default {
     MainChartExample,
     WidgetsDropdown,
     WidgetsBrand,
+    CChartPie,
+    CChartBar,
   },
   data() {
     return {
       selected: "Month",
+      salesAgentDataArr: [1, 10, 45, 51, 55, 8, 54],
       tableItems: [
         {
           avatar: { url: "img/avatars/1.jpg", status: "success" },
@@ -470,6 +504,23 @@ export default {
       } else {
         return "Evening";
       }
+    },
+    salesAgentData() {
+      return [
+        {
+          label: "GitHub Commits",
+          backgroundColor: [
+            "#130f40",
+            "#3498db",
+            "#e67e22",
+            "#8e44ad",
+            "#bdc3c7",
+            "#27ae60",
+            "#c0392b",
+          ],
+          data: this.salesAgentDataArr,
+        },
+      ];
     },
   },
 };

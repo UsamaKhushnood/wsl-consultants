@@ -5,6 +5,7 @@
       header-bg-variant="dark"
       header-text-variant="light"
       centered
+      scrollable
       title="Assign To Agent"
     >
       <div class="modal-body">

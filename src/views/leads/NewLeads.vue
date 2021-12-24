@@ -4,7 +4,7 @@
       <div class="vd_content clearfix">
         <div class="vd_title-section clearfix">
           <div class="vd_panel-header">
-            <h1><i class="fas fa-cubes"></i> All Leads</h1>
+            <h1><i class="fas fa-cubes"></i> New Leads</h1>
           </div>
         </div>
         <div class="clearfix">
@@ -94,7 +94,7 @@
                             </p>
                           </td>
                         </template>
-                        <template #PhoneNo="{item}">
+                        <template #phone="{item}">
                           <td>
                             <a
                               :href="'tel:' + item.phone"
@@ -125,19 +125,24 @@
                             <!-- <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'In Progress' || item.status == 'Rejected' ||
-                                item.status == 'New Lead'|| item.status == 'On Hold'
-                                  ? 'badge-info'
-                                  : item.status == 'Expected' ||
-                                    item.status == 'Applied'
+                                item.status == 'In Progress'
                                   ? 'badge-success'
-                                  : item.status == 'Not Expected'
+                                  : item.status == 'New Lead'
+                                  ? 'badge-info'
+                                  : item.status == 'On Hold'
+                                  ? 'badge-warning'
+                                  : item.status == 'Expected'
+                                  ? 'badge-dark'
+                                  : item.status == 'Applied'
+                                  ? 'badge-success'
+                                  : item.status == 'Not Expected' ||
+                                    item.status == 'Rejected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
                               {{ item.status }}
-                            </span>  -->
+                            </span> -->
                           </td>
                         </template>
                         <template #Actions="{index,item}">
