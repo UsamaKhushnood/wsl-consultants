@@ -161,7 +161,7 @@
                     {{ getSelectedStudent.created_at }}
                   </p>
                 </div>
-                <div class="col-sm-4 brdLeft"  v-if="getUser.type =='admin'">
+                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
                   <h6
                     class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
                     style="width: fit-content"
@@ -182,19 +182,21 @@
                   </div>
                   <h4 class="text-center">Agent's Name</h4>
                   <div class="text-center">
-                     <router-link
-                    active-class="c-active"
-                    :to="'/dashboard/agents/'+getSelectedStudent.call_agent_id"
-                    class="c-sidebar-nav-link"
-                    target="_self"
+                    <router-link
+                      active-class="c-active"
+                      :to="
+                        '/dashboard/agents/' + getSelectedStudent.call_agent_id
+                      "
+                      class="c-sidebar-nav-link"
+                      target="_self"
                     >
-                    <b-button class="mrgn0 text-center btn-sm" variant="dark">
-                      Agent Profile
-                    </b-button>
-                     </router-link>
+                      <b-button class="mrgn0 text-center btn-sm" variant="dark">
+                        Agent Profile
+                      </b-button>
+                    </router-link>
                   </div>
                 </div>
-                <div class="col-sm-4 brdLeft"  v-if="getUser.type =='admint'" >
+                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
                   <h6
                     class="font-bold bg-warning d-flex justify-content-center p-1 radius-10 text-dark"
                     style="width: fit-content"
@@ -214,16 +216,18 @@
                   </div>
                   <h4 class="text-center">Agent's Name</h4>
                   <div class="text-center">
-                       <router-link
-                    active-class="c-active"
-                    :to="'/dashboard/agents/'+getSelectedStudent.assigned_to"
-                    class="c-sidebar-nav-link"
-                    target="_self"
+                    <router-link
+                      active-class="c-active"
+                      :to="
+                        '/dashboard/agents/' + getSelectedStudent.assigned_to
+                      "
+                      class="c-sidebar-nav-link"
+                      target="_self"
                     >
-                    <b-button class="mrgn0 text-center btn-sm" variant="dark">
-                      Agent Profile
-                    </b-button>
-                       </router-link>
+                      <b-button class="mrgn0 text-center btn-sm" variant="dark">
+                        Agent Profile
+                      </b-button>
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -244,22 +248,21 @@
                 <h5>Passing Year</h5>
                 <p>{{ getSelectedStudent.student_info.passing_year }}</p>
               </div>
-              <div v-if="getSelectedStudent.cv">
+              <div v-if="getSelectedStudent.cv" class="mb-4">
                 <a
                   :href="ImageUrl + '/student/' + getSelectedStudent.cv"
                   download
-                  >Download</a
+                  class="mb-4"
+                  >Download CV</a
                 >
               </div>
-              <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
-              <div v-for="(data ,index) in getSelectedStudent.screen_shots" :key="index" >
+              <h5 v-if="getSelectedStudent">Screenshot</h5>
+              <div>
                 <div class="screenshotsGallery">
                   <a
-                    :href="
-                      ImageUrl +
-                        '/screen-shot/' +
-                        data.screen_shot
-                    "
+                    v-for="(data, index) in getSelectedStudent.screen_shots"
+                    :key="index"
+                    :href="ImageUrl + '/screen-shot/' + data.screen_shot"
                     target="_blank"
                     class="position-relative"
                     v-b-tooltip.hover
@@ -276,6 +279,7 @@
                       variant="outline-danger"
                       size="sm"
                       class="screenShotTrash"
+                      @click.prevent
                     >
                       <i class="fa fa-trash"></i>
                     </b-button>
@@ -325,7 +329,7 @@ export default {
     ],
   }),
   computed: {
-    ...mapGetters(["getSelectedStudent","getUser"]),
+    ...mapGetters(["getSelectedStudent", "getUser"]),
     ImageUrl() {
       return process.env.VUE_APP_IMAGE_STORAGE_URL;
     },

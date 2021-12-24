@@ -17,7 +17,7 @@
                 Create New Lead
               </button>
               <CreateNewLead />
-              <EditLead :items="getPropUser" />
+              <!-- <EditLead :items="getPropUser" /> -->
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
@@ -255,7 +255,7 @@ export default {
     currentPage: 1,
     itemsPerPage: 3,
     resultCount: 0,
-    user_for_pro:""
+    user_for_pro: "",
   }),
   computed: {
     ...mapGetters(["getUser", "getAllStudentData"]),
@@ -280,9 +280,9 @@ export default {
       var index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
       return this.articles.slice(index, index + this.itemsPerPage);
     },
-    getPropUser(){
-      return this.user_for_pro
-    }
+    getPropUser() {
+      return this.user_for_pro;
+    },
   },
   methods: {
     setPage: function(pageNumber) {
@@ -293,8 +293,8 @@ export default {
       // this.deleteStudentId = data
       this.$store.commit("SET_CURRENT_STUDENT", null);
       this.$store.commit("SET_CURRENT_STUDENT", data);
-      this.user_for_pro=data
-      console.log("pro",data)
+      this.user_for_pro = data;
+      console.log("pro", data);
     },
     changeStatus(item) {
       const vm = this;

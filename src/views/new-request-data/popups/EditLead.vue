@@ -90,8 +90,8 @@
               <label for="agentFirstName">Recently Uploaded:</label>
               <div class="screenshotsGallery justify-content-center">
                 <a
-                  :href="
-                    ImageUrl + '/screen-shot/' + getSelectedStudent.screen_shot
+                  href=" 
+                     ImageUrl/screen-shot/getSelectedStudent.screen_shot
                   "
                   target="_blank"
                   class="position-relative"
@@ -145,7 +145,7 @@ import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
-    props: ["items"],
+  props: ["propsindex"],
   data: () => ({
     // items: tableData,
     visibleLiveDemo: false,
@@ -164,14 +164,14 @@ export default {
   computed: {
     ...mapGetters(["getUser", "getSelectedStudent"]),
     ...mapState(["allStudentData"]),
-      getItems(){
-        return this.$props.items
-      }
+    getItems() {
+      return this.$props.items;
+    },
   },
   components: {
     VueUploadMultipleImage,
   },
-  
+
   methods: {
     handleCvUpload(event) {
       let vm = this;
