@@ -146,7 +146,7 @@ import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
-    props: ["items"],
+  props: ["items"],
   data ()  {
     return{
        // items: tableData,

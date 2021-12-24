@@ -17,7 +17,7 @@
                 Create New Lead
               </button>
               <CreateNewLead />
-              <!-- <EditLead :items="getPropUser" /> -->
+              <EditLead :items="getPropUser" />
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
