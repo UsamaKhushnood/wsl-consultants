@@ -159,7 +159,7 @@ export default {
       } else if (vm.getUser.type == "Call Center Agent") {
         url = process.env.VUE_APP_API_URL + "/call-agent/new-leads";
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/new-leads/";
+        url = process.env.VUE_APP_API_URL + "/admin/new-leads";
       }
 
       var formData = new FormData();
@@ -205,22 +205,17 @@ export default {
             (vm.whatsapp_num = ""),
             (vm.cv = ""),
             (vm.screenShot = "");
+            (vm.imageList = []);
           vm.$store.commit("SET_All_STUDENT", true);
           vm.$getStudent();
           vm.$refs.cancel.click();
         })
         .catch((errors) => {
           this.formOverlay = false;
-          var err = "";
-          console.log(errors, "create new lead errors");
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-          if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
-          }
+       
+        
           if (errors)
-            this.$toast.error(err, {
+            this.$toast.error(errors.response.data.errors, {
               position: "top-right",
               closeButton: "button",
               icon: true,
