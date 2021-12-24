@@ -41,7 +41,7 @@
           <template #first_name="{item}">
             <td>
               <p>
-                {{ item.agent.first_name }}
+                {{ item.first_name }}
               </p>
             </td>
           </template>
@@ -49,7 +49,7 @@
           <template #type="{item}">
             <td>
               <p>
-                {{ item.agent.type }}
+                {{ item.type }}
               </p>
             </td>
           </template>
@@ -62,7 +62,7 @@
                     ? 'badge-primary'
                     : 'badge-warning',
                 ]"
-                >{{ item.agent.type }}</span
+                >{{ item.type }}</span
               >
             </td>
           </template>
@@ -101,12 +101,7 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-          if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
-          }
+        
           if (errors)
             this.$toast.error(err, {
               position: "top-right",
@@ -128,9 +123,7 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
+        
         });
     },
     getAllLoginList() {
@@ -144,9 +137,7 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
+          console.log(errors)
           // if (errors.response.data.message == "Login Time Expire") {
           //   localStorage.setItem("token", null);
           // }

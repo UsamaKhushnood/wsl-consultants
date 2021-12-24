@@ -225,7 +225,7 @@ export default {
     },
     uploadImageSuccess(formData, index, fileList) {
       console.log(formData, "index:", index, fileList, "upload success");
-      this.imageList.push(fileList[0].path)
+      this.imageList.push(fileList[index].path)
     },
     // beforeRemove(index, done, fileList) {
     //   console.log("index:", index, done, fileList, "before remove");

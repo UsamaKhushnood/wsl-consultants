@@ -303,7 +303,10 @@ export default {
       let url = "";
       if (vm.getUser.type == "admin") {
         url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
-      } else {
+      } else if(vm.getUser.type =="Call Center Agent"){
+       url = process.env.VUE_APP_API_URL + "/call-agent/status/" + item.id;
+      }
+      else {
         url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
       }
       axios

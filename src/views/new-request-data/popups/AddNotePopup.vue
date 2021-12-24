@@ -98,6 +98,7 @@ export default {
           });
           vm.text=''
           vm.imageList=[]
+         vm.$getStudent();
         })
         .catch((errors) => {
           var err = "";

@@ -15,7 +15,7 @@
         <div
           class="d-flex text-light align-items-center justify-content-center px-3 py-2 modalHeader bg-dark"
         >
-          <b-button size="sm" @click="hide"
+          <b-button size="sm" ref="model_hide" @click="hide"
             ><i class="fa fa-arrow-circle-right"></i
           ></b-button>
           <h4 class="mx-auto">Student Details</h4>
@@ -107,7 +107,7 @@
                 </b-card-text>
               </b-card>
               <b-card
-                v-show="getSelectedStudent.notes != null"
+                v-show="getSelectedStudent.student_info !=null"
                 border-variant="dark"
                 header="Student Query"
                 header-bg-variant="danger"
@@ -117,15 +117,13 @@
               >
                 <b-card-text>
                   <p
-                    v-for="(data, index) in getSelectedStudent.notes"
-                    :key="index"
                   >
-                    {{ data.note }}
+                    {{ getSelectedStudent.student_info == null ? "" : getSelectedStudent.student_info.query    }}
                   </p>
                 </b-card-text>
               </b-card>
               <b-card
-                v-show="getSelectedStudent.notes != null"
+                v-if=" !getSelectedStudent.notes.length"
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -254,13 +252,14 @@
               <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
               <div v-for="(data ,index) in getSelectedStudent.screen_shots" :key="index" >
                 <div class="screenshotsGallery">
-                  <a
-                    :href="
+                   <!-- :href="
                       ImageUrl +
                         '/screen-shot/' +
                         data.screen_shot
                     "
-                    target="_blank"
+                    target="_blank" -->
+                  <a
+                   
                     class="position-relative"
                     v-b-tooltip.hover
                     title="Click to view full"
@@ -277,7 +276,8 @@
                       size="sm"
                       class="screenShotTrash"
                     >
-                      <i class="fa fa-trash"></i>
+                      
+                      <i  class="fa fa-trash" @click="deleteScreenShot(data.id)" ></i>
                     </b-button>
                   </a>
                 </div>
@@ -292,6 +292,7 @@
 <script>
 import { mapGetters } from "vuex";
 import usersData from "./userData";
+import axios from 'axios'
 export default {
   props: ["propsindex"],
   components: {},
@@ -327,6 +328,7 @@ export default {
   computed: {
     ...mapGetters(["getSelectedStudent","getUser"]),
     ImageUrl() {
+
       return process.env.VUE_APP_IMAGE_STORAGE_URL;
     },
   },
@@ -342,6 +344,32 @@ export default {
         ? "danger"
         : "primary";
     },
+    deleteScreenShot(id){
+        const vm = this;
+        var url = "";
+        
+        if(vm.getUser.type =='admin'){
+         url  = "/admin/screen-shot-delete/";
+        }else{
+          url = "/screen-shot-delete/";
+        }
+      axios
+        .post(process.env.VUE_APP_API_URL+url+id)
+        .then((response) => {
+           vm.$toast.success(response.data.message, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+            vm.$getStudent();
+            vm.$refs.model_hide.click();
+        })
+        .catch((errors) => {
+          var err = "";
+         
+        });
+    }
   },
 };
 </script>

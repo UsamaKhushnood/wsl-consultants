@@ -14,7 +14,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="form-element">
-                  <label for="agentFirstName">First Name:</label>
+                  <label for="agentFirstName">First Name:{{items.first_name}}</label>
                   <input type="text" v-model="first_name" id="agentFirstName" />
                 </div>
               </div>
@@ -109,10 +109,11 @@ import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
     props: ["items"],
-  data: () => ({
-    // items: tableData,
+  data ()  {
+    return{
+       // items: tableData,
     visibleLiveDemo: false,
-    first_name: "",
+    first_name:items.first_name,
     last_name: "",
     country: "",
     email: "",
@@ -123,7 +124,9 @@ export default {
     imageList: [],
     uploadedImages: [],
     formOverlay: false,
-  }),
+    }
+   
+  },
   computed: {
     ...mapGetters(["getUser","getSelectedStudent"]),
     ...mapState(["allStudentData"]),
@@ -160,12 +163,10 @@ export default {
     addLead() {
       const vm = this;
       let url = "";
-      if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/new-leads";
-      } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/new-leads";
-      } else {
-        url = process.env.VUE_APP_API_URL + "/admin/new-leads";
+      if (vm.getUser.type == "admin") {
+        url = process.env.VUE_APP_API_URL +"/admin/new-leads/"+id;
+      }else {
+        url = process.env.VUE_APP_API_URL + "/new-leads/"+id;
       }
 
       var formData = new FormData();

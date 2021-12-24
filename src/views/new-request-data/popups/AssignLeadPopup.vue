@@ -87,12 +87,12 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-           this.$toast.error(errors.response.data.message, {
-            position: "top-right",
-            closeButton: "button",
-            icon: true,
-            rtl: false,
-          });
+          //  this.$toast.error(errors.response.data.message, {
+          //   position: "top-right",
+          //   closeButton: "button",
+          //   icon: true,
+          //   rtl: false,
+          // });
         });
     },
     assignedTo() {
@@ -122,13 +122,12 @@ export default {
         })
         .catch((errors) => {
         
-          if(errors)
-          this.$toast.error(errors.response.data.message, {
-            position: "top-right",
-            closeButton: "button",
-            icon: true,
-            rtl: false,
-          });
+          // this.$toast.error(errors.response.data.message, {
+          //   position: "top-right",
+          //   closeButton: "button",
+          //   icon: true,
+          //   rtl: false,
+          // });
         });
     },
   },

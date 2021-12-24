@@ -84,23 +84,36 @@ export default {
         })
         .then((response) => {
           console.log('data::',response.data);
-          const token = response.data.token
-          localStorage.setItem('token', token)
-            vm.$store.commit("SET_AUTH_TOKEN", response.data.token);
-            // vm.$store.commit("SET_SPINNER", false);
-            vm.$store.commit("SET_USER", response.data.user);
-            vm.$toast.success("Login Successfully", {
-              position: "top-right",
-              closeButton: "button",
-              icon: true,
-              rtl: false,
-            });
-                // vm.$store.commit('SET_SPINNER',false);
-          window.location.href =process.env.VUE_APP_URL+'dashboard' 
+          console.log('data::',response.data.error);
+          if(response.data.token){
+              const token = response.data.token
+            localStorage.setItem('token', token)
+              vm.$store.commit("SET_AUTH_TOKEN", response.data.token);
+              // vm.$store.commit("SET_SPINNER", false);
+              vm.$store.commit("SET_USER", response.data.user);
+              vm.$toast.success("Login Successfully", {
+                position: "top-right",
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+              });
+                  // vm.$store.commit('SET_SPINNER',false);
+            window.location.href =process.env.VUE_APP_URL+'dashboard' 
+          }
+            
+             vm.$toast.error(response.data.error, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          
+          
           // vm.$router.push({ name: "Dashboard" });
 
         })
         .catch((errors) => {
+         
           if(errors.response.data){
             this.$toast.error(errors.response.data.message, {
             position: "top-right",
@@ -110,26 +123,26 @@ export default {
           });
           }
           var err =''
-          {  console.log('errors.response.data',errors.response.data)
-          if(errors.response.data.message =='Login Time Expire'){
-            // console.log('errors.response.data',errors.response.data.message)
-            // localStorage.setItem('token', null)
-          }}
-          if(errors.response.data.errors.email){
-            err+=errors.response.data.errors.email
-          }
-          if(errors.response.data.errors.password){
-            err+=errors.response.data.errors.password
-          }
+          // {  console.log('errors.response.data',errors.response.data)
+          // if(errors.response.data.message =='Login Time Expire'){
+          //   // console.log('errors.response.data',errors.response.data.message)
+          //   // localStorage.setItem('token', null)
+          // }}
+          // if(errors.response.data.errors.email){
+          //   err+=errors.response.data.errors.email
+          // }
+          // if(errors.response.data.errors.password){
+          //   err+=errors.response.data.errors.password
+          // }
           
             
-          if(errors)
-          this.$toast.error(err, {
-            position: "top-right",
-            closeButton: "button",
-            icon: true,
-            rtl: false,
-          });
+          // if(errors)
+          // this.$toast.error(err, {
+          //   position: "top-right",
+          //   closeButton: "button",
+          //   icon: true,
+          //   rtl: false,
+          // });
             // vm.$store.commit('SET_SPINNER',false);
         });
     },
