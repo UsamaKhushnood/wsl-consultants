@@ -254,8 +254,8 @@
                   >Download CV</a
                 >
               </div>
-              <h5 v-if="getSelectedStudent">Screenshot</h5>
-              <div>
+                <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
+              <div v-for="(data ,index) in getSelectedStudent.screen_shots" :key="index" >
                 <div class="screenshotsGallery">
                    <!-- :href="
                       ImageUrl +
