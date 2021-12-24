@@ -61,7 +61,7 @@ import VueUploadMultipleImage from "vue-upload-multiple-image";
 export default {
   props: ["propsindex", "item"],
   computed: {
-    ...mapGetters(["getSelectedStudentId"]),
+    ...mapGetters(["getSelectedStudentId",'getUser']),
   },
   components: {
     VueUploadMultipleImage,
@@ -81,8 +81,9 @@ export default {
         alert("please Add one Value")
         return;
       }else{
+        let url =vm.getUser.type =='admin' ? "/admin/notes" : "/notes"
       axios
-        .post(process.env.VUE_APP_API_URL + "/admin/notes", {
+        .post(process.env.VUE_APP_API_URL + url, {
           note: vm.text,
           student_id: vm.getSelectedStudentId,
           screen_shot:vm.imageList,

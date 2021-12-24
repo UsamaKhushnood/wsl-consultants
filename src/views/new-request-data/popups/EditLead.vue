@@ -108,10 +108,11 @@ import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
+    props: ["items"],
   data: () => ({
     // items: tableData,
     visibleLiveDemo: false,
-    first_name: "",
+    first_name: this.getItems.first_name,
     last_name: "",
     country: "",
     email: "",
@@ -126,20 +127,14 @@ export default {
   computed: {
     ...mapGetters(["getUser","getSelectedStudent"]),
     ...mapState(["allStudentData"]),
-  
+      getItems(){
+        return this.$props.items
+      }
   },
    components: {
     VueUploadMultipleImage,
   },
-  mounted(){
-    let vm = this;
-  //  this.first_name = vm.getSelectedStudent.first_name,
-  //  this.last_name = vm.getSelectedStudent.last_name,
-  //  this.country = vm.getSelectedStudent.country,
-  //  this.email = vm.getSelectedStudent.email,
-  //  this.phone = vm.getSelectedStudent.phone,
-  //  this.whatsapp_num = vm.getSelectedStudent.whatsapp_num
-  },
+  
   methods: {
     handleCvUpload(event) {
       let vm = this;
