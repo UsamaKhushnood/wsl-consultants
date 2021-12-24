@@ -90,7 +90,7 @@
                             </a>
                           </td>
                         </template>
-                        <template #PhoneNo="{item}">
+                        <template #phone="{item}">
                           <td>
                             <a
                               :href="'tel:' + item.PhoneNo"

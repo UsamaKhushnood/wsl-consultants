@@ -8,10 +8,7 @@
     <template #toggler>
       <CHeaderNavLink>
         <div class="c-avatar">
-          <img
-            src="@/assets/avatar/briant2.png"
-            class="c-avatar-img "
-          />
+          <img src="@/assets/avatar/briant2.png" class="c-avatar-img " />
         </div>
       </CHeaderNavLink>
     </template>
@@ -19,56 +16,59 @@
       <strong v-if="getUser.first_name">{{getUser.first_name}} Account</strong>
     </CDropdownHeader>
     <CDropdownItem>
+    <!-- <CDropdownHeader tag="div" class="text-center" color="light">
+      <strong>{{getUser.first_name}} Account</strong>
+    </CDropdownHeader> -->
+    <!-- <CDropdownItem>
       <CIcon name="cil-bell"/> Updates
       <CBadge color="info" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
+    </CDropdownItem> -->
     <!-- <CDropdownItem>
       <CIcon name="cil-envelope-open" /> Messages
       <CBadge color="success" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem> -->
-    <CDropdownItem>
+    <!-- <CDropdownItem>
       <CIcon name="cil-task" /> Tasks
       <CBadge color="danger" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
+    </CDropdownItem> -->
     <!-- <CDropdownItem>
       <CIcon name="cil-comment-square" /> Comments
       <CBadge color="warning" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem> -->
-    <CDropdownHeader
-      tag="div"
-      class="text-center"
-      color="light"
-    >
+    <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>Settings</strong>
     </CDropdownHeader>
     <CDropdownItem>
-      <CIcon name="cil-user" /> Agent Profiles
+      <router-link to="/dashboard/agents">
+        <CIcon name="cil-user" /> Agent Profiles</router-link
+      >
     </CDropdownItem>
     <CDropdownItem>
-      <CIcon name="cil-settings" /> Settings
+      <router-link to="/dashboard/time-setting">
+        <CIcon name="cil-settings" /> Settings</router-link
+      >
     </CDropdownItem>
-    <CDropdownDivider/>
-    <CDropdownItem>
+    <CDropdownDivider />
+    <!-- <CDropdownItem>
       <CIcon name="cil-shield-alt" /> Lock Account
-    </CDropdownItem>
+    </CDropdownItem> -->
     <CDropdownItem @click.prevent="logout()">
-
-      <CIcon name="cil-lock-locked"  /> Logout
+      <CIcon name="cil-lock-locked" /> Logout
     </CDropdownItem>
   </CDropdown>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
-  name: 'TheHeaderDropdownAccnt',
-  data () {
-    return { 
-      itemsCount: 42
-    }
+  name: "TheHeaderDropdownAccnt",
+  data() {
+    return {
+      itemsCount: 42,
+    };
   },
-  computed:{
-    ...mapGetters(['getUser'])
+  computed: {
+    ...mapGetters(["getUser"]),
   },
   methods: {
     trigger() {
@@ -80,7 +80,7 @@ export default {
       this.$http
         .post(process.env.VUE_APP_API_URL + "/logout")
         .then((response) => {
-          console.log('s',response.data.message)
+          console.log("s", response.data.message);
           // vm.$store.commit("SET_AUTH_TOKEN", response.data.token);
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$store.commit("SET_USER", response.data.userDetail.user);
@@ -95,7 +95,7 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-         
+
           if (errors)
             this.$toast.error(errors.message, {
               position: "top-right",
@@ -110,11 +110,11 @@ export default {
       window.open(url, "_blank");
     },
   },
-}
+};
 </script>
 
 <style scoped>
-  .c-icon {
-    margin-right: 0.3rem;
-  }
+.c-icon {
+  margin-right: 0.3rem;
+}
 </style>

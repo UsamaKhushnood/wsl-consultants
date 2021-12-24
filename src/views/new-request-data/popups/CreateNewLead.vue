@@ -6,6 +6,7 @@
       header-bg-variant="dark"
       header-text-variant="light"
       centered
+      scrollable
       ref="create_lead_modal"
     >
       <template #default>

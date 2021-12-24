@@ -17,7 +17,7 @@
                 Create New Lead
               </button>
               <CreateNewLead />
-              <EditLead :items="getPropUser" />
+              <!-- <EditLead :items="getPropUser" /> -->
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
@@ -87,7 +87,7 @@
                             </p>
                           </td>
                         </template>
-                        <template #PhoneNo="{item}">
+                        <template #phone="{item}">
                           <td>
                             <a
                               :href="'tel:' + item.phone"
@@ -118,15 +118,18 @@
                             <!-- <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'In Progress' ||
-                                item.status == 'Rejected' ||
-                                item.status == 'New Lead' ||
-                                item.status == 'On Hold'
-                                  ? 'badge-info'
-                                  : item.status == 'Expected' ||
-                                    item.status == 'Applied'
+                                item.status == 'In Progress'
                                   ? 'badge-success'
-                                  : item.status == 'Not Expected'
+                                  : item.status == 'New Lead'
+                                  ? 'badge-info'
+                                  : item.status == 'On Hold'
+                                  ? 'badge-warning'
+                                  : item.status == 'Expected'
+                                  ? 'badge-dark'
+                                  : item.status == 'Applied'
+                                  ? 'badge-success'
+                                  : item.status == 'Not Expected' ||
+                                    item.status == 'Rejected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
@@ -166,7 +169,7 @@
 
                             <a
                               class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
-                              v-b-modal="'edit-lead-modal'"
+                              v-b-modal="'edit-lead-modal' + index"
                               :item="item.id"
                               @click="setStudent(item)"
                             >
@@ -241,12 +244,11 @@ import tableData from "../tableData";
 import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-import EditLead from "@/views/new-request-data/popups/EditLead.vue";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 export default {
   name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead },
+  components: { WidgetsDropdown, AllPopups, CreateNewLead },
 
   data: () => ({
     // items: tableData,
@@ -256,11 +258,11 @@ export default {
     currentPage: 1,
     itemsPerPage: 3,
     resultCount: 0,
-    user_for_pro:""
+    user_for_pro: "",
   }),
   computed: {
     ...mapGetters(["getUser", "getAllStudentData"]),
-    ...mapState(["allStudent","allStudentData"]),
+    ...mapState(["allStudent", "allStudentData"]),
     /* eslint-disable */
     totalPages: function() {
       if (this.resultCount == 0) {
@@ -281,9 +283,9 @@ export default {
       var index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
       return this.articles.slice(index, index + this.itemsPerPage);
     },
-    getPropUser(){
-      return this.user_for_pro
-    }
+    getPropUser() {
+      return this.user_for_pro;
+    },
   },
   methods: {
     setPage: function(pageNumber) {
@@ -294,8 +296,8 @@ export default {
       // this.deleteStudentId = data
       this.$store.commit("SET_CURRENT_STUDENT", null);
       this.$store.commit("SET_CURRENT_STUDENT", data);
-      this.user_for_pro=data
-      console.log("pro",data)
+      this.user_for_pro = data;
+      console.log("pro", data);
     },
     changeStatus(item) {
       const vm = this;
@@ -348,13 +350,11 @@ export default {
   },
   mounted() {
     let vm = this;
-
   },
-   watch: {
+  watch: {
     // getAllStudentData: function (val) {
-    //   this.getAllStudentData = val 
+    //   this.getAllStudentData = val
     // },
-   
   },
   created() {
     this.$getStudent();

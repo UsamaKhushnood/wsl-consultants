@@ -92,7 +92,9 @@
           <div class="agentsList ml-2 p-4 py-2 bg-white">
             <div class="d-flex mb-4 align-items-center justify-content-between">
               <h2>Agents List</h2>
-              <b-button variant="dark" size="sm">View All</b-button>
+              <router-link to="/dashboard/agents">
+                <b-button variant="dark" size="sm">View All</b-button>
+              </router-link>
             </div>
             <div
               class="agent d-flex p-3 bg-gray-100 mb-2 align-items-center"

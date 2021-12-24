@@ -1,11 +1,12 @@
 <template>
   <div class="edit-lead-popup position-relative ">
     <b-modal
-      :id="'edit-lead-modal'"
+      :id="'edit-lead-modal' + propsindex"
       title="Edit Lead"
       header-bg-variant="dark"
       header-text-variant="light"
       centered
+      scrollable
       ref="edit_lead_modal"
     >
       <template #default>
@@ -64,11 +65,18 @@
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
-              <input type="file" ref="file" @change="handleCvUpload($event)" required id="cv" />
+              <input
+                type="file"
+                ref="file"
+                @change="handleCvUpload($event)"
+                required
+                id="cv"
+              />
             </div>
             <div class="form-element">
-              <label for="agentFirstName">Screenshots:</label>
-                 <VueUploadMultipleImage
+              <label for="agentFirstName">Updload Screenshots:</label>
+
+              <VueUploadMultipleImage
                 :data-images="uploadedImages"
                 @upload-success="uploadImageSuccess"
                 @edit-image="editImage"
@@ -77,6 +85,36 @@
               <p class="badge mb-0 text-capitalize text-secondary">
                 max uplaod limit is 5
               </p>
+            </div>
+            <div class="form-element">
+              <label for="agentFirstName">Recently Uploaded:</label>
+              <div class="screenshotsGallery justify-content-center">
+                <a
+                  href=" 
+                     ImageUrl/screen-shot/getSelectedStudent.screen_shot
+                  "
+                  target="_blank"
+                  class="position-relative"
+                  v-b-tooltip.hover
+                  title="Click to view full"
+                >
+                  <div
+                    class="screenShotWrapper"
+                    v-b-modal="'imgModal' + propsindex"
+                    :style="{
+                      backgroundImage: `url(${ImageUrl}/screen-shot/${getSelectedStudent.screen_shot})`,
+                    }"
+                  ></div>
+                  <b-button
+                    variant="outline-danger"
+                    size="sm"
+                    class="screenShotTrash"
+                    @click.prevent
+                  >
+                    <i class="fa fa-trash"></i>
+                  </b-button>
+                </a>
+              </div>
             </div>
           </form>
         </div>
@@ -128,16 +166,16 @@ export default {
    
   },
   computed: {
-    ...mapGetters(["getUser","getSelectedStudent"]),
+    ...mapGetters(["getUser", "getSelectedStudent"]),
     ...mapState(["allStudentData"]),
-      getItems(){
-        return this.$props.items
-      }
+    getItems() {
+      return this.$props.items;
+    },
   },
-   components: {
+  components: {
     VueUploadMultipleImage,
   },
-  
+
   methods: {
     handleCvUpload(event) {
       let vm = this;
@@ -172,7 +210,7 @@ export default {
       var formData = new FormData();
       var cv = document.querySelector("#cv");
       var scr = document.querySelector("#scr");
-      
+
       // formData.append("first_name", vm.first_name);
       // formData.append("last_name", vm.last_name);
       // formData.append("country", vm.country);
@@ -184,16 +222,15 @@ export default {
       this.formOverlay = true;
       axios
         .post(url, {
-          first_name:vm.first_name,
-         last_name: vm.last_name,
-         country:vm.country,
-          email:vm.email,
-          cv:vm.cv,
-          screen_shot:vm.imageList,
-          whatsapp_num:vm.whatsapp_num,
-          phone:vm.phone}
-        
-        )
+          first_name: vm.first_name,
+          last_name: vm.last_name,
+          country: vm.country,
+          email: vm.email,
+          cv: vm.cv,
+          screen_shot: vm.imageList,
+          whatsapp_num: vm.whatsapp_num,
+          phone: vm.phone,
+        })
         .then((response) => {
           this.formOverlay = false;
           console.log("data::", response.data);
@@ -237,7 +274,7 @@ export default {
     },
     uploadImageSuccess(formData, index, fileList) {
       console.log(formData, "index:", index, fileList, "upload success");
-      this.imageList.push(fileList[0].path)
+      this.imageList.push(fileList[0].path);
     },
     // beforeRemove(index, done, fileList) {
     //   console.log("index:", index, done, fileList, "before remove");
@@ -250,9 +287,9 @@ export default {
     },
   },
 
-  destroyed(){
-    this.$store.commit('SET_ALL_STUDENT_DATA',null)
-  }
+  destroyed() {
+    this.$store.commit("SET_ALL_STUDENT_DATA", null);
+  },
 };
 </script>
 <style lang="scss"></style>

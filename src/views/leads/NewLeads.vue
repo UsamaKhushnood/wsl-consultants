@@ -4,7 +4,7 @@
       <div class="vd_content clearfix">
         <div class="vd_title-section clearfix">
           <div class="vd_panel-header">
-            <h1><i class="fas fa-cubes"></i> All Leads</h1>
+            <h1><i class="fas fa-cubes"></i> New Leads</h1>
           </div>
         </div>
         <div class="clearfix">
@@ -33,8 +33,7 @@
                         :itemsPerPage="20"
                         class="leads-table"
                         sorter
-                         :fields="[
-                
+                        :fields="[
                           'first_name',
                           'whatsapp_num',
                           'phone',
@@ -95,7 +94,7 @@
                             </p>
                           </td>
                         </template>
-                        <template #PhoneNo="{item}">
+                        <template #phone="{item}">
                           <td>
                             <a
                               :href="'tel:' + item.phone"
@@ -110,7 +109,6 @@
                           <td class="status text-center">
                             <!-- new is the default status  -->
                             <b-form-select
-                             
                               size="sm"
                               @change="changeStatus(item)"
                               v-model="item.status"
@@ -124,22 +122,27 @@
                                 'Rejected',
                               ]"
                             ></b-form-select>
-                           <!-- <span
+                            <!-- <span
                               class="badge badge-pill"
                               :class="[
-                                item.status == 'In Progress' || item.status == 'Rejected' ||
-                                item.status == 'New Lead'|| item.status == 'On Hold'
-                                  ? 'badge-info'
-                                  : item.status == 'Expected' ||
-                                    item.status == 'Applied'
+                                item.status == 'In Progress'
                                   ? 'badge-success'
-                                  : item.status == 'Not Expected'
+                                  : item.status == 'New Lead'
+                                  ? 'badge-info'
+                                  : item.status == 'On Hold'
+                                  ? 'badge-warning'
+                                  : item.status == 'Expected'
+                                  ? 'badge-dark'
+                                  : item.status == 'Applied'
+                                  ? 'badge-success'
+                                  : item.status == 'Not Expected' ||
+                                    item.status == 'Rejected'
                                   ? 'badge-danger'
                                   : 'badge-warning',
                               ]"
                             >
                               {{ item.status }}
-                            </span>  -->
+                            </span> -->
                           </td>
                         </template>
                         <template #Actions="{index,item}">
@@ -170,18 +173,30 @@
                                 title="Assign"
                               ></i>
                             </a>
-
+                            <a
+                              class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
+                              v-b-modal="'edit-lead-modal' + index"
+                              :item="item.id"
+                              @click="setStudent(item)"
+                            >
+                              <i
+                                v-b-tooltip.hover
+                                title="Edit Lead"
+                                class="fa fa-pen"
+                              ></i>
+                            </a>
                             <a
                               data-target="#denyRequest"
                               data-toggle="modal"
                               class="btn edit-icon menu-icon  vd_bd-black vd_bd-black "
                               v-b-modal="'add-note-modal' + index"
                               :item="item.id"
+                              @click="setStudent(item)"
                             >
                               <i
                                 v-b-tooltip.hover
                                 title="Add Note"
-                                class="fa fa-pen"
+                                class="fa fa-book"
                               ></i>
                             </a>
                             <a
@@ -297,7 +312,7 @@ export default {
         .get(url)
         .then((response) => {
           console.log("data::", response.data.data);
-          vm.items = response.data.data
+          vm.items = response.data.data;
         })
         .catch((errors) => {
           var err = "";
