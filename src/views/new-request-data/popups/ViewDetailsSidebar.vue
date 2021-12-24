@@ -107,7 +107,7 @@
                 </b-card-text>
               </b-card>
               <b-card
-                v-show="getSelectedStudent.student_info !=null"
+                v-show="getSelectedStudent.student_info != null"
                 border-variant="dark"
                 header="Student Query"
                 header-bg-variant="danger"
@@ -116,14 +116,17 @@
                 class="mt-2 mb-2"
               >
                 <b-card-text>
-                  <p
-                  >
-                    {{ getSelectedStudent.student_info == null ? "" : getSelectedStudent.student_info.query    }}
+                  <p>
+                    {{
+                      getSelectedStudent.student_info == null
+                        ? ""
+                        : getSelectedStudent.student_info.query
+                    }}
                   </p>
                 </b-card-text>
               </b-card>
               <b-card
-                v-if=" !getSelectedStudent.notes.length"
+                v-if="!getSelectedStudent.notes.length"
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -254,17 +257,19 @@
                   >Download CV</a
                 >
               </div>
-                <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
-              <div v-for="(data ,index) in getSelectedStudent.screen_shots" :key="index" >
+              <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
+              <div
+                v-for="(data, index) in getSelectedStudent.screen_shots"
+                :key="index"
+              >
                 <div class="screenshotsGallery">
-                   <!-- :href="
+                  <!-- :href="
                       ImageUrl +
                         '/screen-shot/' +
                         data.screen_shot
                     "
                     target="_blank" -->
                   <a
-                   
                     class="position-relative"
                     v-b-tooltip.hover
                     title="Click to view full"
@@ -282,8 +287,10 @@
                       class="screenShotTrash"
                       @click.prevent
                     >
-                      
-                      <i  class="fa fa-trash" @click="deleteScreenShot(data.id)" ></i>
+                      <i
+                        class="fa fa-trash"
+                        @click="deleteScreenShot(data.id)"
+                      ></i>
                     </b-button>
                   </a>
                 </div>
@@ -296,11 +303,12 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
 import usersData from "./userData";
-import axios from 'axios'
+import axios from "axios";
 export default {
   props: ["propsindex"],
+  mixins: [getSelectedStudent],
   components: {},
   data: () => ({
     items: usersData,
@@ -332,9 +340,8 @@ export default {
     ],
   }),
   computed: {
-    ...mapGetters(["getSelectedStudent", "getUser"]),
+    // ...mapGetters(["getSelectedStudent", "getUser"]),
     ImageUrl() {
-
       return process.env.VUE_APP_IMAGE_STORAGE_URL;
     },
   },
@@ -350,32 +357,31 @@ export default {
         ? "danger"
         : "primary";
     },
-    deleteScreenShot(id){
-        const vm = this;
-        var url = "";
-        
-        if(vm.getUser.type =='admin'){
-         url  = "/admin/screen-shot-delete/";
-        }else{
-          url = "/screen-shot-delete/";
-        }
+    deleteScreenShot(id) {
+      const vm = this;
+      var url = "";
+
+      if (vm.getUser.type == "admin") {
+        url = "/admin/screen-shot-delete/";
+      } else {
+        url = "/screen-shot-delete/";
+      }
       axios
-        .post(process.env.VUE_APP_API_URL+url+id)
+        .post(process.env.VUE_APP_API_URL + url + id)
         .then((response) => {
-           vm.$toast.success(response.data.message, {
-              position: "top-right",
-              closeButton: "button",
-              icon: true,
-              rtl: false,
-            });
-            vm.$getStudent();
-            vm.$refs.model_hide.click();
+          vm.$toast.success(response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          vm.$getStudent();
+          vm.$refs.model_hide.click();
         })
         .catch((errors) => {
           var err = "";
-         
         });
-    }
+    },
   },
 };
 </script>
