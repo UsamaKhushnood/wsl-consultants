@@ -112,7 +112,7 @@ export default {
   data: () => ({
     // items: tableData,
     visibleLiveDemo: false,
-    first_name: this.getItems.first_name,
+    first_name: "",
     last_name: "",
     country: "",
     email: "",
