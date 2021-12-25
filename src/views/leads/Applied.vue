@@ -351,6 +351,7 @@ export default {
   mounted() {
     this.getStudent();
   },
+ 
 };
 </script>
 <style lang="scss">

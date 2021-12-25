@@ -364,7 +364,7 @@ import WidgetsDropdown from "./widgets/WidgetsDropdown";
 import WidgetsBrand from "./widgets/WidgetsBrand";
 import { CChartPie, CChartBar } from "@coreui/vue-chartjs";
 import { mapGetters } from "vuex";
-
+import axios from 'axios';
 export default {
   name: "Dashboard",
   components: {
@@ -374,10 +374,11 @@ export default {
     CChartPie,
     CChartBar,
   },
+
   data() {
     return {
       selected: "Month",
-      salesAgentDataArr: [1, 10, 45, 51, 55, 8, 54],
+      salesAgentDataArr: [],
       tableItems: [
         {
           avatar: { url: "img/avatars/1.jpg", status: "success" },
@@ -461,6 +462,25 @@ export default {
       }
       return $color;
     },
+      getSaleAgentCounts() {
+        const vm = this;
+        axios
+          .get(process.env.VUE_APP_API_URL + "/sale-agent-chart/" + this.getUser.id)
+          .then((response) => {
+            console.log("salesAgentDataArr::", response.data.data);
+
+            vm.salesAgentDataArr.push(response.data.data.applied) ;
+            vm.salesAgentDataArr.push(response.data.data.expected) ;
+            vm.salesAgentDataArr.push(response.data.data.in_progress) ;
+            vm.salesAgentDataArr.push(response.data.data.not_expected) ;
+            vm.salesAgentDataArr.push(response.data.data.on_hold) ;
+            vm.salesAgentDataArr.push(response.data.data.rejected) ;
+          
+          })
+          .catch((errors) => {
+            var err = "";
+          });
+    },
   },
   computed: {
     ...mapGetters(["getUser"]),
@@ -523,6 +543,9 @@ export default {
       ];
     },
   },
+  mounted(){
+    this.getSaleAgentCounts()
+  }
 };
 </script>
 <style lang="scss">

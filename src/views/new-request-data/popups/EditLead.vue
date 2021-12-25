@@ -7,6 +7,8 @@
       header-text-variant="light"
       centered
       scrollable
+      @close="closeModal()"
+      @hide="closeModal()"
       ref="edit_lead_modal"
     >
       <template #default>
@@ -16,21 +18,22 @@
               <div class="col-6">
                 <div class="form-element">
                   <label for="agentFirstName">First Name:</label>
-                  <input type="text" v-model="first_name" id="agentFirstName" />
+                  <input type="text" v-model="propsData.first_name"  id="agentFirstName" />
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-element">
                   <label for="last_name">Last Name:</label>
-                  <input type="text" v-model="last_name" id="last_name" />
+                  <input type="text" v-model="propsData.last_name" id="last_name" />
                 </div>
               </div>
             </div>
             <div class="form-element">
               <label for="country">Preferred Country:</label>
               <b-form-select
-                v-model="country"
+                v-model="propsData.country"
                 required
+                
                 :options="[
                   'Austria ',
                   'Europe',
@@ -48,20 +51,20 @@
             </div>
             <div class="form-element">
               <label for="phone">Phone Number:</label>
-              <input type="text" v-model="phone" id="phone" />
+              <input type="text" v-model="propsData.phone" id="phone" />
             </div>
             <div class="form-element">
               <label for="whatsapp_num">Whatsapp Number:</label>
               <input
                 type="text"
                 required
-                v-model="whatsapp_num"
+                v-model="propsData.whatsapp_num"
                 id="whatsapp_num"
               />
             </div>
             <div class="form-element">
               <label for="email">Email:</label>
-              <input type="text" required v-model="email" id="email" />
+              <input type="text" required v-model="propsData.email" id="email" />
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
@@ -81,6 +84,12 @@
                 @upload-success="uploadImageSuccess"
                 @edit-image="editImage"
                 @data-change="dataChange"
+                dragText="drag and drop files here"
+                browseText="or select"
+                primaryText="Default"
+                markIsPrimaryText="Set as default"
+                popupText="This image will be displayed as default"
+                dropText="Drop your files here..."
               />
               <p class="badge mb-0 text-capitalize text-secondary">
                 max uplaod limit is 5
@@ -119,7 +128,7 @@
           </form>
         </div>
       </template>
-      <template #modal-footer="{hide}">
+      <template #modal-footer="{close}">
         <div>
           <div class="row mt-4 mr-2 justify-content-end">
             <b-button
@@ -127,7 +136,7 @@
               class="mr-2"
               ref="cancel"
               squared
-              @click="hide"
+              @click="close"
               >Cancel</b-button
             >
             <b-button variant="success" squared @click="addLead"
@@ -145,8 +154,13 @@
 import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
+import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
+
 export default {
-  props: ["items","propsindex"],
+  components:{
+    getSelectedStudent
+  },
+  props: ["propsindex","items"],
   data ()  {
     return{
        // items: tableData,
@@ -173,7 +187,18 @@ export default {
     },
     ImageUrl(){
       return process.env.VUE_APP_IMAGE_URL
+    },
+    propsData(){
+      return {
+        first_name:this.items.first_name,
+        last_name: this.items.last_name,
+        country: this.items.country,
+        email: this.items.email,
+        phone: this.items.phone,
+        whatsapp_num: this.items.whatsapp_num,
+      }
     }
+        
   },
   components: {
     VueUploadMultipleImage,
@@ -200,7 +225,14 @@ export default {
         console.log(this.screenShot);
       };
     },
-
+    setStudent(data) {
+      // this.deleteStudentId = data
+      this.$store.commit("SET_CURRENT_STUDENT", null);
+      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.user_for_pro = data;
+      this.selectedStudent = data;
+      console.log("pro", data);
+    },
     addLead() {
       const vm = this;
       let url = "";
@@ -288,8 +320,16 @@ export default {
     dataChange(data) {
       console.log(data, "dataChange");
     },
+    closeModal(){
+      alert(1)
+    }
   },
-
+  watch:{
+    propsData(oldVal, NewVal){
+      console.log("old" ,oldVal)
+      console.log("new" ,NewVal)
+    }
+  },
   destroyed() {
     this.$store.commit("SET_ALL_STUDENT_DATA", null);
   },

@@ -74,6 +74,12 @@
                 @upload-success="uploadImageSuccess"
                 @edit-image="editImage"
                 @data-change="dataChange"
+                dragText="drag and drop files here"
+                browseText="or select"
+                primaryText="Default"
+                markIsPrimaryText="Set as default"
+                popupText="This image will be displayed as default"
+                dropText="Drop your files here..."
               />
               <p class="badge mb-0 text-capitalize text-secondary">
                 max uplaod limit is 5

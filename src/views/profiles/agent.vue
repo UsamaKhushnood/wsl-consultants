@@ -35,9 +35,9 @@
         <div class="bg-white radius-10 py-3 px-3">
           <h5 class="agent-progress text-black text-bold">Agent's Progress</h5>
           <div class="row">
-            <div class="col-6" v-if="getAgent.type ==='Sales Agent'">
+            <div class="col-6" >
               <h6 class="text-text badge badge-success">
-                For Sales Agent
+                For Sales Agent {{salesAgentDataArr}}
               </h6>
               <CChartPie
                 :datasets="salesAgentData"
@@ -314,6 +314,7 @@ export default {
       this.$store.commit("SET_CURRENT_STUDENT", null);
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
+    
     changeStatus(item) {
       const vm = this;
       console.log(item.status);
@@ -354,7 +355,7 @@ export default {
     },
     getAgentHistory(id) {
       const vm = this;
-      console.log(vm.getAllStudentData);
+      // console.log(vm.getAllStudentData);
       axios
         .get(process.env.VUE_APP_API_URL + "/admin/agent-login-history/" + id)
         // .get(process.env.VUE_APP_API_URL +"/admin/agent-login-history/"+vm.getAllStudentData)
@@ -384,7 +385,14 @@ export default {
         .get(process.env.VUE_APP_API_URL + "/admin/sale-agent-chart/" + id)
         .then((response) => {
           console.log("salesAgentDataArr::", response.data.data);
-          vm.salesAgentDataArr = response.data.data;
+
+          vm.salesAgentDataArr.push(response.data.data.applied) ;
+          vm.salesAgentDataArr.push(response.data.data.expected) ;
+          vm.salesAgentDataArr.push(response.data.data.in_progress) ;
+          vm.salesAgentDataArr.push(response.data.data.not_expected) ;
+          vm.salesAgentDataArr.push(response.data.data.on_hold) ;
+          vm.salesAgentDataArr.push(response.data.data.rejected) ;
+         
         })
         .catch((errors) => {
           var err = "";

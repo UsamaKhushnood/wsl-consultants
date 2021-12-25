@@ -126,7 +126,7 @@
                 </b-card-text>
               </b-card>
               <b-card
-                v-if="!getSelectedStudent.notes.length"
+                v-if="getSelectedStudent.notes"
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -162,7 +162,7 @@
                     {{ getSelectedStudent.created_at }}
                   </p>
                 </div>
-                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
+                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin' ">
                   <h6
                     class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
                     style="width: fit-content"
@@ -197,17 +197,17 @@
                     </router-link>
                   </div>
                 </div>
-                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
+                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin' && getSelectedStudent.agent">
                   <h6
                     class="font-bold bg-warning d-flex justify-content-center p-1 radius-10 text-dark"
                     style="width: fit-content"
                   >
                     Assing To
                   </h6>
-                  <div class="text-center mb-2">
+                  <div class="text-center mb-2" >
                     <b-avatar variant="dark" size="80">
                       {{
-                        "Agent Name"
+                        getSelectedStudent.agent ? getSelectedStudent.agent.first_name :"Agent Name"
                           .split(" ")
                           .map((i) => i.charAt(0))
                           .join("")
@@ -215,7 +215,7 @@
                       }}</b-avatar
                     >
                   </div>
-                  <h4 class="text-center">Agent's Name</h4>
+                  <h4 class="text-center">{{getSelectedStudent.agent.first_name}}</h4>
                   <div class="text-center">
                     <router-link
                       active-class="c-active"
@@ -259,17 +259,19 @@
               </div>
               <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
               <div
-                v-for="(data, index) in getSelectedStudent.screen_shots"
-                :key="index"
+               
               >
                 <div class="screenshotsGallery">
-                  <!-- :href="
+                   
+                  <a
+                   v-for="(data, index) in getSelectedStudent.screen_shots"
+                :key="index"
+                  :href="
                       ImageUrl +
                         '/screen-shot/' +
                         data.screen_shot
                     "
-                    target="_blank" -->
-                  <a
+                    target="_blank" 
                     class="position-relative"
                     v-b-tooltip.hover
                     title="Click to view full"
@@ -285,11 +287,11 @@
                       variant="outline-danger"
                       size="sm"
                       class="screenShotTrash"
-                      @click.prevent
+                      @click.prevent="deleteScreenShot(data.id)"
                     >
                       <i
                         class="fa fa-trash"
-                        @click="deleteScreenShot(data.id)"
+                       
                       ></i>
                     </b-button>
                   </a>

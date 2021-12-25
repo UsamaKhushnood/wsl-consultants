@@ -62,10 +62,10 @@ export default {
     ...mapGetters(['getSelectedStudentId','getUser'])
   },
   mounted(){
-    Object.keys({'key': 'value'})
-    if (window.UndefinedVariable) {
-        Object.assign(window.UndefinedVariable, {})
-    }
+    // Object.keys({'key': 'value'})
+    // if (window.UndefinedVariable) {
+    //     Object.assign(window.UndefinedVariable, {})
+    // }
 
   },
    methods:{

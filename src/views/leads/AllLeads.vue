@@ -17,7 +17,8 @@
                 Create New Lead
               </button>
               <CreateNewLead />
-              <EditLead :items="getPropUser" />
+              <!-- <EditLead  /> -->
+
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
@@ -220,7 +221,7 @@
                                 title="Hold"
                               ></i>
                             </a> -->
-                            <AllPopups :propsindex="index"> </AllPopups>
+                            <AllPopups :propsindex="index" :items="getPropUser"> </AllPopups>
                           </td>
                           <!-- <button v-for="pageNumber in items" :key="pageNumber" class="w3-button" v-bind:key="pageNumber" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }} </button> -->
                         </template>
@@ -247,9 +248,11 @@ import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
 import EditLead from "@/views/new-request-data/popups/EditLead.vue";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
+import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
+
 export default {
   name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead },
+  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead ,getSelectedStudent},
 
   data: () => ({
     // items: tableData,
@@ -292,12 +295,12 @@ export default {
     setPage: function(pageNumber) {
       this.currentPage = pageNumber;
     },
-
     setStudent(data) {
       // this.deleteStudentId = data
       this.$store.commit("SET_CURRENT_STUDENT", null);
       this.$store.commit("SET_CURRENT_STUDENT", data);
       this.user_for_pro = data;
+      this.selectedStudent = data;
       console.log("pro", data);
     },
     changeStatus(item) {

@@ -6,7 +6,7 @@
     <ViewShopSidebar :propsindex="propsindex" />
     <ViewDetailsSidebar :propsindex="propsindex" />
     <AddNotePopup :propsindex="propsindex" />
-    <EditLead :propsindex="propsindex" />
+    <EditLead :propsindex="propsindex" :items="items" />
   </div>
 </template>
 <script>
@@ -28,7 +28,7 @@ export default {
     EditLead,
   },
   name: "AllPopups",
-  props: ["propsindex"],
+  props: ["propsindex","items"],
 };
 </script>
 <style lang="scss"></style>
