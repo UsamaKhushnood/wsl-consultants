@@ -16,14 +16,14 @@
             </b-avatar>
           </div>
           <div>
-            <h5 class="mb-0">Agent Name</h5>
+            <h5 class="mb-0">{{getAgent.name}}</h5>
             <p class="m-0 text-primary text-bold">
               Call Center Agent
             </p>
             <!-- <p class="m-0 text-success text-bold">Sales Agent</p> -->
           </div>
           <div class="ml-auto align-self-baseline">
-            <p>Created At: <span class="text-bold"> 12-Dec-2021</span></p>
+            <p>Created At: <span class="text-bold"> {{getAgent.created_at}}</span></p>
             <p></p>
           </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="bg-white radius-10 py-3 px-3">
           <h5 class="agent-progress text-black text-bold">Agent's Progress</h5>
           <div class="row">
-            <div class="col-6">
+            <div class="col-6" v-if="getAgent.type ==='Sales Agent'">
               <h6 class="text-text badge badge-success">
                 For Sales Agent
               </h6>
@@ -52,7 +52,7 @@
                 ]"
               />
             </div>
-            <div class="col-6">
+            <div class="col-6"  v-if="getAgent.type ==='Call Center Agent'">
               <h6 class="text-text badge badge-success">
                 For Call Center Agent
               </h6>
@@ -234,13 +234,14 @@
   </div>
 </template>
 <script>
+import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
 import { CChartPie } from "@coreui/vue-chartjs";
 import { CChartBar } from "@coreui/vue-chartjs";
 import AllPopups from "@/views/new-request-data/AllPopups";
 import { mapGetters, mapState } from "vuex";
 import axios from "axios";
 export default {
-  components: { CChartPie, CChartBar, AllPopups },
+  components: { CChartPie, CChartBar, AllPopups ,getSelectedStudent},
   data() {
     return {
       items: [],
@@ -254,7 +255,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUser", "getAllStudent"]),
+    ...mapGetters(["getUser", "getAllStudent","getAgent"]),
     ...mapState(["allStudent", "allStudentData"]), // "getAllStudentData"
     /* eslint-disable */ totalPages: function() {
       if (this.resultCount == 0) {

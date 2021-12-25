@@ -13,6 +13,7 @@ const state = {
   current_student: '',
   allStudent: '',
   allStudentData: '',
+  selected_agent: '',
 }
 
 
@@ -63,6 +64,9 @@ const mutations = {
   SET_ALL_STUDENT_DATA(state, data) {
     state.allStudentData = data;
   },
+  SET_SELECTED_AGENT(state, data) {
+    state.selected_agent = data;
+  },
 }
   const getters = {
     getSpinner(state) {
@@ -70,6 +74,9 @@ const mutations = {
     },
     getUser(state) {
       return state.user;
+    },
+    getAgent(state) {
+      return state.selected_agent;
     },
     getSelectedStudentId(state) {
       return state.current_student.id;

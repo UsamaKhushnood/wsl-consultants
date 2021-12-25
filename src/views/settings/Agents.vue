@@ -34,6 +34,7 @@
               :to="'/dashboard/agents/' + data.id"
               class="c-sidebar-nav-link p-0"
               target="_self"
+              @click.native="$store.commit('SET_SELECTED_AGENT',data)"
             >
               <b-button size="sm" variant="link">
                 View Profile
