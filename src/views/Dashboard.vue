@@ -473,7 +473,7 @@ export default {
     axios
       .get(process.env.VUE_APP_API_URL + "/call-agent-chart/" + this.getUser.id)
       .then((response) => {
-        console.log(response.data.data)
+        // console.log(response.data.data)
         $.each(response.data.data,function(index,data){
           vm.callCenterAgentDataArr.push(data)
         })

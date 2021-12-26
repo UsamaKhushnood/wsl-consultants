@@ -47,6 +47,7 @@ export default {
               icon: true,
               rtl: false,
             });
+            vm.$getStudent()
         })
         .catch((errors) => {
           var err = "";

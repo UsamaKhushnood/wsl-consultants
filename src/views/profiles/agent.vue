@@ -413,7 +413,9 @@ export default {
         .get(process.env.VUE_APP_API_URL + "/admin/call-agent-chart/" + id)
         .then((response) => {
           console.log("callCenterAgentDataArr::", response.data.data);
-          vm.callCenterAgentDataArr = response.data.data;
+            $.each(response.data.data,function(index,data){
+            vm.callCenterAgentDataArr.push(data)
+          })
         })
         .catch((errors) => {
           var err = "";

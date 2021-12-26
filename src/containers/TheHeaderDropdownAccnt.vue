@@ -39,12 +39,12 @@
       <strong>Settings</strong>
     </CDropdownHeader>
     <CDropdownItem>
-      <router-link to="/dashboard/agents">
+      <router-link v-if="getUser.type =='admin'" to="/dashboard/agents">
         <CIcon name="cil-user" /> Agent Profiles</router-link
       >
     </CDropdownItem>
     <CDropdownItem>
-      <router-link to="/dashboard/time-setting">
+      <router-link v-if="getUser.type =='admin'" to="/dashboard/time-setting">
         <CIcon name="cil-settings" /> Settings</router-link
       >
     </CDropdownItem>

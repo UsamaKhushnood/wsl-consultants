@@ -226,7 +226,7 @@
                                 title="Hold"
                               ></i>
                             </a> -->
-                            <AllPopups :propsindex="index"> </AllPopups>
+                            <AllPopups :propsindex="index" :items="getPropUser"> </AllPopups>
                           </td>
                         </template>
                       </CDataTable>
@@ -258,45 +258,16 @@ export default {
     // items: tableData,
     items: [],
     deleteStudentId: "",
+     user_for_pro: "",
   }),
   computed: {
     ...mapGetters(["getUser"]),
     ...mapState(["allStudent"]),
+     getPropUser() {
+      return this.user_for_pro;
+    },
   },
   methods: {
-    // getStudent() {
-    //   const vm = this;
-    //   console.log(vm.getUser.type)
-    //   let url ='';
-    //   if(vm.getUser.type =='Sales Agent'){
-    //       url = process.env.VUE_APP_API_URL +"/sales-agent/students";
-    //   }else if(vm.getUser.type =='Call Center Agent'){
-    //       url = process.env.VUE_APP_API_URL +"/call-agent/students";
-    //   }
-    //   else{
-    //       url = process.env.VUE_APP_API_URL +"/admin/students";
-    //   }
-    //   axios
-    //     .get(url)
-    //     .then((response) => {
-    //       console.log("data::", response.data.data);
-    //       vm.items = response.data.data
-    //     })
-    //     .catch((errors) => {
-    //       var err = "";
-    //      console.log('(error.response.status',errors.response.status)
-    //       console.log('errors.response.data',errors.response.data.errors)
-    //       if(errors.response.status == '401'){
-    //         localStorage.setItem('token', null)
-
-    //       }
-    //     console.log('errors.response.data',errors.response.data)
-    //     if(errors.response.data.message =='Login Time Expire'){
-    //       console.log('errors.response.data',errors.response.data.message)
-    //       localStorage.setItem('token', null)
-    //     }
-    //     });
-    // },
     getStudent() {
       const vm = this;
       console.log(vm.getUser.type);
@@ -327,6 +298,8 @@ export default {
     },
     setStudent(data) {
       // this.deleteStudentId = data
+      this.user_for_pro = data;
+      this.$store.commit("SET_CURRENT_STUDENT", null);
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
     changeStatus(item) {

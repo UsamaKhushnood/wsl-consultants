@@ -117,7 +117,7 @@
               size="sm"
               variant="danger"
               class="ml-1"
-              @click="deleteAgents(i)"
+              @click="deleteAgents(data.id)"
             >
               <b-icon icon="trash"></b-icon>
             </b-button>
@@ -163,7 +163,25 @@ export default {
             });
         });
     },
-
+    deleteAgents(id) {
+      const vm = this;
+      axios
+        .delete(process.env.VUE_APP_API_URL +"/admin/agents/"+id)
+        .then((response) => {
+           
+          vm.$toast.success(response.data.message, {
+              position: "top-right",
+              closeButton: "button",
+              icon: true,
+              rtl: false,
+            });
+            vm.getAgent()
+        })
+        .catch((errors) => {
+          var err = "";
+         
+        });
+    },
     copyCredentials(data) {
       const vm = this;
       // first name will replace with password

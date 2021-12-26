@@ -177,10 +177,11 @@ export default {
             icon: true,
             rtl: false,
           });
-          vm.getAgents()((vm.first_name = "")),
-            (vm.last_name = ""),
-            (vm.email = ""),
-            (vm.password = "");
+          vm.getAgents()
+          vm.first_name = "",
+          vm.last_name = "",
+          vm.email = "",
+          vm.password = "";
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$router.push({ name: "Dashboard" });
         })

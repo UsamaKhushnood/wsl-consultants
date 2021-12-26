@@ -29,7 +29,7 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="getAllStudentData"
+                        :items="items"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"
@@ -241,7 +241,7 @@
 <script>
 import $ from "jquery";
 import "datatables.net-buttons-bs4";
-import tableData from "../tableData";
+// import tableData from "../tableData";
 import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
@@ -259,41 +259,47 @@ export default {
 
     items: [],
     deleteStudentId: "",
-    currentPage: 1,
-    itemsPerPage: 3,
+   
     resultCount: 0,
     user_for_pro: "",
   }),
   computed: {
     ...mapGetters(["getUser", "getAllStudentData"]),
     ...mapState(["allStudent", "allStudentData"]),
-    /* eslint-disable */
-    totalPages: function() {
-      if (this.resultCount == 0) {
-        return 1;
-      } else {
-        return Math.ceil(this.resultCount / this.itemsPerPage);
-      }
-    },
-    /* eslint-disable */
-    paginate: function() {
-      if (!this.articles || this.articles.length != this.articles.length) {
-        return;
-      }
-      this.resultCount = this.articles.length;
-      if (this.currentPage >= this.totalPages) {
-        this.currentPage = this.totalPages;
-      }
-      var index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
-      return this.articles.slice(index, index + this.itemsPerPage);
-    },
+
+
     getPropUser() {
       return this.user_for_pro;
     },
   },
   methods: {
-    setPage: function(pageNumber) {
-      this.currentPage = pageNumber;
+      getStudent() {
+      const vm = this;
+      console.log(vm.getUser.type);
+      let url = "";
+        if (vm.getUser.type == "Sales Agent") {
+          url = process.env.VUE_APP_API_URL + "/sales-agent/students";
+        } else if (vm.getUser.type == "Call Center Agent") {
+          url = process.env.VUE_APP_API_URL + "/call-agent/students";
+        } else {
+          url = process.env.VUE_APP_API_URL + "/admin/students";
+        }
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("data::", response.data.data);
+          vm.items = response.data.data;
+        })
+        .catch((errors) => {
+          var err = "";
+          console.log("(error.response.status", error.response.status);
+          console.log("errors.response.data", errors.response.data.errors);
+
+          // if (errors.response.data.message == "Login Time Expire") {
+          //   console.log("errors.response.data", errors.response.data.message);
+          //   localStorage.setItem("token", null);
+          // }
+        });
     },
     setStudent(data) {
       // this.deleteStudentId = data
@@ -352,8 +358,11 @@ export default {
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
   },
-  mounted() {
+ mounted() {
     let vm = this;
+    setTimeout(function() {
+      vm.getStudent();
+    }, 500);
   },
   watch: {
     // getAllStudentData: function (val) {
@@ -361,7 +370,7 @@ export default {
     // },
   },
   created() {
-    this.$getStudent();
+    this.getStudent();
   },
 };
 </script>
