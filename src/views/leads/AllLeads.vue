@@ -29,7 +29,7 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="[...allStudentData]"
+                        :items="getAllStudentData"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"

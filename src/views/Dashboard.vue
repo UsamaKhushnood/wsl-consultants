@@ -383,6 +383,7 @@ export default {
     return {
       selected: "Month",
       salesAgentDataArr: [],
+      callCenterAgentDataArr: [],
       tableItems: [
         {
           avatar: { url: "img/avatars/1.jpg", status: "success" },
@@ -466,6 +467,22 @@ export default {
       }
       return $color;
     },
+
+    getCallAgentCounts(id) {
+    const vm = this;
+    axios
+      .get(process.env.VUE_APP_API_URL + "/call-agent-chart/" + this.getUser.id)
+      .then((response) => {
+        console.log(response.data.data)
+        $.each(response.data.data,function(index,data){
+          vm.callCenterAgentDataArr.push(data)
+        })
+        // vm.callCenterAgentDataArr=response.data.data;
+      })
+      .catch((errors) => {
+        var err = "";
+      });
+    },
     getSaleAgentCounts() {
       const vm = this;
       axios
@@ -473,8 +490,6 @@ export default {
           process.env.VUE_APP_API_URL + "/sale-agent-chart/" + this.getUser.id
         )
         .then((response) => {
-          console.log("salesAgentDataArr::", response.data.data);
-
           vm.salesAgentDataArr.push(response.data.data.new_lead);
           vm.salesAgentDataArr.push(response.data.data.in_progress);
           vm.salesAgentDataArr.push(response.data.data.on_hold);
@@ -548,9 +563,21 @@ export default {
         },
       ];
     },
+     callCenterAgentData() {
+      return [
+        {
+          label: "Total Leads",
+          backgroundColor: "#130f40",
+          data: this.callCenterAgentDataArr,
+        },
+      ];
+    },
   },
   mounted() {
-    this.getSaleAgentCounts();
+    if(this.getUser.type =='Sales Agent'){
+      this.getSaleAgentCounts();
+    }
+    this.getCallAgentCounts()
   },
 };
 </script>
