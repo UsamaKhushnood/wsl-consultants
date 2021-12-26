@@ -468,7 +468,6 @@ export default {
           .get(process.env.VUE_APP_API_URL + "/sale-agent-chart/" + this.getUser.id)
           .then((response) => {
             console.log("salesAgentDataArr::", response.data.data);
-
             vm.salesAgentDataArr.push(response.data.data.applied) ;
             vm.salesAgentDataArr.push(response.data.data.expected) ;
             vm.salesAgentDataArr.push(response.data.data.in_progress) ;
