@@ -7,6 +7,9 @@
       centered
       scrollable
       title="Assign To Agent"
+      @close="closeModal()"
+      @hide="closeModal()"
+      @show="openModal()"
     >
       <div class="modal-body">
         <h6>Select an Agent from Dropdown</h6>
@@ -68,33 +71,14 @@ export default {
     // }
   },
   methods: {
-    getAgents() {
-      const vm = this;
-      let url =
-        vm.getUser.type == "admin" ? "/admin/sale-agents" : "/sale-agents";
-      axios
-        .get(process.env.VUE_APP_API_URL + url)
-        .then((response) => {
-          console.log("data::", response.data.data);
-          let arr = response.data.data;
-          arr.map(function(value, key) {
-            let d = {
-              value: value.id,
-              text: value.first_name,
-            };
-            vm.options.push(d);
-          });
-        })
-        .catch((errors) => {
-          var err = "";
-          //  this.$toast.error(errors.response.data.message, {
-          //   position: "top-right",
-          //   closeButton: "button",
-          //   icon: true,
-          //   rtl: false,
-          // });
-        });
+     openModal() {
+       this.$getAgents();
     },
+  
+     closeModal() {
+      //  this.$getAgents();
+    },
+  
     assignedTo() {
       const vm = this;
       let url = vm.getUser.type == "admin" ? "/admin/assigned/" : "/assigned/";
@@ -129,9 +113,7 @@ export default {
         });
     },
   },
-  created() {
-    this.getAgents();
-  },
+  
 };
 </script>
 <style lang="scsss"></style>

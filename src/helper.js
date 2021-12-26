@@ -78,6 +78,44 @@ const Helpers = {
           });
       
     }
+    Vue.prototype.$successMsg= function(msg){
+      this.$toast.success(msg, {
+        position: "top-right",
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+      });
+    }
+    Vue.prototype.$getAgents =function() {
+      const vm = this;
+      let url =
+        vm.getUser.type == "admin" ? "/admin/sale-agents" : "/sale-agents";
+      axios
+        .get(process.env.VUE_APP_API_URL + url,{headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
+      })
+        .then((response) => {
+          console.log("data::", response.data.data);
+          let arr = response.data.data;
+          arr.map(function(value, key) {
+            let d = {
+              value: value.id,
+              text: value.first_name,
+            };
+            vm.options.push(d);
+          });
+        })
+        .catch((errors) => {
+          var err = "";
+          //  this.$toast.error(errors.response.data.message, {
+          //   position: "top-right",
+          //   closeButton: "button",
+          //   icon: true,
+          //   rtl: false,
+          // });
+        });
+    }
   }
 }
 

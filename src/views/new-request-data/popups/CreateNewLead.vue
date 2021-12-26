@@ -191,7 +191,8 @@ export default {
           cv:vm.cv,
           screen_shot:vm.imageList,
           whatsapp_num:vm.whatsapp_num,
-          phone:vm.phone}
+          phone:vm.phone
+          }
         
         )
         .then((response) => {

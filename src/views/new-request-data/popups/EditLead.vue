@@ -130,7 +130,7 @@
                     variant="outline-danger"
                     size="sm"
                     class="screenShotTrash"
-                    @click.prevent
+                     @click.prevent="deleteScreenShot(data.id)"
                   >
                     <i class="fa fa-trash"></i>
                   </b-button>
@@ -151,8 +151,8 @@
               @click="close"
               >Cancel</b-button
             >
-            <b-button variant="success" squared @click="addLead"
-              >Create</b-button
+            <b-button variant="success" squared @click="updateLead"
+              >Update</b-button
             >
           </div>
         </div>
@@ -243,49 +243,44 @@ export default {
       this.selectedStudent = data;
       console.log("pro", data);
     },
-    addLead() {
+    updateLead() {
       const vm = this;
+
+      console.log( {first_name:vm.propsData.first_name,
+         last_name: vm.propsData.last_name,
+         country:vm.propsData.country,
+          email:vm.propsData.email,
+          cv:vm.cv,
+          screen_shot:vm.imageList,
+          whatsapp_num:vm.propsData.whatsapp_num,
+          phone:vm.propsData.phone})
       let url = "";
       if (vm.getUser.type == "admin") {
-        url = process.env.VUE_APP_API_URL + "/admin/new-leads/" + id;
+        url = process.env.VUE_APP_API_URL + "/admin/new-leads/" + vm.getSelectedStudent.id;
       } else {
-        url = process.env.VUE_APP_API_URL + "/new-leads/" + id;
+        url = process.env.VUE_APP_API_URL + "/new-leads/" + vm.getSelectedStudent.id;
       }
 
       var formData = new FormData();
       var cv = document.querySelector("#cv");
       var scr = document.querySelector("#scr");
-
-      // formData.append("first_name", vm.first_name);
-      // formData.append("last_name", vm.last_name);
-      // formData.append("country", vm.country);
-      // formData.append("email", vm.email);
-      // formData.append("cv", cv.files[0]);
-      // formData.append("screen_shot", vm.imageList);
-      // formData.append("whatsapp_num", vm.whatsapp_num);
-      // formData.append("phone", vm.phone);
       this.formOverlay = true;
       axios
         .post(url, {
-          first_name: vm.first_name,
-          last_name: vm.last_name,
-          country: vm.country,
-          email: vm.email,
-          cv: vm.cv,
-          screen_shot: vm.imageList,
-          whatsapp_num: vm.whatsapp_num,
-          phone: vm.phone,
+        first_name:vm.propsData.first_name,
+         last_name: vm.propsData.last_name,
+         country:vm.propsData.country,
+          email:vm.propsData.email,
+          cv:vm.cv,
+          screen_shot:vm.imageList,
+          whatsapp_num:vm.propsData.whatsapp_num,
+          phone:vm.propsData.phone
         })
         .then((response) => {
           this.formOverlay = false;
           console.log("data::", response.data);
-          vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
-            icon: true,
-            rtl: false,
-          });
-
+          vm.$successMsg(response.data.message)
+          vm.$getStudent();
           (vm.first_name = ""),
             (vm.last_name = ""),
             (vm.country = ""),
@@ -295,7 +290,7 @@ export default {
             (vm.cv = ""),
             (vm.screenShot = "");
           vm.$store.commit("SET_All_STUDENT", true);
-          vm.$getStudent();
+      
           vm.$refs.cancel.click();
         })
         .catch((errors) => {
@@ -333,6 +328,32 @@ export default {
     closeModal() {
       console.log("modal close");
     },
+      deleteScreenShot(id) {
+      const vm = this;
+      var url = "";
+
+      if (vm.getUser.type == "admin") {
+        url = "/admin/screen-shot-delete/";
+      } else {
+        url = "/screen-shot-delete/";
+      }
+      axios
+        .post(process.env.VUE_APP_API_URL + url + id)
+        .then((response) => {
+          vm.$toast.success(response.data.message, {
+            position: "top-right",
+            closeButton: "button",
+            icon: true,
+            rtl: false,
+          });
+          vm.$getStudent();
+          vm.$refs.edit_lead_modal.click();
+        })
+        .catch((errors) => {
+          var err = "";
+        });
+    },
+   
   },
   watch: {
     propsData(oldVal, NewVal) {
