@@ -166,12 +166,10 @@
 import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
-import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
+import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
 
 export default {
-  components: {
-    getSelectedStudent,
-  },
+   mixins:[getSelectedStudentMix],
   props: ["propsindex", "items"],
   data() {
     return {
@@ -279,7 +277,7 @@ export default {
           this.formOverlay = false;
           console.log("data::", response.data);
           vm.$successMsg(response.data.message)
-          vm.$getStudent();
+          vm.getStudent();
           (vm.first_name = ""),
             (vm.last_name = ""),
             (vm.country = ""),
@@ -339,14 +337,15 @@ export default {
       axios
         .post(process.env.VUE_APP_API_URL + url + id)
         .then((response) => {
+         
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
             icon: true,
             rtl: false,
           });
-          vm.$getStudent();
-          vm.$refs.edit_lead_modal.click();
+          vm.$refs.cancel.click();
+           vm.getStudent();
         })
         .catch((errors) => {
           var err = "";

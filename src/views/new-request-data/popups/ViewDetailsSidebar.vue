@@ -306,12 +306,12 @@
   </div>
 </template>
 <script>
-import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
+import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
 import usersData from "./userData";
 import axios from "axios";
 export default {
   props: ["propsindex"],
-  mixins: [getSelectedStudent],
+  mixins: [getSelectedStudentMix],
   components: {},
   data: () => ({
     items: usersData,

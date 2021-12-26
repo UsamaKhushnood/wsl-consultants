@@ -243,14 +243,15 @@
   </div>
 </template>
 <script>
-import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
+import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
 import { CChartPie } from "@coreui/vue-chartjs";
 import { CChartBar } from "@coreui/vue-chartjs";
 import AllPopups from "@/views/new-request-data/AllPopups";
 import { mapGetters, mapState } from "vuex";
 import axios from "axios";
 export default {
-  components: { CChartPie, CChartBar, AllPopups, getSelectedStudent },
+  mixins:[getSelectedStudentMix],
+  components: { CChartPie, CChartBar, AllPopups },
   data() {
     return {
       items: [],

@@ -248,12 +248,12 @@ import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
 import EditLead from "@/views/new-request-data/popups/EditLead.vue";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
-import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
+import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
 
 export default {
   name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead ,getSelectedStudent},
-
+  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead },
+  mixins:[getSelectedStudentMix],
   data: () => ({
     // items: tableData,
 
@@ -273,34 +273,7 @@ export default {
     },
   },
   methods: {
-      getStudent() {
-      const vm = this;
-      console.log(vm.getUser.type);
-      let url = "";
-        if (vm.getUser.type == "Sales Agent") {
-          url = process.env.VUE_APP_API_URL + "/sales-agent/students";
-        } else if (vm.getUser.type == "Call Center Agent") {
-          url = process.env.VUE_APP_API_URL + "/call-agent/students";
-        } else {
-          url = process.env.VUE_APP_API_URL + "/admin/students";
-        }
-      axios
-        .get(url)
-        .then((response) => {
-          console.log("data::", response.data.data);
-          vm.items = response.data.data;
-        })
-        .catch((errors) => {
-          var err = "";
-          console.log("(error.response.status", error.response.status);
-          console.log("errors.response.data", errors.response.data.errors);
-
-          // if (errors.response.data.message == "Login Time Expire") {
-          //   console.log("errors.response.data", errors.response.data.message);
-          //   localStorage.setItem("token", null);
-          // }
-        });
-    },
+    
     setStudent(data) {
       // this.deleteStudentId = data
       this.$store.commit("SET_CURRENT_STUDENT", null);
@@ -359,19 +332,14 @@ export default {
     },
   },
  mounted() {
-    let vm = this;
-    setTimeout(function() {
-      vm.getStudent();
-    }, 500);
+   
   },
   watch: {
     // getAllStudentData: function (val) {
     //   this.getAllStudentData = val
     // },
   },
-  created() {
-    this.getStudent();
-  },
+  
 };
 </script>
 
