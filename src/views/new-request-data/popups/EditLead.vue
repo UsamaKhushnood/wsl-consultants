@@ -18,13 +18,21 @@
               <div class="col-6">
                 <div class="form-element">
                   <label for="agentFirstName">First Name:</label>
-                  <input type="text" v-model="propsData.first_name"  id="agentFirstName" />
+                  <input
+                    type="text"
+                    v-model="propsData.first_name"
+                    id="agentFirstName"
+                  />
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-element">
                   <label for="last_name">Last Name:</label>
-                  <input type="text" v-model="propsData.last_name" id="last_name" />
+                  <input
+                    type="text"
+                    v-model="propsData.last_name"
+                    id="last_name"
+                  />
                 </div>
               </div>
             </div>
@@ -33,7 +41,6 @@
               <b-form-select
                 v-model="propsData.country"
                 required
-                
                 :options="[
                   'Austria ',
                   'Europe',
@@ -64,7 +71,12 @@
             </div>
             <div class="form-element">
               <label for="email">Email:</label>
-              <input type="text" required v-model="propsData.email" id="email" />
+              <input
+                type="text"
+                required
+                v-model="propsData.email"
+                id="email"
+              />
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
@@ -157,27 +169,26 @@ import { mapGetters, mapState } from "vuex";
 import { getSelectedStudent } from "@/mixins/getSelectedStudent.js";
 
 export default {
-  components:{
-    getSelectedStudent
+  components: {
+    getSelectedStudent,
   },
-  props: ["propsindex","items"],
-  data ()  {
-    return{
-       // items: tableData,
-    visibleLiveDemo: false,
-    first_name:"",
-    last_name: "",
-    country: "",
-    email: "",
-    phone: "",
-    whatsapp_num: "",
-    cv: "",
-    screenShot: "",
-    imageList: [],
-    uploadedImages: [],
-    formOverlay: false,
-    }
-   
+  props: ["propsindex", "items"],
+  data() {
+    return {
+      // items: tableData,
+      visibleLiveDemo: false,
+      first_name: "",
+      last_name: "",
+      country: "",
+      email: "",
+      phone: "",
+      whatsapp_num: "",
+      cv: "",
+      screenShot: "",
+      imageList: [],
+      uploadedImages: [],
+      formOverlay: false,
+    };
   },
   computed: {
     ...mapGetters(["getUser", "getSelectedStudent"]),
@@ -185,20 +196,19 @@ export default {
     getItems() {
       return this.$props.items;
     },
-    ImageUrl(){
-      return process.env.VUE_APP_IMAGE_URL
+    ImageUrl() {
+      return process.env.VUE_APP_IMAGE_URL;
     },
-    propsData(){
+    propsData() {
       return {
-        first_name:this.items.first_name,
+        first_name: this.items.first_name,
         last_name: this.items.last_name,
         country: this.items.country,
         email: this.items.email,
         phone: this.items.phone,
         whatsapp_num: this.items.whatsapp_num,
-      }
-    }
-        
+      };
+    },
   },
   components: {
     VueUploadMultipleImage,
@@ -237,9 +247,9 @@ export default {
       const vm = this;
       let url = "";
       if (vm.getUser.type == "admin") {
-        url = process.env.VUE_APP_API_URL +"/admin/new-leads/"+id;
-      }else {
-        url = process.env.VUE_APP_API_URL + "/new-leads/"+id;
+        url = process.env.VUE_APP_API_URL + "/admin/new-leads/" + id;
+      } else {
+        url = process.env.VUE_APP_API_URL + "/new-leads/" + id;
       }
 
       var formData = new FormData();
@@ -320,15 +330,15 @@ export default {
     dataChange(data) {
       console.log(data, "dataChange");
     },
-    closeModal(){
-      alert(1)
-    }
+    closeModal() {
+      console.log("modal close");
+    },
   },
-  watch:{
-    propsData(oldVal, NewVal){
-      console.log("old" ,oldVal)
-      console.log("new" ,NewVal)
-    }
+  watch: {
+    propsData(oldVal, NewVal) {
+      console.log("old", oldVal);
+      console.log("new", NewVal);
+    },
   },
   destroyed() {
     this.$store.commit("SET_ALL_STUDENT_DATA", null);

@@ -126,7 +126,11 @@
                 </b-card-text>
               </b-card>
               <b-card
-                v-if="getSelectedStudent.notes"
+                v-show="
+                  getSelectedStudent.notes
+                    ? getSelectedStudent.notes.length > 0
+                    : false
+                "
                 border-variant="primary"
                 header="Student Notes"
                 header-bg-variant="primary"
@@ -162,7 +166,7 @@
                     {{ getSelectedStudent.created_at }}
                   </p>
                 </div>
-                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin' ">
+                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
                   <h6
                     class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
                     style="width: fit-content"
@@ -197,25 +201,32 @@
                     </router-link>
                   </div>
                 </div>
-                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin' && getSelectedStudent.agent">
+                <div
+                  class="col-sm-4 brdLeft"
+                  v-if="getUser.type == 'admin' && getSelectedStudent.agent"
+                >
                   <h6
                     class="font-bold bg-warning d-flex justify-content-center p-1 radius-10 text-dark"
                     style="width: fit-content"
                   >
                     Assing To
                   </h6>
-                  <div class="text-center mb-2" >
+                  <div class="text-center mb-2">
                     <b-avatar variant="dark" size="80">
                       {{
-                        getSelectedStudent.agent ? getSelectedStudent.agent.first_name :"Agent Name"
-                          .split(" ")
-                          .map((i) => i.charAt(0))
-                          .join("")
-                          .toUpperCase()
+                        getSelectedStudent.agent
+                          ? getSelectedStudent.agent.first_name
+                          : "Agent Name"
+                              .split(" ")
+                              .map((i) => i.charAt(0))
+                              .join("")
+                              .toUpperCase()
                       }}</b-avatar
                     >
                   </div>
-                  <h4 class="text-center">{{getSelectedStudent.agent.first_name}}</h4>
+                  <h4 class="text-center">
+                    {{ getSelectedStudent.agent.first_name }}
+                  </h4>
                   <div class="text-center">
                     <router-link
                       active-class="c-active"
@@ -258,20 +269,13 @@
                 >
               </div>
               <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
-              <div
-               
-              >
+              <div>
                 <div class="screenshotsGallery">
-                   
                   <a
-                   v-for="(data, index) in getSelectedStudent.screen_shots"
-                :key="index"
-                  :href="
-                      ImageUrl +
-                        '/screen-shot/' +
-                        data.screen_shot
-                    "
-                    target="_blank" 
+                    v-for="(data, index) in getSelectedStudent.screen_shots"
+                    :key="index"
+                    :href="ImageUrl + '/screen-shot/' + data.screen_shot"
+                    target="_blank"
                     class="position-relative"
                     v-b-tooltip.hover
                     title="Click to view full"
@@ -289,10 +293,7 @@
                       class="screenShotTrash"
                       @click.prevent="deleteScreenShot(data.id)"
                     >
-                      <i
-                        class="fa fa-trash"
-                       
-                      ></i>
+                      <i class="fa fa-trash"></i>
                     </b-button>
                   </a>
                 </div>

@@ -95,8 +95,8 @@ export default {
         let url = vm.getUser.type == "admin" ? "/admin/notes" : "/notes";
         axios
           .post(process.env.VUE_APP_API_URL + url, {
-            note: vm.text,
             student_id: vm.getSelectedStudentId,
+            note: vm.text,
             screen_shot: vm.imageList,
           })
           .then((response) => {
