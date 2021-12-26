@@ -25,10 +25,14 @@
     <div class="bg-white radius-10 py-3 px-3" v-if="getUser.type !== 'admin'">
       <h5 class="agent-progress text-black text-bold">Your Progress</h5>
       <div class="row">
-        <div class="col-6" v-if="getUser.type == 'Sales Agent'">
-          <h6 class="text-text badge badge-success">
-            For Sales Agent
-          </h6>
+        <div class="col-6" v-if="getUser.type.toLowerCase() === 'sales agent'">
+          <!-- <h6 class="text-text badge badge-dark f-14">
+            {{
+              items.length > 0
+                ? "Total Leads:" + items.length
+                : "No Leads Assgined yet"
+            }}
+          </h6> -->
           <CChartPie
             :datasets="salesAgentData"
             :labels="[
@@ -43,9 +47,9 @@
           />
         </div>
         <div class="col-6" v-else>
-          <h6 class="text-text badge badge-success">
-            For Call Center Agent
-          </h6>
+          <!-- <h6 class="text-text badge badge-success">
+                Call Center Agent
+              </h6> -->
           <CChartBar :datasets="callCenterAgentData" labels="months" />
         </div>
       </div>
@@ -364,7 +368,7 @@ import WidgetsDropdown from "./widgets/WidgetsDropdown";
 import WidgetsBrand from "./widgets/WidgetsBrand";
 import { CChartPie, CChartBar } from "@coreui/vue-chartjs";
 import { mapGetters } from "vuex";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "Dashboard",
   components: {
@@ -462,24 +466,27 @@ export default {
       }
       return $color;
     },
-      getSaleAgentCounts() {
-        const vm = this;
-        axios
-          .get(process.env.VUE_APP_API_URL + "/sale-agent-chart/" + this.getUser.id)
-          .then((response) => {
-            console.log("salesAgentDataArr::", response.data.data);
+    getSaleAgentCounts() {
+      const vm = this;
+      axios
+        .get(
+          process.env.VUE_APP_API_URL + "/sale-agent-chart/" + this.getUser.id
+        )
+        .then((response) => {
+          console.log("salesAgentDataArr::", response.data.data);
 
-            vm.salesAgentDataArr.push(response.data.data.applied) ;
-            vm.salesAgentDataArr.push(response.data.data.expected) ;
-            vm.salesAgentDataArr.push(response.data.data.in_progress) ;
-            vm.salesAgentDataArr.push(response.data.data.not_expected) ;
-            vm.salesAgentDataArr.push(response.data.data.on_hold) ;
-            vm.salesAgentDataArr.push(response.data.data.rejected) ;
-          
-          })
-          .catch((errors) => {
-            var err = "";
-          });
+          let missingNewLead = 3;
+          vm.salesAgentDataArr.push(missingNewLead);
+          vm.salesAgentDataArr.push(response.data.data.in_progress);
+          vm.salesAgentDataArr.push(response.data.data.on_hold);
+          vm.salesAgentDataArr.push(response.data.data.expected);
+          vm.salesAgentDataArr.push(response.data.data.not_expected);
+          vm.salesAgentDataArr.push(response.data.data.applied);
+          vm.salesAgentDataArr.push(response.data.data.rejected);
+        })
+        .catch((errors) => {
+          var err = "";
+        });
     },
   },
   computed: {
@@ -543,9 +550,9 @@ export default {
       ];
     },
   },
-  mounted(){
-    this.getSaleAgentCounts()
-  }
+  mounted() {
+    this.getSaleAgentCounts();
+  },
 };
 </script>
 <style lang="scss">

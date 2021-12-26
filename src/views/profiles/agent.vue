@@ -5,25 +5,27 @@
         <div class="d-flex bg-black py-3 px-3 radius-10 text-white">
           <div class="mr-3">
             <b-avatar size="lg">
-              <!-- {{
-              i.first_name
-                .split(" ")
-                .map((i) => i.charAt(0))
-                .join("")                        
-                .toUpperCase()
-            }} -->
-              AN
+              {{
+                getAgent.name
+                  .split(" ")
+                  .map((i) => i.charAt(0))
+                  .join("")
+                  .toUpperCase()
+              }}
             </b-avatar>
           </div>
           <div>
-            <h5 class="mb-0">{{getAgent.name}}</h5>
+            <h5 class="mb-0">{{ getAgent.name }}</h5>
             <p class="m-0 text-primary text-bold">
-              Call Center Agent
+              {{ getAgent.type }}
             </p>
             <!-- <p class="m-0 text-success text-bold">Sales Agent</p> -->
           </div>
           <div class="ml-auto align-self-baseline">
-            <p>Created At: <span class="text-bold"> {{getAgent.created_at}}</span></p>
+            <p v-if="getAgent.created_at">
+              Created At:
+              <span class="text-bold"> {{ getAgent.created_at }}</span>
+            </p>
             <p></p>
           </div>
         </div>
@@ -35,9 +37,16 @@
         <div class="bg-white radius-10 py-3 px-3">
           <h5 class="agent-progress text-black text-bold">Agent's Progress</h5>
           <div class="row">
-            <div class="col-6" >
-              <h6 class="text-text badge badge-success">
-                For Sales Agent {{salesAgentDataArr}}
+            <div
+              class="col-6"
+              v-if="getAgent.type.toLowerCase() === 'sales agent'"
+            >
+              <h6 class="text-text badge badge-dark f-14">
+                {{
+                  items.length > 0
+                    ? "Total Leads:" + items.length
+                    : "No Leads Assgined yet"
+                }}
               </h6>
               <CChartPie
                 :datasets="salesAgentData"
@@ -52,10 +61,10 @@
                 ]"
               />
             </div>
-            <div class="col-6"  v-if="getAgent.type ==='Call Center Agent'">
-              <h6 class="text-text badge badge-success">
-                For Call Center Agent
-              </h6>
+            <div class="col-6" v-else>
+              <!-- <h6 class="text-text badge badge-success">
+                Call Center Agent
+              </h6> -->
               <CChartBar :datasets="callCenterAgentData" labels="months" />
             </div>
           </div>
@@ -241,7 +250,7 @@ import AllPopups from "@/views/new-request-data/AllPopups";
 import { mapGetters, mapState } from "vuex";
 import axios from "axios";
 export default {
-  components: { CChartPie, CChartBar, AllPopups ,getSelectedStudent},
+  components: { CChartPie, CChartBar, AllPopups, getSelectedStudent },
   data() {
     return {
       items: [],
@@ -255,7 +264,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUser", "getAllStudent","getAgent"]),
+    ...mapGetters(["getUser", "getAllStudent", "getAgent"]),
     ...mapState(["allStudent", "allStudentData"]), // "getAllStudentData"
     /* eslint-disable */ totalPages: function() {
       if (this.resultCount == 0) {
@@ -314,7 +323,7 @@ export default {
       this.$store.commit("SET_CURRENT_STUDENT", null);
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
-    
+
     changeStatus(item) {
       const vm = this;
       console.log(item.status);
@@ -386,13 +395,14 @@ export default {
         .then((response) => {
           console.log("salesAgentDataArr::", response.data.data);
 
-          vm.salesAgentDataArr.push(response.data.data.applied) ;
-          vm.salesAgentDataArr.push(response.data.data.expected) ;
-          vm.salesAgentDataArr.push(response.data.data.in_progress) ;
-          vm.salesAgentDataArr.push(response.data.data.not_expected) ;
-          vm.salesAgentDataArr.push(response.data.data.on_hold) ;
-          vm.salesAgentDataArr.push(response.data.data.rejected) ;
-         
+          let missingNewLead = 3;
+          vm.salesAgentDataArr.push(missingNewLead);
+          vm.salesAgentDataArr.push(response.data.data.in_progress);
+          vm.salesAgentDataArr.push(response.data.data.on_hold);
+          vm.salesAgentDataArr.push(response.data.data.expected);
+          vm.salesAgentDataArr.push(response.data.data.not_expected);
+          vm.salesAgentDataArr.push(response.data.data.applied);
+          vm.salesAgentDataArr.push(response.data.data.rejected);
         })
         .catch((errors) => {
           var err = "";
