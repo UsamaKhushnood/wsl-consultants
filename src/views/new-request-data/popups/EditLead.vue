@@ -111,9 +111,9 @@
               <label for="agentFirstName">Recently Uploaded:</label>
               <div class="screenshotsGallery justify-content-center">
                 <a
-                  href=" 
-                     ImageUrl/screen-shot/getSelectedStudent.screen_shot
-                  "
+                  v-for="(data, index) in getSelectedStudent.screen_shots"
+                  :key="index"
+                  :href="ImageUrl + '/screen-shot/' + data.screen_shot"
                   target="_blank"
                   class="position-relative"
                   v-b-tooltip.hover
@@ -122,9 +122,9 @@
                   <div
                     class="screenShotWrapper"
                     v-b-modal="'imgModal' + propsindex"
-                    :style="{
-                      backgroundImage: `url(${ImageUrl}/screen-shot/${getSelectedStudent.screen_shot})`,
-                    }"
+                      :style="{
+                        backgroundImage: `url(${ImageUrl}/screen-shot/${data.screen_shot})`,
+                      }"
                   ></div>
                   <b-button
                     variant="outline-danger"
@@ -197,7 +197,7 @@ export default {
       return this.$props.items;
     },
     ImageUrl() {
-      return process.env.VUE_APP_IMAGE_URL;
+      return process.env.VUE_APP_IMAGE_STORAGE_URL;
     },
     propsData() {
       return {
