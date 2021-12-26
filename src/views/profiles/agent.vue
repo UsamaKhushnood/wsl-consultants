@@ -394,9 +394,7 @@ export default {
         .get(process.env.VUE_APP_API_URL + "/admin/sale-agent-chart/" + id)
         .then((response) => {
           console.log("salesAgentDataArr::", response.data.data);
-
-          let missingNewLead = 3;
-          vm.salesAgentDataArr.push(missingNewLead);
+          vm.salesAgentDataArr.push(response.data.data.new_lead);
           vm.salesAgentDataArr.push(response.data.data.in_progress);
           vm.salesAgentDataArr.push(response.data.data.on_hold);
           vm.salesAgentDataArr.push(response.data.data.expected);

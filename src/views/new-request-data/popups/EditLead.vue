@@ -201,12 +201,12 @@ export default {
     },
     propsData() {
       return {
-        first_name: this.items.first_name,
-        last_name: this.items.last_name,
-        country: this.items.country,
-        email: this.items.email,
-        phone: this.items.phone,
-        whatsapp_num: this.items.whatsapp_num,
+        first_name:  this.items.first_name ? this.items.first_name :"",
+        last_name: this.items.last_name? this.items.last_name :"",
+        country: this.items.country ? this.items.country :"",
+        email: this.items.email ? this.items.email :"",
+        phone: this.items.phone ? this.items.phone :"",
+        whatsapp_num: this.items.whatsapp_num ? this.items.whatsapp_num :"",
       };
     },
   },
