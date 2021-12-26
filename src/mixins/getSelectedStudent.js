@@ -40,12 +40,7 @@ export const getSelectedStudentMix = {
       },
   },
   mounted() {
-    let vm = this;
-    setTimeout(function() {
-      vm.getStudent();
-      
-      console.log("mixin is working", this.getSelectedStudentMix);
-    }, 500);
+  
   },
   created(){
     this.getStudent()
