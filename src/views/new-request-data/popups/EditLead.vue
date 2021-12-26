@@ -245,7 +245,6 @@ export default {
     },
     updateLead() {
       const vm = this;
-
       console.log( {first_name:vm.propsData.first_name,
          last_name: vm.propsData.last_name,
          country:vm.propsData.country,
