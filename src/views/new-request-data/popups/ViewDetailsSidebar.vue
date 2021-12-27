@@ -185,13 +185,14 @@
                       }}</b-avatar
                     >
                   </div>
-                  <h4 class="text-center">Agent's Name</h4>
+                  <h4 class="text-center">{{getSelectedStudent.call_agent.first_name}}</h4>
                   <div class="text-center">
                     <router-link
                       active-class="c-active"
                       :to="
                         '/dashboard/agents/' + getSelectedStudent.call_agent_id
                       "
+                      @click.native="getCurrentAgent(getSelectedStudent.call_agent)"
                       class="c-sidebar-nav-link"
                       target="_self"
                     >
@@ -359,6 +360,10 @@ export default {
         : status === "Banned"
         ? "danger"
         : "primary";
+    },
+    getCurrentAgent(data){
+      this.$store.commit("SET_CURRENT_AGENT", null);
+      this.$store.commit("SET_CURRENT_AGENT", data);
     },
     deleteScreenShot(id) {
       const vm = this;
