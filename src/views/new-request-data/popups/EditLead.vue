@@ -354,9 +354,9 @@ export default {
    
   },
   watch: {
-    propsData(oldVal, NewVal) {
-      console.log("old", oldVal);
-      console.log("new", NewVal);
+    propsData(NewVal,oldVal) {
+      // console.log("old", oldVal);
+      // console.log("new", NewVal);
     },
   },
   destroyed() {

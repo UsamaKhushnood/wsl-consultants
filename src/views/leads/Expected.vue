@@ -301,7 +301,6 @@ export default {
     // },
     getStudent() {
       const vm = this;
-      console.log(vm.getUser.type);
       let url = "";
       if (vm.getUser.type == "Sales Agent") {
         url = process.env.VUE_APP_API_URL + "/sales-agent/expected-leads";
@@ -313,7 +312,7 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          console.log("data::", response.data.data);
+          // console.log("data::", response.data.data);
           vm.items = response.data.data;
         })
         .catch((errors) => {
@@ -333,7 +332,6 @@ export default {
     },
     changeStatus(item) {
       const vm = this;
-      console.log(item.status);
       let url = "";
       if (vm.getUser.type == "admin") {
         url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
@@ -345,7 +343,7 @@ export default {
           status: item.status,
         })
         .then((response) => {
-          console.log("data::", response.data);
+          // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
@@ -359,10 +357,7 @@ export default {
           console.log("(error.response.status", errors.response.status);
           console.log("errors.response.data", errors.response.data.errors);
           console.log("errors.response.data", errors.response.data);
-          if (errors.response.data.message == "Login Time Expire") {
-            console.log("errors.response.data", errors.response.data.message);
-            localStorage.setItem("token", null);
-          }
+         
           if (errors.response.data.errors.email) {
             err += errors.response.data.errors.email;
           }
@@ -393,7 +388,7 @@ export default {
   watch: {
     allStudent: {
       handler: function(newVal, oldVal) {
-        console.log(newVal, oldVal);
+      
         let vm = this;
         // this function will trigger when ever the value of `my_state` changes
         if (newVal == true) {

@@ -83,7 +83,7 @@ export default {
       this.$http
         .post(process.env.VUE_APP_API_URL + "/logout")
         .then((response) => {
-          console.log("s", response.data.message);
+         
           // vm.$store.commit("SET_AUTH_TOKEN", response.data.token);
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$store.commit("SET_USER", response.data.userDetail.user);

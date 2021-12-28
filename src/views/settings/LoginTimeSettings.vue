@@ -91,7 +91,7 @@ export default {
           logout_time: vm.endTime,
         })
         .then((response) => {
-          console.log("data::", response.data);
+          // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
@@ -117,7 +117,7 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          console.log("data::", response.data.data);
+          // console.log("data::", response.data.data);
           vm.startTime = response.data.data.login_time;
           vm.endTime = response.data.data.logout_time;
         })
@@ -132,7 +132,7 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          console.log("data::", response.data.data);
+          // console.log("data::", response.data.data);
           vm.items = response.data.data;
         })
         .catch((errors) => {

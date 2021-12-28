@@ -29,7 +29,7 @@
                         :striped="true"
                         :border="true"
                         :fixed="false"
-                        :items="items"
+                        :items="getItems"
                         columnFilter
                         itemsPerPageSelect
                         :itemsPerPage="20"
@@ -264,9 +264,8 @@ export default {
     user_for_pro: "",
   }),
   computed: {
-    ...mapGetters(["getUser", "getAllStudentData"]),
+    ...mapGetters(["getUser", "getAllStudentData","getItems"]),
     ...mapState(["allStudent", "allStudentData"]),
-
 
     getPropUser() {
       return this.user_for_pro;
@@ -280,11 +279,11 @@ export default {
       this.$store.commit("SET_CURRENT_STUDENT", data);
       this.user_for_pro = data;
       this.selectedStudent = data;
-      console.log("pro", data);
+    
     },
     changeStatus(item) {
       const vm = this;
-      console.log(item.status);
+     
       let url = "";
       if (vm.getUser.type == "admin") {
         url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
@@ -299,7 +298,7 @@ export default {
           status: item.status,
         })
         .then((response) => {
-          console.log("data::", response.data);
+  
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
@@ -310,9 +309,9 @@ export default {
         })
         .catch((errors) => {
           var err = "";
-          console.log("(error.response.status", errors.response.status);
-          console.log("errors.response.data", errors.response.data.errors);
-          console.log("errors.response.data", errors.response.data);
+          // console.log("(error.response.status", errors.response.status);
+          // console.log("errors.response.data", errors.response.data.errors);
+          // console.log("errors.response.data", errors.response.data);
           // if (errors.response.data.message == "Login Time Expire") {
           //   console.log("errors.response.data", errors.response.data.message);
           //   localStorage.setItem("token", null);
@@ -332,7 +331,7 @@ export default {
     },
   },
  mounted() {
-   
+   this.getStudent()
   },
   watch: {
     // getAllStudentData: function (val) {

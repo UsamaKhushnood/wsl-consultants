@@ -279,7 +279,7 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          console.log("data::", response.data.data);
+          // console.log("data::", response.data.data);
           vm.items = response.data.data;
         })
         .catch((errors) => {
@@ -299,7 +299,6 @@ export default {
     },
     changeStatus(item) {
       const vm = this;
-      console.log(item.status);
       let url = "";
       if (vm.getUser.type == "admin") {
         url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
@@ -311,7 +310,7 @@ export default {
           status: item.status,
         })
         .then((response) => {
-          console.log("data::", response.data);
+          // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
@@ -359,7 +358,7 @@ export default {
   watch: {
     allStudent: {
       handler: function(newVal, oldVal) {
-        console.log(newVal, oldVal);
+        // console.log(newVal, oldVal);
         let vm = this;
         // this function will trigger when ever the value of `my_state` changes
         if (newVal == true) {

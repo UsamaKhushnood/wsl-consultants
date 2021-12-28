@@ -288,7 +288,7 @@ export default {
           },
         })
         .then((response) => {
-          console.log("data::", response.data);
+     
           vm.formOverlay = false;
           vm.BtnStatus = false;
           // vm.$store.commit("SET_SPINNER", false);
@@ -336,7 +336,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          console.log(credentials);
+         
         },
         function() {
           vm.isModalVisible = false;

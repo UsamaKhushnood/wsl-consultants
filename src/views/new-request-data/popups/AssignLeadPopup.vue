@@ -87,8 +87,7 @@ export default {
           assigned_to: vm.selected,
         })
         .then((response) => {
-          console.log("data Success::", response.data);
-          console.log("data Success::", response.data.message);
+          // console.log("data Success::", response.data.message);
           if (response.data.message) {
             Vue.$toast(response.data.message, {
               timeout: 2000,

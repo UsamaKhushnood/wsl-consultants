@@ -195,7 +195,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          console.log(credentials);
+          // console.log(credentials);
         },
         function() {
           vm.isModalVisible = false;

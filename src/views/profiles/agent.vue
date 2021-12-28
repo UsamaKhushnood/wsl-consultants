@@ -329,7 +329,6 @@ export default {
 
     changeStatus(item) {
       const vm = this;
-      console.log(item.status);
       let url = "";
       if (vm.getUser.type == "admin") {
         url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
@@ -372,7 +371,7 @@ export default {
         .get(process.env.VUE_APP_API_URL + "/admin/agent-login-history/" + id)
         // .get(process.env.VUE_APP_API_URL +"/admin/agent-login-history/"+vm.getAllStudentData)
         .then((response) => {
-          console.log("data::", response.data.data);
+          // console.log("data::", response.data.data);
           vm.history = response.data.data;
         })
         .catch((errors) => {
@@ -384,7 +383,7 @@ export default {
       axios
         .get(process.env.VUE_APP_API_URL + "/admin/agent-leads/" + id)
         .then((response) => {
-          console.log("data::", response.data.data);
+          // console.log("data::", response.data.data);
           vm.items = response.data.data;
         })
         .catch((errors) => {
@@ -396,7 +395,7 @@ export default {
       axios
         .get(process.env.VUE_APP_API_URL + "/admin/sale-agent-chart/" + id)
         .then((response) => {
-          console.log("salesAgentDataArr::", response.data.data);
+          // console.log("salesAgentDataArr::", response.data.data);
           vm.salesAgentDataArr.push(response.data.data.new_lead);
           vm.salesAgentDataArr.push(response.data.data.in_progress);
           vm.salesAgentDataArr.push(response.data.data.on_hold);
@@ -415,7 +414,7 @@ export default {
       axios
         .get(process.env.VUE_APP_API_URL + "/admin/call-agent-chart/" + id)
         .then((response) => {
-          console.log("callCenterAgentDataArr::", response.data.data);
+          // console.log("callCenterAgentDataArr::", response.data.data);
             $.each(response.data.data,function(index,data){
             vm.callCenterAgentDataArr.push(data)
           })

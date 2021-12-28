@@ -277,7 +277,6 @@ export default {
   methods: {
     getStudent() {
       const vm = this;
-      console.log(vm.getUser.type);
       let url = "";
       if (vm.getUser.type == "Sales Agent") {
         url = process.env.VUE_APP_API_URL + "/sales-agent/applied-leads";
@@ -289,7 +288,7 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          console.log("data::1", response.data.data);
+          // console.log("data::1", response.data.data);
           vm.items = response.data.data;
         })
         .catch((errors) => {
@@ -309,12 +308,10 @@ export default {
     },
 
     currentStudent(data) {
-      console.log(data);
       this.$store.commit("SET_CURRENT_STUDENT", data);
     },
     changeStatus(item) {
       const vm = this;
-      console.log(item.status);
       let url = "";
       if (vm.getUser.type == "admin") {
         url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
@@ -326,7 +323,7 @@ export default {
           status: item.status,
         })
         .then((response) => {
-          console.log("data::", response.data);
+          // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",

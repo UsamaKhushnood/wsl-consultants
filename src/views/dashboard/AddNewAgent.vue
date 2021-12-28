@@ -208,7 +208,7 @@ export default {
       axios
         .get(process.env.VUE_APP_API_URL + "/admin/agents")
         .then((response) => {
-          console.log("data:: agggs", response.data.data);
+        
           vm.agents_list = response.data.data;
         })
         .catch((errors) => {
@@ -255,7 +255,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          console.log(credentials);
+    
         },
         function() {
           vm.isModalVisible = false;

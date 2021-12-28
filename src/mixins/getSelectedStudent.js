@@ -25,7 +25,8 @@ export const getSelectedStudentMix = {
         .get(url)
         .then((response) => {
           console.log("data::", response.data.data);
-          vm.items = response.data.data;
+          // vm.items = response.data.data;
+          vm.$store.commit('SET_ITEMS',response.data.data)
         })
         .catch((errors) => {
           var err = "";
@@ -43,7 +44,7 @@ export const getSelectedStudentMix = {
   
   },
   created(){
-    this.getStudent()
+    // this.getStudent()
   }
 
 };

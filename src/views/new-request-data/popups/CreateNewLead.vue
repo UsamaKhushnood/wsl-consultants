@@ -112,9 +112,11 @@
 </template>
 <script>
 import VueUploadMultipleImage from "vue-upload-multiple-image";
+import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
 import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
+  mixins:[getSelectedStudentMix],
   data: () => ({
     // items: tableData,
     visibleLiveDemo: false,
@@ -135,6 +137,7 @@ export default {
   },
    components: {
     VueUploadMultipleImage,
+  
   },
   methods: {
     handleCvUpload(event) {
@@ -197,7 +200,7 @@ export default {
         )
         .then((response) => {
           this.formOverlay = false;
-          console.log("data::", response.data);
+          // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
             position: "top-right",
             closeButton: "button",
@@ -215,7 +218,8 @@ export default {
             (vm.screenShot = "");
             (vm.imageList = []);
           vm.$store.commit("SET_All_STUDENT", true);
-          vm.$getStudent();
+          vm.getStudent();
+          // vm.$getStudent();
           vm.$refs.cancel.click();
         })
         .catch((errors) => {

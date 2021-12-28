@@ -55,7 +55,7 @@
                   <b-avatar variant="danger" size="80"></b-avatar>
                 </div>
 
-                <h4>
+                <h4 v-if="getSelectedStudent.first_name">
                   {{
                     getSelectedStudent.first_name +
                       " " +
@@ -185,7 +185,7 @@
                       }}</b-avatar
                     >
                   </div>
-                  <h4 class="text-center">{{getSelectedStudent.call_agent.first_name}}</h4>
+                  <h4 class="text-center" v-if="getSelectedStudent.call_agent">{{ getSelectedStudent.call_agent.first_name != null ? getSelectedStudent.call_agent.first_name : ""}}</h4>
                   <div class="text-center">
                     <router-link
                       active-class="c-active"
@@ -213,7 +213,7 @@
                     Assing To
                   </h6>
                   <div class="text-center mb-2">
-                    <b-avatar variant="dark" size="80">
+                    <b-avatar variant="dark" size="80" v-if="getSelectedStudent.agent.first_name">
                       {{
                         getSelectedStudent.agent
                           ? getSelectedStudent.agent.first_name
@@ -225,7 +225,7 @@
                       }}</b-avatar
                     >
                   </div>
-                  <h4 class="text-center">
+                  <h4 class="text-center" v-if="getSelectedStudent.agent.first_name">
                     {{ getSelectedStudent.agent.first_name }}
                   </h4>
                   <div class="text-center">
