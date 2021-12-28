@@ -8,7 +8,10 @@
     <template #toggler>
       <CHeaderNavLink>
         <div class="c-avatar">
-          <img src="@/assets/avatar/briant2.png" class="c-avatar-img " />
+          <!-- <img src="@/assets/avatar/briant2.png" class="c-avatar-img " /> -->
+          <b-avatar>
+
+          </b-avatar>
         </div>
       </CHeaderNavLink>
     </template>
@@ -35,7 +38,7 @@
       <CIcon name="cil-comment-square" /> Comments
       <CBadge color="warning" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem> -->
-    <CDropdownHeader tag="div" class="text-center" color="light">
+    <CDropdownHeader tag="div" v-if="getUser.type =='admin'"   class="text-center" color="light">
       <strong>Settings</strong>
     </CDropdownHeader>
     <CDropdownItem>
