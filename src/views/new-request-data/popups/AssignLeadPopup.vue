@@ -101,6 +101,7 @@ export default {
               rtl: false,
             });
           }
+          vm.$getStudent();
           vm.$refs.cancel.click();
         })
         .catch((errors) => {
