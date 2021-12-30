@@ -6,8 +6,8 @@
           <div class="mr-3">
             <b-avatar size="lg">
               {{
-                  getCurrentAgent.first_name
-                          ? getCurrentAgent.first_name
+                  getAgent.name
+                          ? getAgent.name
                           : "Agent Name"
                   .split(" ")
                   .map((i) => i.charAt(0))
@@ -17,16 +17,16 @@
             </b-avatar>
           </div>
           <div>
-            <h5 class="mb-0">{{ getCurrentAgent.name }}</h5>
+            <h5 class="mb-0"> {{getAgent.name}}</h5>
             <p class="m-0 text-primary text-bold">
-              {{ getCurrentAgent.type }}
+              {{ getAgent.type }}
             </p>
             <!-- <p class="m-0 text-success text-bold">Sales Agent</p> -->
           </div>
           <div class="ml-auto align-self-baseline">
-            <p v-if="getCurrentAgent.created_at">
+            <p v-if="getAgent.created_at">
               Created At:
-              <span class="text-bold"> {{ getCurrentAgent.created_at }}</span>
+              <span class="text-bold"> {{ getAgent.created_at }}</span>
             </p>
             <p></p>
           </div>
