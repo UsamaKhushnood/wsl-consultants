@@ -67,6 +67,7 @@
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 import VueUploadMultipleImage from 'vue-upload-multiple-image'
+
 export default {
   props: ['propsindex', 'item'],
   computed: {
@@ -111,7 +112,7 @@ export default {
 
             vm.text = ''
             vm.imageList = []
-            vm.$getStudent()
+            vm.getStudent()
           })
           .catch((errors) => {
             var err = ''

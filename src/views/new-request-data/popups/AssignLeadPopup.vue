@@ -47,7 +47,9 @@
 import axios from "axios";
 import Vue from "vue";
 import { mapGetters } from "vuex";
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 export default {
+  mixins:[getSelectedStudentMix],
   props: ["propsindex"],
   data() {
     return {
@@ -100,7 +102,7 @@ export default {
               rtl: false,
             });
           }
-          vm.$getStudent();
+          vm.getStudent();
           vm.$refs.cancel.click();
         })
         .catch((errors) => {

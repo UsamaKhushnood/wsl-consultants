@@ -302,7 +302,7 @@ export default {
             icon: true,
             rtl: false,
           })
-          vm.$getStudent()
+          vm.getStudent()
         })
         .catch((errors) => {
           var err = ''

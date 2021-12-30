@@ -16,6 +16,7 @@ const state = {
   selected_agent: '',
   current_agent: '',
   items: '',
+  leads_counts: '',
 }
 
 
@@ -75,6 +76,9 @@ const mutations = {
   SET_ITEMS(state, data) {
     state.items = data;
   },
+  SET_LEADS(state, data) {
+    state.leads_counts = data;
+  },
 }
   const getters = {
     getSpinner(state) {
@@ -82,6 +86,9 @@ const mutations = {
     },
     getUser(state) {
       return state.user;
+    },
+    getLeadCount(state) {
+      return state.leads_counts;
     },
     getItems(state) {
       return state.items;

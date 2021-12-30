@@ -109,7 +109,7 @@
               <span v-else>
                 My Leads
               </span>
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.all_leads}}</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -120,7 +120,7 @@
               target="_self"
             >
               New Leads
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.new_lead}}</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -131,7 +131,7 @@
               target="_self"
             >
               In Progress
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.in_progress}}</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -142,7 +142,7 @@
               target="_self"
             >
               On Hold
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.hold_leads}}</div>
             </router-link>
           </li>
 
@@ -154,7 +154,7 @@
               target="_self"
             >
               Expected
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.expected}}</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -165,7 +165,7 @@
               target="_self"
             >
               Not Expected
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.not_expected}}</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item bg-success">
@@ -176,7 +176,7 @@
               target="_self"
             >
               Applied
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.applied}}</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item bg-danger">
@@ -187,7 +187,7 @@
               target="_self"
             >
               Rejected
-              <div class="badge badge-primary">25</div>
+              <div class="badge badge-primary" v-if="getLeadCount">{{getLeadCount.rejected}}</div>
             </router-link>
           </li>
         </b-collapse>
@@ -275,7 +275,7 @@ export default {
     nav() {
       return $options.nav
     },
-    ...mapGetters(['getUser']),
+    ...mapGetters(['getUser','getLeadCount']),
     ...mapState(['sidebarShow', 'sidebarMinimize']),
   },
 }

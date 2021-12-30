@@ -30,16 +30,18 @@
 import TheSidebar from "./TheSidebar";
 import TheHeader from "./TheHeader";
 import TheFooter from "./TheFooter";
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 
 export default {
   name: "TheContainer",
+  mixins:[getSelectedStudentMix],
   components: {
     TheSidebar,
     TheHeader,
     TheFooter,
   },
   created() {
-
+    this.getStudent()
   },
 };
 </script>

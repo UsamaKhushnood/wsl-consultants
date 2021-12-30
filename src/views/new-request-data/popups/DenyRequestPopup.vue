@@ -28,8 +28,11 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex';
+import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
+
 export default {
   props: ["propsindex","item"],
+  mixins:[getSelectedStudentMix],
   computed:{
     ...mapGetters(['getSelectedStudentId'])
   },
@@ -47,7 +50,7 @@ export default {
               icon: true,
               rtl: false,
             });
-            vm.$getStudent()
+            vm.getStudent()
         })
         .catch((errors) => {
           var err = "";

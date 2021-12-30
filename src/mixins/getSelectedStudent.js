@@ -27,6 +27,29 @@ export const getSelectedStudentMix = {
           console.log("data::", response.data.data);
           // vm.items = response.data.data;
           vm.$store.commit('SET_ITEMS',response.data.data)
+          vm.getLeadCounts()
+        })
+        .catch((errors) => {
+          var err = "";
+          console.log("(error.response.status", error.response.status);
+          console.log("errors.response.data", errors.response.data.errors);
+
+          // if (errors.response.data.message == "Login Time Expire") {
+          //   console.log("errors.response.data", errors.response.data.message);
+          //   localStorage.setItem("token", null);
+          // }
+        });
+      },
+    getLeadCounts() {
+      const vm = this;
+      console.log(vm.getUser.type);
+      let url = "";
+        url = process.env.VUE_APP_API_URL + "/count-leads";
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("data::", response.data.data);
+          vm.$store.commit('SET_LEADS',response.data.data)
         })
         .catch((errors) => {
           var err = "";

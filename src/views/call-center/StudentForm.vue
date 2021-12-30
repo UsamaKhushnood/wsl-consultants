@@ -181,7 +181,9 @@
 import axios from "axios";
 import { mapGetters } from "vuex";
 import pakistan_cities from "./cities";
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 export default {
+  mixins:[getSelectedStudentMix],
   data() {
     return {
       selected: null,
@@ -292,7 +294,7 @@ export default {
           vm.formOverlay = false;
           vm.BtnStatus = false;
           // vm.$store.commit("SET_SPINNER", false);
-          vm.$getStudent();
+          vm.getStudent();
           vm.$toast.success("Add Student Successfully", {
             position: "top-right",
             closeButton: "button",

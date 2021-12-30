@@ -139,7 +139,9 @@
 <script>
 import axios from "axios";
 import PasswordInput from "@/components/PasswordInput";
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 export default {
+  mixins:[getSelectedStudentMix],
   components: { PasswordInput },
   data() {
     return {

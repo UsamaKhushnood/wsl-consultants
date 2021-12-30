@@ -383,7 +383,7 @@ export default {
             icon: true,
             rtl: false,
           });
-          vm.$getStudent();
+          vm.getStudent();
           vm.$refs.model_hide.click();
         })
         .catch((errors) => {
