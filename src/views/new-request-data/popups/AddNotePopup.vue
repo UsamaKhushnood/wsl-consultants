@@ -64,35 +64,35 @@
   </div>
 </template>
 <script>
-import axios from "axios";
-import { mapGetters } from "vuex";
-import VueUploadMultipleImage from "vue-upload-multiple-image";
+import axios from 'axios'
+import { mapGetters } from 'vuex'
+import VueUploadMultipleImage from 'vue-upload-multiple-image'
 export default {
-  props: ["propsindex", "item"],
+  props: ['propsindex', 'item'],
   computed: {
-    ...mapGetters(["getSelectedStudentId", "getUser"]),
+    ...mapGetters(['getSelectedStudentId', 'getUser']),
   },
   components: {
     VueUploadMultipleImage,
   },
   data() {
     return {
-      text: "",
+      text: '',
       uploadedImages: [],
       imageList: [],
       formOverlay: false,
-    };
+    }
   },
   methods: {
     addNote() {
-      const vm = this;
+      const vm = this
 
-      if (vm.text == "" && vm.imageList.length == 0) {
-        alert("please Add one Value");
-        return;
+      if (vm.text == '' && vm.imageList.length == 0) {
+        alert('please Add one Value')
+        return
       } else {
-        this.formOverlay = true;
-        let url = vm.getUser.type == "admin" ? "/admin/notes" : "/notes";
+        this.formOverlay = true
+        let url = vm.getUser.type == 'admin' ? '/admin/notes' : '/notes'
         axios
           .post(process.env.VUE_APP_API_URL + url, {
             student_id: vm.getSelectedStudentId,
@@ -100,41 +100,41 @@ export default {
             screen_shot: vm.imageList,
           })
           .then((response) => {
-            vm.$refs.cancel.click();
-            this.formOverlay = false;
-            vm.$toast.success("Notes Add Successfully", {
-              position: "top-right",
-              closeButton: "button",
+            vm.$refs.cancel.click()
+            this.formOverlay = false
+            vm.$toast.success('Notes Add Successfully', {
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
-            
-          vm.text=''
-          vm.imageList=[]
-         vm.$getStudent();
-        })
-        .catch((errors) => {
-          var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
-        });
-     }
+            })
+
+            vm.text = ''
+            vm.imageList = []
+            vm.$getStudent()
+          })
+          .catch((errors) => {
+            var err = ''
+            if (errors.response.data.errors.email) {
+              err += errors.response.data.errors.email
+            }
+          })
+      }
     },
     uploadImageSuccess(formData, index, fileList) {
-      console.log(formData, "index:", index, fileList, "upload success");
-      this.imageList.push(fileList[index].path);
+      console.log(formData, 'index:', index, fileList, 'upload success')
+      this.imageList.push(fileList[index].path)
     },
     // beforeRemove(index, done, fileList) {
     //   console.log("index:", index, done, fileList, "before remove");
     // },
     editImage(formData, index, fileList) {
-      console.log(formData, "index:", index, fileList, "edit image");
+      console.log(formData, 'index:', index, fileList, 'edit image')
     },
     dataChange(data) {
-      console.log(data, "dataChange");
+      console.log(data, 'dataChange')
     },
   },
-};
+}
 </script>
 <style lang="scss"></style>
