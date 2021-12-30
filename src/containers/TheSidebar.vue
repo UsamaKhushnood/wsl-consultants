@@ -13,11 +13,14 @@
       target="_self"
       ><img src="/img/logo.cfcafe70.png" width="50px" alt="WSL Consultants"
     /></router-link>
+    <!-- <div class="sidebar-wrapper"> -->
     <ul
       class="c-sidebar-nav h-100 ps"
-      style="position: relative; overflow: auto !important;"
+      style="position: relative; overflow: visible !important;"
     >
-      <li class="c-sidebar-nav-title" v-if="getUser.type == 'admin'">Admin</li>
+      <li class="c-sidebar-nav-title" v-if="getUser.type == 'admin'">
+        Admin
+      </li>
       <li class="c-sidebar-nav-title" v-if="getUser.type == 'Sales Agent'">
         Sales Department
       </li>
@@ -106,6 +109,7 @@
               <span v-else>
                 My Leads
               </span>
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -116,6 +120,7 @@
               target="_self"
             >
               New Leads
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -126,6 +131,7 @@
               target="_self"
             >
               In Progress
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -136,6 +142,7 @@
               target="_self"
             >
               On Hold
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
 
@@ -147,6 +154,7 @@
               target="_self"
             >
               Expected
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item">
@@ -157,6 +165,7 @@
               target="_self"
             >
               Not Expected
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item bg-success">
@@ -167,6 +176,7 @@
               target="_self"
             >
               Applied
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
           <li class="c-sidebar-nav-item bg-danger">
@@ -177,6 +187,7 @@
               target="_self"
             >
               Rejected
+              <div class="badge badge-primary">25</div>
             </router-link>
           </li>
         </b-collapse>
@@ -238,6 +249,7 @@
         ></div>
       </div>
     </ul>
+    <!-- </div> -->
     <button
       type="button"
       class="c-sidebar-minimizer d-md-down-none"
@@ -247,24 +259,24 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
-import nav from "./_nav";
+import { mapGetters, mapState } from 'vuex'
+import nav from './_nav'
 
 export default {
-  name: "TheSidebar",
+  name: 'TheSidebar',
   nav,
   computed: {
     show() {
-      return this.$store.state.sidebarShow;
+      return this.$store.state.sidebarShow
     },
     minimize() {
-      return this.$store.state.sidebarMinimize;
+      return this.$store.state.sidebarMinimize
     },
     nav() {
-      return $options.nav;
+      return $options.nav
     },
-    ...mapGetters(["getUser"]),
-    ...mapState(["sidebarShow", "sidebarMinimize"]),
+    ...mapGetters(['getUser']),
+    ...mapState(['sidebarShow', 'sidebarMinimize']),
   },
-};
+}
 </script>

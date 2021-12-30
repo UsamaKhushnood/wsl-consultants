@@ -60,7 +60,7 @@
                             <span v-else>
                               {{
                                 item.agent == null
-                                  ? "unassigned"
+                                  ? 'unassigned'
                                   : item.agent.first_name
                               }}
                             </span>
@@ -221,7 +221,8 @@
                                 title="Hold"
                               ></i>
                             </a> -->
-                            <AllPopups :propsindex="index" :items="getPropUser"> </AllPopups>
+                            <AllPopups :propsindex="index" :items="getPropUser">
+                            </AllPopups>
                           </td>
                           <!-- <button v-for="pageNumber in items" :key="pageNumber" class="w3-button" v-bind:key="pageNumber" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }} </button> -->
                         </template>
@@ -239,76 +240,72 @@
 </template>
 
 <script>
-import $ from "jquery";
-import "datatables.net-buttons-bs4";
+import $ from 'jquery'
+import 'datatables.net-buttons-bs4'
 // import tableData from "../tableData";
-import WidgetsDropdown from "../widgets/WidgetsDropdown";
-import AllPopups from "@/views/new-request-data/AllPopups.vue";
-import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-import EditLead from "@/views/new-request-data/popups/EditLead.vue";
-import axios from "axios";
-import { mapGetters, mapState } from "vuex";
-import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
+import WidgetsDropdown from '../widgets/WidgetsDropdown'
+import AllPopups from '@/views/new-request-data/AllPopups.vue'
+import CreateNewLead from '@/views/new-request-data/popups/CreateNewLead.vue'
+import EditLead from '@/views/new-request-data/popups/EditLead.vue'
+import axios from 'axios'
+import { mapGetters, mapState } from 'vuex'
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 
 export default {
-  name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead,EditLead },
-  mixins:[getSelectedStudentMix],
+  name: 'NewRequest',
+  components: { WidgetsDropdown, AllPopups, CreateNewLead, EditLead },
+  mixins: [getSelectedStudentMix],
   data: () => ({
     // items: tableData,
 
     items: [],
-    deleteStudentId: "",
-   
+    deleteStudentId: '',
+
     resultCount: 0,
-    user_for_pro: "",
+    user_for_pro: '',
   }),
   computed: {
-    ...mapGetters(["getUser", "getAllStudentData","getItems"]),
-    ...mapState(["allStudent", "allStudentData"]),
+    ...mapGetters(['getUser', 'getAllStudentData', 'getItems']),
+    ...mapState(['allStudent', 'allStudentData']),
 
     getPropUser() {
-      return this.user_for_pro;
+      return this.user_for_pro
     },
   },
   methods: {
-    
     setStudent(data) {
       // this.deleteStudentId = data
-      this.$store.commit("SET_CURRENT_STUDENT", null);
-      this.$store.commit("SET_CURRENT_STUDENT", data);
-      this.user_for_pro = data;
-      this.selectedStudent = data;
-    
+      this.$store.commit('SET_CURRENT_STUDENT', null)
+      this.$store.commit('SET_CURRENT_STUDENT', data)
+      this.user_for_pro = data
+      this.selectedStudent = data
     },
     changeStatus(item) {
-      const vm = this;
-     
-      let url = "";
-      if (vm.getUser.type == "admin") {
-        url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
-      } else if(vm.getUser.type =="Call Center Agent"){
-       url = process.env.VUE_APP_API_URL + "/call-agent/status/" + item.id;
-      }
-      else {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
+      const vm = this
+
+      let url = ''
+      if (vm.getUser.type == 'admin') {
+        url = process.env.VUE_APP_API_URL + '/admin/status/' + item.id
+      } else if (vm.getUser.type == 'Call Center Agent') {
+        url = process.env.VUE_APP_API_URL + '/call-agent/status/' + item.id
+      } else {
+        url = process.env.VUE_APP_API_URL + '/sales-agent/status/' + item.id
       }
       axios
         .post(url, {
           status: item.status,
         })
         .then((response) => {
-  
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-          vm.$getStudent();
+          })
+          vm.$getStudent()
         })
         .catch((errors) => {
-          var err = "";
+          var err = ''
           // console.log("(error.response.status", errors.response.status);
           // console.log("errors.response.data", errors.response.data.errors);
           // console.log("errors.response.data", errors.response.data);
@@ -318,28 +315,27 @@ export default {
           // }
           if (errors)
             this.$toast.error(err, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
-        });
+            })
+        })
     },
     currentStudent(data) {
-      this.$store.commit("SET_CURRENT_STUDENT", {});
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', {})
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
   },
- mounted() {
-   this.getStudent()
+  mounted() {
+    this.getStudent()
   },
   watch: {
     // getAllStudentData: function (val) {
     //   this.getAllStudentData = val
     // },
   },
-  
-};
+}
 </script>
 
 <style lang="scss">

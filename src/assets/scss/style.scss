@@ -1,13 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lora&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
 // If you want to override variables do it here
-@import "variables";
+@import 'variables';
 // Import styles
-@import "~@coreui/coreui/scss/coreui";
+@import '~@coreui/coreui/scss/coreui';
 
 // If you want to add something do it here
-@import "custom";
+@import 'custom';
 
 :root {
   --primary-color: #131152;
@@ -27,6 +27,11 @@
 
 .c-sidebar {
   background-color: var(--primary-light);
+}
+
+.sidebar-wrapper {
+  overflow: auto;
+  height: 100%;
 }
 
 .c-sidebar .c-sidebar-nav-link.c-active,
@@ -54,7 +59,7 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .f-14 {
@@ -76,7 +81,7 @@ body {
     input {
       border: 1px solid var(--primary-color) !important;
       border-radius: 5px;
-      &[type="checkbox"] {
+      &[type='checkbox'] {
         margin-right: 10px;
       }
     }
@@ -110,7 +115,7 @@ body {
   cursor: pointer;
 }
 
-div[helperclass="active-sorting-item"] {
+div[helperclass='active-sorting-item'] {
   background: #f2f2f2;
 }
 
@@ -120,6 +125,12 @@ div[helperclass="active-sorting-item"] {
 
 a.c-sidebar-nav-dropdown-toggle.not-collapsed {
   background-color: var(--primary);
+}
+
+.c-sidebar-minimized {
+  .c-sidebar-nav-dropdown-items-custom {
+    overflow: hidden;
+  }
 }
 
 .c-sidebar-nav-dropdown-items-custom {
@@ -137,7 +148,7 @@ label.label-divider {
   margin: 15px 0;
   background: #fff;
   &::before {
-    content: " ";
+    content: ' ';
     width: 40%;
     height: 1px;
     background: #e1e1e1;
@@ -147,7 +158,7 @@ label.label-divider {
     z-index: 998;
   }
   &:after {
-    content: " ";
+    content: ' ';
     width: 40%;
     height: 1px;
     background: #e1e1e1;
@@ -176,4 +187,48 @@ label.label-divider {
 
 .modal-body {
   overflow-x: hidden;
+}
+
+.c-sidebar-nav-dropdown-toggle::after {
+  transform: rotate(90deg);
+  display: block !important;
+}
+.c-sidebar-nav-dropdown-toggle.collapsed::after {
+  transform: rotate(-90deg);
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #6c757d;
+  border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.c-sidebar {
+  ::-webkit-scrollbar-thumb {
+    background: #565a5c;
+    border-radius: 50px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+.c-sidebar .c-sidebar-minimizer {
+  background-color: #131152;
+}
+.c-sidebar .c-sidebar-minimizer:hover {
+  background-color: #272393;
 }
