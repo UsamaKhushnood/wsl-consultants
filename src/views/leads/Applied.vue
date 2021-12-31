@@ -244,6 +244,8 @@
                           </td>
                         </template>
                       </CDataTable>
+                      <b-overlay :show="formOverlay" no-wrap class="overlayModal">
+                     </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -263,6 +265,8 @@ import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
 import axios from "axios";
 import { mapGetters } from "vuex";
+
+
 export default {
   name: "NewRequest",
   components: { WidgetsDropdown, AllPopups, CreateNewLead },
@@ -270,6 +274,7 @@ export default {
     // items: tableData,
     items: [],
     deleteStudentId: "",
+    formOverlay: true,
   }),
   computed: {
     ...mapGetters(["getUser"]),

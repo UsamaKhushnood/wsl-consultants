@@ -244,6 +244,8 @@
                           </td>
                         </template>
                       </CDataTable>
+                       <b-overlay :show="formOverlay" no-wrap class="overlayModal">
+                     </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -263,13 +265,17 @@ import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import AllPopups from "@/views/new-request-data/AllPopups.vue";
 import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
 import axios from "axios";
+
+
 export default {
   name: "NewRequest",
+
   components: { WidgetsDropdown, AllPopups, CreateNewLead },
   data: () => ({
     // items: tableData,
     items: [],
     deleteStudentId: "",
+    formOverlay: true,
   }),
   computed: {
     ...mapGetters(["getUser"]),
@@ -288,14 +294,12 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          // console.log("data::", response.data.data);
           vm.items = response.data.data;
+          vm.formOverlay=false;
         })
         .catch((errors) => {
           var err = "";
-          if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
-          }
+          vm.formOverlay=false;
         });
     },
     setStudent(data) {

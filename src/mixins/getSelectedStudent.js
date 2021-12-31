@@ -50,6 +50,7 @@ export const getSelectedStudentMix = {
         .then((response) => {
           console.log("data::", response.data.data);
           vm.$store.commit('SET_LEADS',response.data.data)
+          vm.formOverlay=false
         })
         .catch((errors) => {
           var err = "";

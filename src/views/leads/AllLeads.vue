@@ -227,6 +227,8 @@
                           <!-- <button v-for="pageNumber in items" :key="pageNumber" class="w3-button" v-bind:key="pageNumber" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }} </button> -->
                         </template>
                       </CDataTable>
+                      <b-overlay :show="formOverlay" no-wrap class="overlayModal">
+                     </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -260,7 +262,7 @@ export default {
 
     items: [],
     deleteStudentId: '',
-
+    formOverlay: true,
     resultCount: 0,
     user_for_pro: '',
   }),

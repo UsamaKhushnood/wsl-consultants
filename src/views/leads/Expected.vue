@@ -232,6 +232,8 @@
                           </td>
                         </template>
                       </CDataTable>
+                      <b-overlay :show="formOverlay" no-wrap class="overlayModal">
+                     </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -260,6 +262,7 @@ export default {
     // items: tableData,
     items: [],
     deleteStudentId: "",
+    formOverlay: true,
   }),
   computed: {
     ...mapGetters(["getUser"]),
@@ -314,9 +317,11 @@ export default {
         .then((response) => {
           // console.log("data::", response.data.data);
           vm.items = response.data.data;
+          vm.formOverlay = false
         })
         .catch((errors) => {
           var err = "";
+          vm.formOverlay = false
           console.log("(error.response.status", error.response.status);
           console.log("errors.response.data", errors.response.data.errors);
 
