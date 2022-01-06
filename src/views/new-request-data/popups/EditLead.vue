@@ -88,7 +88,7 @@
                 id="cv"
               />
             </div>
-            <div class="form-element">
+            <!-- <div class="form-element">
               <label for="agentFirstName">Updload Screenshots:</label>
 
               <VueUploadMultipleImage
@@ -106,7 +106,7 @@
               <p class="badge mb-0 text-capitalize text-secondary">
                 max uplaod limit is 5
               </p>
-            </div>
+            </div> -->
             <div class="form-element">
               <label for="agentFirstName">Recently Uploaded:</label>
               <div class="screenshotsGallery justify-content-center">
@@ -259,23 +259,27 @@ export default {
       }
 
       var formData = new FormData();
-      var cv = document.querySelector("#cv");
-      var scr = document.querySelector("#scr");
+      var cv1 = document.querySelector("#cv");
+      // var scr = document.querySelector("#scr");
+      // var scr = document.querySelector("#screen_shot1");
+      formData.append("first_name", vm.propsData.first_name);
+      formData.append("last_name", vm.propsData.last_name);
+      formData.append("country", vm.propsData.country);
+      formData.append("email", vm.propsData.email);
+      formData.append("cv",  typeof cv1.files[0] !="undefined" ? cv1.files[0] : "");
+      // formData.append("screen_shot", [vm.imageList]);
+      formData.append("whatsapp_num", vm.propsData.whatsapp_num);
+      formData.append("phone", vm.propsData.phone);
       this.formOverlay = true;
       axios
-        .post(url, {
-        first_name:vm.propsData.first_name,
-         last_name: vm.propsData.last_name,
-         country:vm.propsData.country,
-          email:vm.propsData.email,
-          cv:vm.cv,
-          screen_shot:vm.imageList,
-          whatsapp_num:vm.propsData.whatsapp_num,
-          phone:vm.propsData.phone
-        })
+        .post(url, 
+          formData
+        )
         .then((response) => {
           this.formOverlay = false;
           console.log("data::", response.data);
+
+          
           vm.$successMsg(response.data.message)
           vm.getStudent();
           (vm.first_name = ""),

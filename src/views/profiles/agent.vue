@@ -7,12 +7,9 @@
             <b-avatar size="lg">
               {{
                   getAgent.name
-                          ? getAgent.name
+                          ? getAgent.name.split(' ').map(function(str) { return str ? str[0].toUpperCase() : " ";}).join('')
                           : "Agent Name"
-                  .split(" ")
-                  .map((i) => i.charAt(0))
-                  .join("")
-                  .toUpperCase()
+                  
               }}
             </b-avatar>
           </div>
@@ -41,7 +38,7 @@
           <div class="row">
             <div
               class="col-6"
-              v-if="getAgent.type.toLowerCase() === 'sales agent'"
+              v-if="getAgent.type === 'Sales Agent'"
             >
               <h6 class="text-text badge badge-dark f-14">
                 {{

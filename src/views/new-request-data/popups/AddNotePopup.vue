@@ -67,9 +67,10 @@
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 import VueUploadMultipleImage from 'vue-upload-multiple-image'
-
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 export default {
   props: ['propsindex', 'item'],
+  mixins:[getSelectedStudentMix],
   computed: {
     ...mapGetters(['getSelectedStudentId', 'getUser']),
   },

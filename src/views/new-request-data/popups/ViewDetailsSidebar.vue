@@ -166,7 +166,7 @@
                     {{ getSelectedStudent.created_at }}
                   </p>
                 </div>
-                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
+                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin' ">
                   <h6
                     class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
                     style="width: fit-content"
@@ -186,7 +186,7 @@
                     >
                   </div>
                   <h4 class="text-center" v-if="getSelectedStudent.call_agent">{{ getSelectedStudent.call_agent.first_name != null ? getSelectedStudent.call_agent.first_name : ""}}</h4>
-                  <div class="text-center">
+                  <div class="text-center" v-if="getSelectedStudent.call_agent_id">
                     <router-link
                       active-class="c-active"
                       :to="
@@ -228,7 +228,7 @@
                   <h4 class="text-center" v-if="getSelectedStudent.agent.first_name">
                     {{ getSelectedStudent.agent.first_name }}
                   </h4>
-                  <div class="text-center">
+                  <div class="text-center" v-if="getSelectedStudent.assigned_to">
                     <router-link
                       active-class="c-active"
                       :to="

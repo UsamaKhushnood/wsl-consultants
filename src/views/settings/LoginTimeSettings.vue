@@ -66,6 +66,21 @@
               >
             </td>
           </template>
+          
+          <template #login_time="{item}">
+            <td>
+              <p>
+                {{ item.login_time ?  item.login_time  : "" }}
+              </p>
+            </td>
+          </template>
+          <template #logout_time="{item}">
+            <td>
+              <p>
+                {{ item.logout_time }}
+              </p>
+            </td>
+          </template>
         </CDataTable>
       </div>
     </div>

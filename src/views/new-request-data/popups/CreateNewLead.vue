@@ -67,8 +67,9 @@
               <label for="cv">Student CV:</label>
               <input type="file" ref="file" @change="handleCvUpload($event)" required id="cv" />
             </div>
-            <div class="form-element">
-              <label for="agentFirstName">Screenshots:</label>
+            <!-- <div class="form-element">
+              <label for="agentFirstName">Screenshots:</label
+             
                  <VueUploadMultipleImage
                 :data-images="uploadedImages"
                 @upload-success="uploadImageSuccess"
@@ -83,8 +84,8 @@
               />
               <p class="badge mb-0 text-capitalize text-secondary">
                 max uplaod limit is 5
-              </p>
-            </div>
+              </p> 
+            </div>-->
           </form>
         </div>
       </template>
@@ -130,6 +131,7 @@ export default {
     screenShot: "",
     imageList: [],
     uploadedImages: [],
+    imagesArray: [],
     formOverlay: false,
   }),
   computed: {
@@ -140,6 +142,7 @@ export default {
   
   },
   methods: {
+
     handleCvUpload(event) {
       let vm = this;
       var image = event.target.files[0];
@@ -173,33 +176,23 @@ export default {
       }
 
       var formData = new FormData();
-      var cv = document.querySelector("#cv");
+      var cv1 = document.querySelector("#cv");
       // var scr = document.querySelector("#scr");
-      var scr = document.querySelector(".image-input");
+      // var scr = document.querySelector(".image-input");
+      var scr = document.querySelector("#screen_shot1");
       
-      // formData.append("first_name", vm.first_name);
-      // formData.append("last_name", vm.last_name);
-      // formData.append("country", vm.country);
-      // formData.append("email", vm.email);
-      // formData.append("cv",  typeof cv.files[0] !="undefined" ? cv.files[0] : "");
-      // formData.append("screen_shot", scr.files);
-      // // formData.append("screen_shot", [vm.imageList]);
-      // formData.append("whatsapp_num", vm.whatsapp_num);
-      // formData.append("phone", vm.phone);
+      formData.append("first_name", vm.first_name);
+      formData.append("last_name", vm.last_name);
+      formData.append("country", vm.country);
+      formData.append("email", vm.email);
+      formData.append("cv",  typeof cv1.files[0] !="undefined" ? cv1.files[0] : "");
+      // formData.append("screen_shot", [vm.imageList]);
+      formData.append("whatsapp_num", vm.whatsapp_num);
+      formData.append("phone", vm.phone);
       this.formOverlay = true;
       axios
         .post(url,
-         {
-          first_name:vm.first_name,
-         last_name: vm.last_name,
-         country:vm.country,
-          email:vm.email,
-          cv:vm.cv,
-          screen_shot:vm.imageList,
-          whatsapp_num:vm.whatsapp_num,
-          phone:vm.phone
-          }
-        
+        formData,
         )
         .then((response) => {
           this.formOverlay = false;
