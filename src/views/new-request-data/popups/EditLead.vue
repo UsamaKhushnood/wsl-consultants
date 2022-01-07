@@ -83,6 +83,7 @@
               <input
                 type="file"
                 ref="file"
+                multiple
                 @change="handleCvUpload($event)"
                 required
                 id="cv"
@@ -167,7 +168,8 @@ import VueUploadMultipleImage from "vue-upload-multiple-image";
 import axios from "axios";
 import { mapGetters, mapState } from "vuex";
 import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
-
+import {event} from 'events'
+import Vue from 'vue'
 export default {
    mixins:[getSelectedStudentMix],
   props: ["propsindex", "items"],
@@ -262,11 +264,18 @@ export default {
       var cv1 = document.querySelector("#cv");
       // var scr = document.querySelector("#scr");
       // var scr = document.querySelector("#screen_shot1");
+            
+      for( var i = 0; i < this.$refs.file.files.length; i++ ){
+              let file = this.$refs.file.files[i];
+              formData.append('cv[' + i + ']', file);
+          }
+
+
       formData.append("first_name", vm.propsData.first_name);
       formData.append("last_name", vm.propsData.last_name);
       formData.append("country", vm.propsData.country);
       formData.append("email", vm.propsData.email);
-      formData.append("cv",  typeof cv1.files[0] !="undefined" ? cv1.files[0] : "");
+      // formData.append("cv",  typeof cv1.files[0] !="undefined" ? cv1.files[0] : "");
       // formData.append("screen_shot", [vm.imageList]);
       formData.append("whatsapp_num", vm.propsData.whatsapp_num);
       formData.append("phone", vm.propsData.phone);
@@ -279,8 +288,10 @@ export default {
           this.formOverlay = false;
           console.log("data::", response.data);
 
-          
-          vm.$successMsg(response.data.message)
+          Vue.$toast(response.data.message, {
+              timeout: 2000,
+            });
+          // vm.$successMsg(response.data.message)
           vm.getStudent();
           (vm.first_name = ""),
             (vm.last_name = ""),

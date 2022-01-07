@@ -65,7 +65,7 @@
             </div>
             <div class="form-element">
               <label for="cv">Student CV:</label>
-              <input type="file" ref="file" @change="handleCvUpload($event)" required id="cv" />
+              <input type="file" ref="file" @change="handleCvUpload($event)" multiple required id="cv" />
             </div>
             <!-- <div class="form-element">
               <label for="agentFirstName">Screenshots:</label
@@ -181,11 +181,16 @@ export default {
       // var scr = document.querySelector(".image-input");
       var scr = document.querySelector("#screen_shot1");
       
+ for( var i = 0; i < this.$refs.file.files.length; i++ ){
+        let file = this.$refs.file.files[i];
+        formData.append('cv[' + i + ']', file);
+    }
+
       formData.append("first_name", vm.first_name);
       formData.append("last_name", vm.last_name);
       formData.append("country", vm.country);
       formData.append("email", vm.email);
-      formData.append("cv",  typeof cv1.files[0] !="undefined" ? cv1.files[0] : "");
+      // formData.append("cv",  typeof cv1.files[0] !="undefined" ? cv1.files[0] : "");
       // formData.append("screen_shot", [vm.imageList]);
       formData.append("whatsapp_num", vm.whatsapp_num);
       formData.append("phone", vm.phone);

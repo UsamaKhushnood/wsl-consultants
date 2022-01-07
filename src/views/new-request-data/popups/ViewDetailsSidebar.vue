@@ -282,12 +282,12 @@
                 <h5>Passing Year</h5>
                 <p>{{ getSelectedStudent.student_info.passing_year }}</p>
               </div>
-              <div v-if="getSelectedStudent.cv" class="mb-4">
-                <a
-                  :href="ImageUrl + '/student/' + getSelectedStudent.cv"
+              <div v-if="getSelectedStudent.cvs" class="mb-4">
+                <a v-for="(data,index) in getSelectedStudent.cvs" :key="index"
+                  :href="ImageUrl + '/student/' + data.cv"
                   download
-                  class="mb-4"
-                  >Download CV</a
+                  class="mb-4 ml-2"
+                  >Download CV {{index}}</a
                 >
               </div>
               <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
