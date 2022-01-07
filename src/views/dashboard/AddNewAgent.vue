@@ -12,7 +12,7 @@
       <div class="row">
         <div
           class="col-md-7 bg-white pt-5 px-4 pb-2"
-          style="border-radius: 5px;"
+          style="border-radius: 5px; height: 435px"
         >
           <form>
             <div class="form-group">
@@ -89,7 +89,13 @@
           </form>
         </div>
         <div class="col-md-5">
-          <div class="agentsList ml-2 p-4 py-2 bg-white">
+          <div
+            class="agentsList ml-2 p-4 py-2 bg-white"
+            style="height: calc(100vh - 270px);
+                  overflow: scroll; 
+                  min-height: 435px;     
+                  border-radius: 5px;"
+          >
             <div class="d-flex mb-4 align-items-center justify-content-between">
               <h2>Agents List</h2>
               <router-link to="/dashboard/agents">
@@ -105,9 +111,9 @@
                 <b-avatar>
                   {{
                     i.first_name
-                      .split(" ")
+                      .split(' ')
                       .map((i) => i.charAt(0))
-                      .join("")
+                      .join('')
                       .toUpperCase()
                   }}
                 </b-avatar>
@@ -137,31 +143,31 @@
   </div>
 </template>
 <script>
-import axios from "axios";
-import PasswordInput from "@/components/PasswordInput";
+import axios from 'axios'
+import PasswordInput from '@/components/PasswordInput'
 import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 export default {
-  mixins:[getSelectedStudentMix],
+  mixins: [getSelectedStudentMix],
   components: { PasswordInput },
   data() {
     return {
-      agentType: "Call Center Agent",
-      first_name: "",
-      last_name: "",
-      email: "",
+      agentType: 'Call Center Agent',
+      first_name: '',
+      last_name: '',
+      email: '',
       password: null,
       agents_list: [],
-    };
+    }
   },
   methods: {
     trigger() {
-      this.$refs.sendReq.click();
+      this.$refs.sendReq.click()
     },
     addAgent() {
-      const vm = this;
+      const vm = this
       //  vm.$store.commit("SET_SPINNER", true);
       this.$http
-        .post(process.env.VUE_APP_API_URL + "/register", {
+        .post(process.env.VUE_APP_API_URL + '/register', {
           type: this.agentType,
           first_name: this.first_name,
           last_name: this.last_name,
@@ -169,142 +175,142 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          console.log("s", response.data.message);
+          console.log('s', response.data.message)
           // vm.$store.commit("SET_AUTH_TOKEN", response.data.token);
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$store.commit("SET_USER", response.data.userDetail.user);
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
+          })
           vm.getAgents()
-          vm.first_name = "",
-          vm.last_name = "",
-          vm.email = "",
-          vm.password = "";
+          ;(vm.first_name = ''),
+            (vm.last_name = ''),
+            (vm.email = ''),
+            (vm.password = '')
           // vm.$store.commit("SET_SPINNER", false);
           // vm.$router.push({ name: "Dashboard" });
         })
         .catch((errors) => {
-          var err = "";
+          var err = ''
           if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
+            err += errors.response.data.errors.email
           }
           if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
+            err += errors.response.data.errors.password
           }
           if (errors)
             this.$toast.error(err, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
+            })
           // vm.$store.commit('SET_SPINNER',false);
-        });
+        })
     },
     getAgents() {
-      const vm = this;
+      const vm = this
       axios
-        .get(process.env.VUE_APP_API_URL + "/admin/agents")
+        .get(process.env.VUE_APP_API_URL + '/admin/agents')
         .then((response) => {
-        
-          vm.agents_list = response.data.data;
+          vm.agents_list = response.data.data
         })
         .catch((errors) => {
-          var err = "";
+          var err = ''
           if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
+            err += errors.response.data.errors.email
+            console.log(err)
           }
-        });
+        })
     },
     deleteAgents(id) {
-      const vm = this;
+      const vm = this
       axios
-        .delete(process.env.VUE_APP_API_URL + "/admin/agents/" + id)
+        .delete(process.env.VUE_APP_API_URL + '/admin/agents/' + id)
         .then((response) => {
-          vm.isModalVisible = false;
+          vm.isModalVisible = false
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-          vm.getAgents();
+          })
+          vm.getAgents()
         })
         .catch((errors) => {
-          var err = "";
+          var err = ''
           if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
+            err += errors.response.data.errors.email
+            console.log(err)
           }
-        });
+        })
     },
     sendTo(url) {
-      window.open(url, "_blank");
+      window.open(url, '_blank')
     },
     copyCredentials(index) {
-      const vm = this;
+      const vm = this
       // first name will replace with password
-      var credentials = `Email: ${this.agents_list[index].email}\nPassword: ${this.agents_list[index].encrypt_password}`;
+      var credentials = `Email: ${this.agents_list[index].email}\nPassword: ${this.agents_list[index].encrypt_password}`
       navigator.clipboard.writeText(credentials).then(
         function() {
-          vm.isModalVisible = false;
-          vm.$toast.success("Successfully Copied", {
-            position: "top-right",
-            closeButton: "button",
+          vm.isModalVisible = false
+          vm.$toast.success('Successfully Copied', {
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-    
+          })
         },
         function() {
-          vm.isModalVisible = false;
-          vm.$toast.error("Something went wrong", {
-            position: "top-right",
-            closeButton: "button",
+          vm.isModalVisible = false
+          vm.$toast.error('Something went wrong', {
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
+          })
         }
-      );
+      )
     },
     getPassword() {
-      let pass = "";
-      let length = 12;
+      let pass = ''
+      let length = 12
 
-      const special = "!#$%&()*+,-./:;<=>?@[\]^_|~".split("");
-      const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const special = '!#$%&()*+,-./:;<=>?@[]^_|~'.split('')
+      const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       const chars = new Array(26)
         .fill()
-        .map((_, i) => String.fromCharCode(i + 65));
+        .map((_, i) => String.fromCharCode(i + 65))
 
-      let availableChars = [...chars];
+      let availableChars = [...chars]
       // ensuring at least one number in the output
-      pass += this.randomPick(numbers);
-      length--;
-      availableChars = availableChars.concat(numbers);
+      pass += this.randomPick(numbers)
+      length--
+      availableChars = availableChars.concat(numbers)
       // ensuring at least one special character in the output
-      pass += this.randomPick(special);
-      length--;
-      availableChars = availableChars.concat(special);
+      pass += this.randomPick(special)
+      length--
+      availableChars = availableChars.concat(special)
       for (let i = 0; i < length; i++) {
-        let picked = this.randomPick(availableChars);
+        let picked = this.randomPick(availableChars)
         if (/[A-Z]/.test(picked)) {
-          let lower = Math.random();
-          picked = lower < 0.5 ? picked.toLowerCase() : picked;
+          let lower = Math.random()
+          picked = lower < 0.5 ? picked.toLowerCase() : picked
         }
-        pass += picked;
+        pass += picked
       }
-      this.password = pass;
+      this.password = pass
     },
     randomPick(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
+      return arr[Math.floor(Math.random() * arr.length)]
     },
   },
   created() {
-    this.getAgents();
+    this.getAgents()
   },
-};
+}
 </script>

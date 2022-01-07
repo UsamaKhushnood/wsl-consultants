@@ -36,9 +36,15 @@
                         class="leads-table"
                         sorter
                         :fields="[
-                          'first_name',
+                          {
+                            key: 'sr',
+                            sorter: false,
+                            filter: false,
+                            _style: 'width:50px',
+                            label: 'Sr#',
+                          },
+                          'created_at',
                           'whatsapp_num',
-                          'phone',
                           'country',
                           'assigned_to',
                           'status',
@@ -49,6 +55,11 @@
                         ]"
                         pagination
                       >
+                        <template #sr="{index}">
+                          <td class="text-center">
+                            <p class="mb-0">{{ index + 1 }}</p>
+                          </td>
+                        </template>
                         <template #assigned_to="{item}">
                           <td>
                             <span
@@ -100,7 +111,10 @@
                           </td>
                         </template>
                         <template #status="{item}">
-                          <td class="status text-center">
+                          <td
+                            class="status text-center"
+                            style="padding: 4px 15px 0 15px;"
+                          >
                             <!-- new is the default status  -->
                             <b-form-select
                               size="sm"
@@ -227,8 +241,12 @@
                           <!-- <button v-for="pageNumber in items" :key="pageNumber" class="w3-button" v-bind:key="pageNumber" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }} </button> -->
                         </template>
                       </CDataTable>
-                      <b-overlay :show="formOverlay" no-wrap class="overlayModal">
-                     </b-overlay>
+                      <b-overlay
+                        :show="formOverlay"
+                        no-wrap
+                        class="overlayModal"
+                      >
+                      </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -242,24 +260,18 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import 'datatables.net-buttons-bs4'
-// import tableData from "../tableData";
-import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import AllPopups from '@/views/new-request-data/AllPopups.vue'
 import CreateNewLead from '@/views/new-request-data/popups/CreateNewLead.vue'
-import EditLead from '@/views/new-request-data/popups/EditLead.vue'
 import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 
 export default {
   name: 'NewRequest',
-  components: { WidgetsDropdown, AllPopups, CreateNewLead, EditLead },
+  components: { AllPopups, CreateNewLead },
   mixins: [getSelectedStudentMix],
   data: () => ({
-    // items: tableData,
-
     items: [],
     deleteStudentId: '',
     formOverlay: true,

@@ -20,7 +20,6 @@
               >
                 Create New Lead
               </button>
-              <CreateNewLead />
               <div id="Country1" class="active tab-pane  in">
                 <div class="tabs widget">
                   <div class="tab-content">
@@ -101,8 +100,11 @@
                             </a>
                           </td>
                         </template>
-                        <template #Status="{item}">
-                          <td class="status text-center">
+                        <template #status="{item}">
+                          <td
+                            class="status text-center"
+                            style="padding: 4px 15px 0 15px;"
+                          >
                             <b-form-select
                               v-if="item.Status === null"
                               size="sm"
@@ -197,18 +199,17 @@
 </template>
 
 <script>
-import tableData from "./tableData";
-import WidgetsDropdown from "./widgets/WidgetsDropdown";
-import AllPopups from "@/views/new-request-data/AllPopups.vue";
-import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
+import tableData from './tableData'
+import WidgetsDropdown from './widgets/WidgetsDropdown'
+import AllPopups from '@/views/new-request-data/AllPopups.vue'
 
 export default {
-  name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  name: 'NewRequest',
+  components: { WidgetsDropdown, AllPopups },
   data: () => ({
     items: tableData,
   }),
-};
+}
 </script>
 
 <style lang="scss">

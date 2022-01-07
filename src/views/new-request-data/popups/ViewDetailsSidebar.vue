@@ -58,7 +58,7 @@
                 <h4 v-if="getSelectedStudent.first_name">
                   {{
                     getSelectedStudent.first_name +
-                      " " +
+                      ' ' +
                       getSelectedStudent.last_name
                   }}
                 </h4>
@@ -119,7 +119,7 @@
                   <p>
                     {{
                       getSelectedStudent.student_info == null
-                        ? ""
+                        ? ''
                         : getSelectedStudent.student_info.query
                     }}
                   </p>
@@ -166,7 +166,7 @@
                     {{ getSelectedStudent.created_at }}
                   </p>
                 </div>
-                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin' ">
+                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
                   <h6
                     class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
                     style="width: fit-content"
@@ -177,22 +177,33 @@
                   <div class="text-center mb-2">
                     <b-avatar variant="dark" size="80">
                       {{
-                        "Agent Name"
-                          .split(" ")
+                        'Agent Name'
+                          .split(' ')
                           .map((i) => i.charAt(0))
-                          .join("")
+                          .join('')
                           .toUpperCase()
                       }}</b-avatar
                     >
                   </div>
-                  <h4 class="text-center" v-if="getSelectedStudent.call_agent">{{ getSelectedStudent.call_agent.first_name != null ? getSelectedStudent.call_agent.first_name : ""}}</h4>
-                  <div class="text-center" v-if="getSelectedStudent.call_agent_id">
+                  <h4 class="text-center" v-if="getSelectedStudent.call_agent">
+                    {{
+                      getSelectedStudent.call_agent.first_name != null
+                        ? getSelectedStudent.call_agent.first_name
+                        : ''
+                    }}
+                  </h4>
+                  <div
+                    class="text-center"
+                    v-if="getSelectedStudent.call_agent_id"
+                  >
                     <router-link
                       active-class="c-active"
                       :to="
                         '/dashboard/agents/' + getSelectedStudent.call_agent_id
                       "
-                      @click.native="getCurrentAgent(getSelectedStudent.call_agent)"
+                      @click.native="
+                        getCurrentAgent(getSelectedStudent.call_agent)
+                      "
                       class="c-sidebar-nav-link"
                       target="_self"
                     >
@@ -213,22 +224,32 @@
                     Assing To
                   </h6>
                   <div class="text-center mb-2">
-                    <b-avatar variant="dark" size="80" v-if="getSelectedStudent.agent.first_name">
+                    <b-avatar
+                      variant="dark"
+                      size="80"
+                      v-if="getSelectedStudent.agent.first_name"
+                    >
                       {{
                         getSelectedStudent.agent
                           ? getSelectedStudent.agent.first_name
-                          : "Agent Name"
-                              .split(" ")
+                          : 'Agent Name'
+                              .split(' ')
                               .map((i) => i.charAt(0))
-                              .join("")
+                              .join('')
                               .toUpperCase()
                       }}</b-avatar
                     >
                   </div>
-                  <h4 class="text-center" v-if="getSelectedStudent.agent.first_name">
+                  <h4
+                    class="text-center"
+                    v-if="getSelectedStudent.agent.first_name"
+                  >
                     {{ getSelectedStudent.agent.first_name }}
                   </h4>
-                  <div class="text-center" v-if="getSelectedStudent.assigned_to">
+                  <div
+                    class="text-center"
+                    v-if="getSelectedStudent.assigned_to"
+                  >
                     <router-link
                       active-class="c-active"
                       :to="
@@ -246,7 +267,7 @@
               </div>
 
               <hr class="mrgn10-0" />
-              <h5>Student Email</h5>
+              <h5 v-show="getSelectedStudent.email">Student Email</h5>
               <p>{{ getSelectedStudent.email }}</p>
               <h5>Student Phone</h5>
               <p>{{ getSelectedStudent.phone }}</p>
@@ -307,91 +328,91 @@
   </div>
 </template>
 <script>
-import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
-import usersData from "./userData";
-import axios from "axios";
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
+import usersData from './userData'
+import axios from 'axios'
 export default {
-  props: ["propsindex"],
+  props: ['propsindex'],
   mixins: [getSelectedStudentMix],
   components: {},
   data: () => ({
     items: usersData,
     gallery: [
       {
-        src: "../../../assets/images/auth-background.png",
-        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
-        alt: "Blue starry night photo.",
-        thumbnailWidth: "220px",
+        src: '../../../assets/images/auth-background.png',
+        description: 'Star Night Sky Ravine by Mark Basarab, from Unsplash.',
+        alt: 'Blue starry night photo.',
+        thumbnailWidth: '220px',
       },
       {
-        src: "../../../assets/images/auth-background.png",
-        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
-        alt: "Blue starry night photo.",
-        thumbnailWidth: "220px",
+        src: '../../../assets/images/auth-background.png',
+        description: 'Star Night Sky Ravine by Mark Basarab, from Unsplash.',
+        alt: 'Blue starry night photo.',
+        thumbnailWidth: '220px',
       },
       {
-        src: "../../../assets/images/auth-background.png",
-        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
-        alt: "Blue starry night photo.",
-        thumbnailWidth: "220px",
+        src: '../../../assets/images/auth-background.png',
+        description: 'Star Night Sky Ravine by Mark Basarab, from Unsplash.',
+        alt: 'Blue starry night photo.',
+        thumbnailWidth: '220px',
       },
       {
-        src: "../../../assets/images/auth-background.png",
-        description: "Star Night Sky Ravine by Mark Basarab, from Unsplash.",
-        alt: "Blue starry night photo.",
-        thumbnailWidth: "220px",
+        src: '../../../assets/images/auth-background.png',
+        description: 'Star Night Sky Ravine by Mark Basarab, from Unsplash.',
+        alt: 'Blue starry night photo.',
+        thumbnailWidth: '220px',
       },
     ],
   }),
   computed: {
     // ...mapGetters(["getSelectedStudent", "getUser"]),
     ImageUrl() {
-      return process.env.VUE_APP_IMAGE_STORAGE_URL;
+      return process.env.VUE_APP_IMAGE_STORAGE_URL
     },
   },
   methods: {
     getBadge(status) {
-      return status === "Active"
-        ? "success"
-        : status === "Inactive"
-        ? "secondary"
-        : status === "Pending"
-        ? "warning"
-        : status === "Banned"
-        ? "danger"
-        : "primary";
+      return status === 'Active'
+        ? 'success'
+        : status === 'Inactive'
+        ? 'secondary'
+        : status === 'Pending'
+        ? 'warning'
+        : status === 'Banned'
+        ? 'danger'
+        : 'primary'
     },
-    getCurrentAgent(data){
-      this.$store.commit("SET_CURRENT_AGENT", null);
-      this.$store.commit("SET_CURRENT_AGENT", data);
+    getCurrentAgent(data) {
+      this.$store.commit('SET_CURRENT_AGENT', null)
+      this.$store.commit('SET_CURRENT_AGENT', data)
     },
     deleteScreenShot(id) {
-      const vm = this;
-      var url = "";
+      const vm = this
+      var url = ''
 
-      if (vm.getUser.type == "admin") {
-        url = "/admin/screen-shot-delete/";
+      if (vm.getUser.type == 'admin') {
+        url = '/admin/screen-shot-delete/'
       } else {
-        url = "/screen-shot-delete/";
+        url = '/screen-shot-delete/'
       }
       axios
         .post(process.env.VUE_APP_API_URL + url + id)
         .then((response) => {
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-          vm.getStudent();
-          vm.$refs.model_hide.click();
+          })
+          vm.getStudent()
+          vm.$refs.model_hide.click()
         })
         .catch((errors) => {
-          var err = "";
-        });
+          console.log(errors)
+        })
     },
   },
-};
+}
 </script>
 <style lang="scss">
 .modalHeader {

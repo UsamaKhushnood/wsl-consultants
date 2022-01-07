@@ -10,13 +10,6 @@
         <div class="clearfix">
           <div class="row">
             <div class="col-sm-12">
-              <!-- <button
-                class="btn btn-dark btn-sm ml-auto d-block mb-2"
-                v-b-modal="'create-lead-modal'"
-              >
-                Create New Lead
-              </button>
-              <CreateNewLead /> -->
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
@@ -34,9 +27,15 @@
                         class="leads-table"
                         sorter
                         :fields="[
-                          'first_name',
+                          {
+                            key: 'sr',
+                            sorter: false,
+                            filter: false,
+                            _style: 'width:50px',
+                            label: 'Sr#',
+                          },
+                          'created_at',
                           'whatsapp_num',
-                          'phone',
                           'country',
                           'assigned_to',
                           'status',
@@ -47,6 +46,11 @@
                         ]"
                         pagination
                       >
+                        <template #sr="{index}">
+                          <td class="text-center">
+                            <p class="mb-0">{{ index + 1 }}</p>
+                          </td>
+                        </template>
                         <template #assigned_to="{item}">
                           <td>
                             <span
@@ -58,7 +62,7 @@
                             <span v-else>
                               {{
                                 item.agent == null
-                                  ? "unassigned"
+                                  ? 'unassigned'
                                   : item.agent.first_name
                               }}
                             </span>
@@ -118,7 +122,10 @@
                           </td>
                         </template>
                         <template #status="{item}">
-                          <td class="status text-center">
+                          <td
+                            class="status text-center"
+                            style="padding: 4px 15px 0 15px;"
+                          >
                             <!-- new is the default status  -->
                             <b-form-select
                               size="sm"
@@ -244,8 +251,12 @@
                           </td>
                         </template>
                       </CDataTable>
-                       <b-overlay :show="formOverlay" no-wrap class="overlayModal">
-                     </b-overlay>
+                      <b-overlay
+                        :show="formOverlay"
+                        no-wrap
+                        class="overlayModal"
+                      >
+                      </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -259,62 +270,59 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import tableData from "../tableData";
-import WidgetsDropdown from "../widgets/WidgetsDropdown";
-import AllPopups from "@/views/new-request-data/AllPopups.vue";
-import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-import axios from "axios";
+import { mapGetters } from 'vuex'
+import AllPopups from '@/views/new-request-data/AllPopups.vue'
+import axios from 'axios'
 export default {
-  name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  name: 'NewRequest',
+  components: { AllPopups },
   data: () => ({
     // items: tableData,
     items: [],
-    deleteStudentId: "",
-        formOverlay: true,
+    deleteStudentId: '',
+    formOverlay: true,
   }),
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(['getUser']),
   },
   methods: {
     getStudent() {
-      const vm = this;
-     let url = "";
-      if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/hold-leads";
-      } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/hold-leads";
+      const vm = this
+      let url = ''
+      if (vm.getUser.type == 'Sales Agent') {
+        url = process.env.VUE_APP_API_URL + '/sales-agent/hold-leads'
+      } else if (vm.getUser.type == 'Call Center Agent') {
+        url = process.env.VUE_APP_API_URL + '/call-agent/hold-leads'
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/hold-leads";
+        url = process.env.VUE_APP_API_URL + '/admin/hold-leads'
       }
       axios
         .get(url)
         .then((response) => {
           // console.log("data::", response.data.data);
-          vm.items = response.data.data;
-          vm.formOverlay = false;
+          vm.items = response.data.data
+          vm.formOverlay = false
         })
         .catch((errors) => {
-          var err = "";
-          vm.formOverlay = false;
-        });
+          console.log(errors)
+          vm.formOverlay = false
+        })
     },
     setStudent(data) {
       // this.deleteStudentId = data
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
 
     currentStudent(data) {
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
     changeStatus(item) {
-      const vm = this;
-      let url = "";
-      if (vm.getUser.type == "admin") {
-        url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
+      const vm = this
+      let url = ''
+      if (vm.getUser.type == 'admin') {
+        url = process.env.VUE_APP_API_URL + '/admin/status/' + item.id
       } else {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
+        url = process.env.VUE_APP_API_URL + '/sales-agent/status/' + item.id
       }
       axios
         .post(url, {
@@ -323,35 +331,35 @@ export default {
         .then((response) => {
           // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-          vm.getStudent();
+          })
+          vm.getStudent()
         })
         .catch((errors) => {
-          var err = "";
+          var err = ''
           if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
+            err += errors.response.data.errors.email
           }
           if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
+            err += errors.response.data.errors.password
           }
           if (errors)
             this.$toast.error(err, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
-        });
+            })
+        })
     },
   },
   mounted() {
-    this.getStudent();
+    this.getStudent()
   },
-};
+}
 </script>
 
 <style lang="scss">

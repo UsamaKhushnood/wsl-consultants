@@ -34,9 +34,15 @@
                         class="leads-table"
                         sorter
                         :fields="[
-                          'first_name',
+                          {
+                            key: 'sr',
+                            sorter: false,
+                            filter: false,
+                            _style: 'width:50px',
+                            label: 'Sr#',
+                          },
+                          'created_at',
                           'whatsapp_num',
-                          'phone',
                           'country',
                           'assigned_to',
                           'status',
@@ -47,6 +53,11 @@
                         ]"
                         pagination
                       >
+                        <template #sr="{index}">
+                          <td class="text-center">
+                            <p class="mb-0">{{ index + 1 }}</p>
+                          </td>
+                        </template>
                         <template #assigned_to="{item}">
                           <td>
                             <span
@@ -58,7 +69,7 @@
                             <span v-else>
                               {{
                                 item.agent == null
-                                  ? "unassigned"
+                                  ? 'unassigned'
                                   : item.agent.first_name
                               }}
                             </span>
@@ -118,7 +129,10 @@
                           </td>
                         </template>
                         <template #status="{item}">
-                          <td class="status text-center">
+                          <td
+                            class="status text-center"
+                            style="padding: 4px 15px 0 15px;"
+                          >
                             <!-- new is the default status  -->
                             <b-form-select
                               size="sm"
@@ -244,8 +258,12 @@
                           </td>
                         </template>
                       </CDataTable>
-                      <b-overlay :show="formOverlay" no-wrap class="overlayModal">
-                     </b-overlay>
+                      <b-overlay
+                        :show="formOverlay"
+                        no-wrap
+                        class="overlayModal"
+                      >
+                      </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -259,69 +277,65 @@
 </template>
 
 <script>
-import tableData from "../tableData";
-import WidgetsDropdown from "../widgets/WidgetsDropdown";
-import AllPopups from "@/views/new-request-data/AllPopups.vue";
-import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-import axios from "axios";
-import { mapGetters } from "vuex";
-
+import AllPopups from '@/views/new-request-data/AllPopups.vue'
+import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  name: 'NewRequest',
+  components: { AllPopups },
   data: () => ({
     // items: tableData,
     items: [],
-    deleteStudentId: "",
+    deleteStudentId: '',
     formOverlay: true,
   }),
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(['getUser']),
   },
   methods: {
     getStudent() {
-      const vm = this;
-      let url = "";
-      if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/applied-leads";
-      } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/applied-leads";
+      const vm = this
+      let url = ''
+      if (vm.getUser.type == 'Sales Agent') {
+        url = process.env.VUE_APP_API_URL + '/sales-agent/applied-leads'
+      } else if (vm.getUser.type == 'Call Center Agent') {
+        url = process.env.VUE_APP_API_URL + '/call-agent/applied-leads'
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/applied-leads";
+        url = process.env.VUE_APP_API_URL + '/admin/applied-leads'
       }
       axios
         .get(url)
         .then((response) => {
           // console.log("data::1", response.data.data);
-          vm.items = response.data.data;
+          vm.items = response.data.data
+          vm.formOverlay = false
         })
         .catch((errors) => {
-          var err = "";
-          console.log("(error.response.status", error.response.status);
-          console.log("errors.response.data", errors.response.data.errors);
-
+          console.log('(error.response.status', errors.response.status)
+          console.log('errors.response.data', errors.response.data.errors)
+          vm.formOverlay = false
           // if (errors.response.data.message == "Login Time Expire") {
           //   console.log("errors.response.data", errors.response.data.message);
           //   localStorage.setItem("token", null);
           // }
-        });
+        })
     },
     setStudent(data) {
       // this.deleteStudentId = data
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
 
     currentStudent(data) {
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
     changeStatus(item) {
-      const vm = this;
-      let url = "";
-      if (vm.getUser.type == "admin") {
-        url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
+      const vm = this
+      let url = ''
+      if (vm.getUser.type == 'admin') {
+        url = process.env.VUE_APP_API_URL + '/admin/status/' + item.id
       } else {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
+        url = process.env.VUE_APP_API_URL + '/sales-agent/status/' + item.id
       }
       axios
         .post(url, {
@@ -330,31 +344,28 @@ export default {
         .then((response) => {
           // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-          vm.getStudent();
+          })
+          vm.getStudent()
         })
         .catch((errors) => {
-          var err = "";
-
           if (errors)
             this.$toast.error(errors.message, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
-        });
+            })
+        })
     },
   },
   mounted() {
-    this.getStudent();
+    this.getStudent()
   },
- 
-};
+}
 </script>
 <style lang="scss">
 #newrequest .col-sm-6.p-0.offset-sm-6 {

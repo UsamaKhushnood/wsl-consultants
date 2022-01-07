@@ -44,6 +44,7 @@
     "dotenv": "^10.0.0",
     "jquery": "^3.6.0",
     "process": "^0.11.10",
+    "v-calendar": "^2.3.4",
     "vue": "~2.6.12",
     "vue-cool-lightbox": "^2.7.4",
     "vue-file-agent": "^1.7.3",

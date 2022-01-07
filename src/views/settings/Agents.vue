@@ -11,9 +11,9 @@
             <b-avatar>
               {{
                 data.name
-                  .split(" ")
+                  .split(' ')
                   .map((i) => i.charAt(0))
-                  .join("")
+                  .join('')
                   .toUpperCase()
               }}
             </b-avatar>
@@ -34,7 +34,7 @@
               :to="'/dashboard/agents/' + data.id"
               class="c-sidebar-nav-link p-0"
               target="_self"
-              @click.native="$store.commit('SET_SELECTED_AGENT',data)"
+              @click.native="$store.commit('SET_SELECTED_AGENT', data)"
             >
               <b-button size="sm" variant="link">
                 View Profile
@@ -128,96 +128,96 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from 'axios'
 export default {
   data() {
     return {
       items: [],
-    };
+    }
   },
   methods: {
     getAgent() {
-      const vm = this;
-      let url = "";
-      url = process.env.VUE_APP_API_URL + "/admin/all-agents";
+      const vm = this
+      let url = ''
+      url = process.env.VUE_APP_API_URL + '/admin/all-agents'
       axios
         .get(url)
         .then((response) => {
-          vm.items = response.data.data;
+          vm.items = response.data.data
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
+          })
         })
         .catch((errors) => {
-          var err = "";
+          var err = ''
 
           if (errors)
             this.$toast.error(errors.response.data.message, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
-        });
+            })
+        })
     },
     deleteAgents(id) {
-      const vm = this;
+      const vm = this
       axios
-        .delete(process.env.VUE_APP_API_URL +"/admin/agents/"+id)
+        .delete(process.env.VUE_APP_API_URL + '/admin/agents/' + id)
         .then((response) => {
-           
           vm.$toast.success(response.data.message, {
-              position: "top-right",
-              closeButton: "button",
-              icon: true,
-              rtl: false,
-            });
-            vm.getAgent()
-        })
-        .catch((errors) => {
-          var err = "";
-         
-        });
-    },
-    copyCredentials(data) {
-      const vm = this;
-      // first name will replace with password
-      var credentials = `Email: ${data.email}\nPassword: ${data.encrypt_password}`;
-      navigator.clipboard.writeText(credentials).then(
-        function() {
-          vm.isModalVisible = false;
-          vm.$toast.success("Successfully Copied", {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
+          })
+          vm.getAgent()
+        })
+        .catch((errors) => {
+          console.log(errors)
+        })
+    },
+    copyCredentials(data) {
+      const vm = this
+      // first name will replace with password
+      var credentials = `Email: ${data.email}\nPassword: ${data.encrypt_password}`
+      navigator.clipboard.writeText(credentials).then(
+        function() {
+          vm.isModalVisible = false
+          vm.$toast.success('Successfully Copied', {
+            position: 'top-right',
+            closeButton: 'button',
+            icon: true,
+            rtl: false,
+          })
           // console.log(credentials);
         },
         function() {
-          vm.isModalVisible = false;
-          vm.$toast.error("Something went wrong", {
-            position: "top-right",
-            closeButton: "button",
+          vm.isModalVisible = false
+          vm.$toast.error('Something went wrong', {
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
+          })
         }
-      );
+      )
     },
   },
   created() {
-    this.getAgent();
+    this.getAgent()
   },
-};
+}
 </script>
 <style scoped lang="scss">
 .agents-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  column-gap: 8px;
+  row-gap: 5px;
   .actions {
     position: absolute;
     width: 100%;

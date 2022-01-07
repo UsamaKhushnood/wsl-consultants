@@ -10,13 +10,6 @@
         <div class="clearfix">
           <div class="row">
             <div class="col-sm-12">
-              <button
-                class="btn btn-dark btn-sm ml-auto d-block mb-2"
-                v-b-modal="'create-lead-modal'"
-              >
-                Create New Lead
-              </button>
-              <CreateNewLead />
               <div id="Country1">
                 <div class="widget">
                   <div class="bg-white">
@@ -34,9 +27,15 @@
                         class="leads-table"
                         sorter
                         :fields="[
-                          'first_name',
+                          {
+                            key: 'sr',
+                            sorter: false,
+                            filter: false,
+                            _style: 'width:50px',
+                            label: 'Sr#',
+                          },
+                          'created_at',
                           'whatsapp_num',
-                          'phone',
                           'country',
                           'assigned_to',
                           'status',
@@ -47,6 +46,11 @@
                         ]"
                         pagination
                       >
+                        <template #sr="{index}">
+                          <td class="text-center">
+                            <p class="mb-0">{{ index + 1 }}</p>
+                          </td>
+                        </template>
                         <template #assigned_to="{item}">
                           <td>
                             <span
@@ -58,7 +62,7 @@
                             <span v-else>
                               {{
                                 item.agent == null
-                                  ? "unassigned"
+                                  ? 'unassigned'
                                   : item.agent.first_name
                               }}
                             </span>
@@ -106,7 +110,10 @@
                           </td>
                         </template>
                         <template #status="{item}">
-                          <td class="status text-center">
+                          <td
+                            class="status text-center"
+                            style="padding: 4px 15px 0 15px;"
+                          >
                             <!-- new is the default status  -->
                             <b-form-select
                               size="sm"
@@ -231,8 +238,12 @@
                           </td>
                         </template>
                       </CDataTable>
-                       <b-overlay :show="formOverlay" no-wrap class="overlayModal">
-                     </b-overlay>
+                      <b-overlay
+                        :show="formOverlay"
+                        no-wrap
+                        class="overlayModal"
+                      >
+                      </b-overlay>
                     </div>
                   </div>
                 </div>
@@ -246,69 +257,64 @@
 </template>
 
 <script>
-import $ from "jquery";
-import "datatables.net-buttons-bs4";
-import tableData from "../tableData";
-import WidgetsDropdown from "../widgets/WidgetsDropdown";
-import AllPopups from "@/views/new-request-data/AllPopups.vue";
-import CreateNewLead from "@/views/new-request-data/popups/CreateNewLead.vue";
-import axios from "axios";
-import { mapGetters, mapState } from "vuex";
+import 'datatables.net-buttons-bs4'
+import AllPopups from '@/views/new-request-data/AllPopups.vue'
+import axios from 'axios'
+import { mapGetters, mapState } from 'vuex'
 export default {
-  name: "NewRequest",
-  components: { WidgetsDropdown, AllPopups, CreateNewLead },
+  name: 'NewRequest',
+  components: { AllPopups },
   data: () => ({
     // items: tableData,
     items: [],
     formOverlay: true,
-    deleteStudentId: "",
+    deleteStudentId: '',
   }),
   computed: {
-    ...mapGetters(["getUser"]),
-    ...mapState(["allStudent"]),
+    ...mapGetters(['getUser']),
+    ...mapState(['allStudent']),
   },
   methods: {
     getStudent() {
-      const vm = this;
-      console.log(vm.getUser.type);
-      let url = "";
-      if (vm.getUser.type == "Sales Agent") {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/notexpected-leads";
-      } else if (vm.getUser.type == "Call Center Agent") {
-        url = process.env.VUE_APP_API_URL + "/call-agent/notexpected-leads";
+      const vm = this
+      console.log(vm.getUser.type)
+      let url = ''
+      if (vm.getUser.type == 'Sales Agent') {
+        url = process.env.VUE_APP_API_URL + '/sales-agent/notexpected-leads'
+      } else if (vm.getUser.type == 'Call Center Agent') {
+        url = process.env.VUE_APP_API_URL + '/call-agent/notexpected-leads'
       } else {
-        url = process.env.VUE_APP_API_URL + "/admin/notexpected-leads";
+        url = process.env.VUE_APP_API_URL + '/admin/notexpected-leads'
       }
       axios
         .get(url)
         .then((response) => {
           // console.log("data::", response.data.data);
-          vm.items = response.data.data;
-          vm.formOverlay = false;
+          vm.items = response.data.data
+          vm.formOverlay = false
         })
         .catch((errors) => {
-          var err = "";
-          vm.formOverlay = false;
-          console.log("(error.response.status", error.response.status);
-          console.log("errors.response.data", errors.response.data.errors);
+          vm.formOverlay = false
+          console.log('(error.response.status', errors.response.status)
+          console.log('errors.response.data', errors.response.data.errors)
 
           // if (errors.response.data.message == "Login Time Expire") {
           //   console.log("errors.response.data", errors.response.data.message);
           //   localStorage.setItem("token", null);
           // }
-        });
+        })
     },
     setStudent(data) {
       // this.deleteStudentId = data
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
     changeStatus(item) {
-      const vm = this;
-      let url = "";
-      if (vm.getUser.type == "admin") {
-        url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
+      const vm = this
+      let url = ''
+      if (vm.getUser.type == 'admin') {
+        url = process.env.VUE_APP_API_URL + '/admin/status/' + item.id
       } else {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
+        url = process.env.VUE_APP_API_URL + '/sales-agent/status/' + item.id
       }
       axios
         .post(url, {
@@ -317,64 +323,64 @@ export default {
         .then((response) => {
           // console.log("data::", response.data);
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-          vm.getStudent();
+          })
+          vm.getStudent()
         })
         .catch((errors) => {
-          var err = "";
-          console.log("(error.response.status", errors.response.status);
-          console.log("errors.response.data", errors.response.data.errors);
-          console.log("errors.response.data", errors.response.data);
+          var err = ''
+          console.log('(error.response.status', errors.response.status)
+          console.log('errors.response.data', errors.response.data.errors)
+          console.log('errors.response.data', errors.response.data)
           // if (errors.response.data.message == "Login Time Expire") {
           //   console.log("errors.response.data", errors.response.data.message);
           //   localStorage.setItem("token", null);
           // }
           if (errors.response.data.errors.email) {
-            err += errors.response.data.errors.email;
+            err += errors.response.data.errors.email
           }
           if (errors.response.data.errors.password) {
-            err += errors.response.data.errors.password;
+            err += errors.response.data.errors.password
           }
 
           if (errors)
             this.$toast.error(err, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
-        });
+            })
+        })
     },
     currentStudent(data) {
-      this.$store.commit("SET_CURRENT_STUDENT", {});
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', {})
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
   },
   mounted() {
-    let vm = this;
+    let vm = this
     setTimeout(function() {
-      vm.getStudent();
-    }, 1000);
+      vm.getStudent()
+    }, 1000)
   },
   watch: {
     allStudent: {
-      handler: function(newVal, oldVal) {
+      handler: function(newVal) {
         // console.log(newVal, oldVal);
-        let vm = this;
+        let vm = this
         // this function will trigger when ever the value of `my_state` changes
         if (newVal == true) {
-          vm.getStudent();
-          vm.$store.commit("SET_All_STUDENT", null);
+          vm.getStudent()
+          vm.$store.commit('SET_All_STUDENT', null)
         }
       },
       deep: true,
     },
   },
-};
+}
 </script>
 
 <style lang="scss">

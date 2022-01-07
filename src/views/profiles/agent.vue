@@ -6,15 +6,19 @@
           <div class="mr-3">
             <b-avatar size="lg">
               {{
-                  getAgent.name
-                          ? getAgent.name.split(' ').map(function(str) { return str ? str[0].toUpperCase() : " ";}).join('')
-                          : "Agent Name"
-                  
+                getAgent.name
+                  ? getAgent.name
+                      .split(' ')
+                      .map(function(str) {
+                        return str ? str[0].toUpperCase() : ' '
+                      })
+                      .join('')
+                  : 'Agent Name'
               }}
             </b-avatar>
           </div>
           <div>
-            <h5 class="mb-0"> {{getAgent.name}}</h5>
+            <h5 class="mb-0">{{ getAgent.name }}</h5>
             <p class="m-0 text-primary text-bold">
               {{ getAgent.type }}
             </p>
@@ -33,18 +37,30 @@
     <!-- warpper  -->
     <div class="row mt-4">
       <div class="col-12">
-        <div class="bg-white radius-10 py-3 px-3">
-          <h5 class="agent-progress text-black text-bold">Agent's Progress</h5>
+        <div class="bg-white radius-10 py-3 px-3 position-relative">
+          <div class="d-flex align-items-center ">
+            <h5 class="agent-progress text-black text-bold">
+              Agent's Progress
+            </h5>
+            <b-button-group size="sm" class="ml-auto">
+              <b-button class="bg-gradient-primary">Yesterday</b-button>
+              <b-button class="bg-danger">Weekly</b-button>
+              <b-button class="bg-black-active">Monthly</b-button>
+              <b-button
+                class="ml-1 bg-xing"
+                @click="showDatePicker = !showDatePicker"
+              >
+                {{ showDatePicker ? 'Close' : 'Open' }} Date Picker</b-button
+              >
+            </b-button-group>
+          </div>
           <div class="row">
-            <div
-              class="col-6"
-              v-if="getAgent.type === 'Sales Agent'"
-            >
+            <div class="col-6" v-if="getAgent.type === 'Sales Agent'">
               <h6 class="text-text badge badge-dark f-14">
                 {{
                   items.length > 0
-                    ? "Total Leads:" + items.length
-                    : "No Leads Assgined yet"
+                    ? 'Total Leads:' + items.length
+                    : 'No Leads Assgined yet'
                 }}
               </h6>
               <CChartPie
@@ -60,12 +76,37 @@
                 ]"
               />
             </div>
+
             <div class="col-6" v-else>
               <!-- <h6 class="text-text badge badge-success">
                 Call Center Agent
               </h6> -->
               <CChartBar :datasets="callCenterAgentData" labels="months" />
             </div>
+            <div class="col-6">
+              <div class="datePicker position-relative" v-show="showDatePicker">
+                <div class="closeBtn" @click="showDatePicker = false">
+                  <b-icon icon="x"></b-icon>
+                </div>
+                <DatePicker
+                  v-model="range"
+                  :model-config="modelConfig"
+                  @input="eventOnDate"
+                  title-position="right"
+                  color="red"
+                  is-dark
+                  is-range
+                />
+              </div>
+            </div>
+          </div>
+          <div class="showResults">
+            <h6>
+              <span class="resultLable"> Showing Results from:</span>
+              <span style="color: #1f1498">{{ range.start }} </span>
+              <span style="margin: 0 15px;">to</span>
+              <span style="color:#036466">{{ range.end }}</span>
+            </h6>
           </div>
         </div>
       </div>
@@ -86,13 +127,19 @@
             :items="items"
             columnFilter
             itemsPerPageSelect
-            :itemsPerPage="5"
+            :itemsPerPage="20"
             class="leads-table"
             sorter
             :fields="[
-              'first_name',
+              {
+                key: 'sr',
+                sorter: false,
+                filter: false,
+                _style: 'width:50px',
+                label: 'Sr#',
+              },
+              'created_at',
               'whatsapp_num',
-              'phone',
               'country',
               'status',
               {
@@ -103,21 +150,11 @@
             ]"
             pagination
           >
-            <!-- <template #assigned_to="{item}">
-              <td>
-                <span
-                  v-if="item.agent == null"
-                  class="badge badge-pill badge-danger"
-                >
-                  unassigned
-                </span>
-                <span v-else>
-                  {{
-                    item.agent == null ? "unassigned" : item.agent.first_name
-                  }}
-                </span>
+            <template #sr="{index}">
+              <td class="text-center">
+                <p class="mb-0">{{ index + 1 }}</p>
               </td>
-            </template> -->
+            </template>
             <template #whatsapp_num="{item}">
               <td>
                 <a
@@ -242,95 +279,114 @@
   </div>
 </template>
 <script>
-import { getSelectedStudentMix } from "@/mixins/getSelectedStudent.js";
-import { CChartPie } from "@coreui/vue-chartjs";
-import { CChartBar } from "@coreui/vue-chartjs";
-import AllPopups from "@/views/new-request-data/AllPopups";
-import { mapGetters, mapState } from "vuex";
-import axios from "axios";
+import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
+import { CChartPie } from '@coreui/vue-chartjs'
+import { CChartBar } from '@coreui/vue-chartjs'
+import AllPopups from '@/views/new-request-data/AllPopups'
+import { mapGetters, mapState } from 'vuex'
+import axios from 'axios'
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+
 export default {
-  mixins:[getSelectedStudentMix],
-  components: { CChartPie, CChartBar, AllPopups },
+  mixins: [getSelectedStudentMix],
+  components: { CChartPie, CChartBar, AllPopups, DatePicker },
   data() {
     return {
+      showDatePicker: true,
       items: [],
-      deleteStudentId: "",
+      deleteStudentId: '',
       currentPage: 1,
       itemsPerPage: 3,
       resultCount: 0,
       history: [],
       salesAgentDataArr: [],
       callCenterAgentDataArr: [],
-    };
+      range: {
+        start: '04-Jan-2022',
+        end: '21-Jan-2022',
+      },
+      modelConfig: {
+        type: 'string',
+        mask: 'DD-MMM-YYYY', // Uses 'iso' if missing
+      },
+    }
   },
+
   computed: {
-    ...mapGetters(["getUser", "getAllStudent", "getAgent","getCurrentAgent"]),
-    ...mapState(["allStudent", "allStudentData"]), // "getAllStudentData"
+    ...mapGetters(['getUser', 'getAllStudent', 'getAgent', 'getCurrentAgent']),
+    ...mapState(['allStudent', 'allStudentData']), // "getAllStudentData"
     /* eslint-disable */ totalPages: function() {
       if (this.resultCount == 0) {
-        return 1;
+        return 1
       } else {
-        return Math.ceil(this.resultCount / this.itemsPerPage);
+        return Math.ceil(this.resultCount / this.itemsPerPage)
       }
     },
     /* eslint-disable */
     paginate: function() {
       if (!this.articles || this.articles.length != this.articles.length) {
-        return;
+        return
       }
-      this.resultCount = this.articles.length;
+      this.resultCount = this.articles.length
       if (this.currentPage >= this.totalPages) {
-        this.currentPage = this.totalPages;
+        this.currentPage = this.totalPages
       }
-      var index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
-      return this.articles.slice(index, index + this.itemsPerPage);
+      var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+      return this.articles.slice(index, index + this.itemsPerPage)
     },
     salesAgentData() {
       return [
         {
-          label: "GitHub Commits",
+          label: 'GitHub Commits',
           backgroundColor: [
-            "#130f40",
-            "#3498db",
-            "#e67e22",
-            "#8e44ad",
-            "#bdc3c7",
-            "#27ae60",
-            "#c0392b",
+            '#130f40',
+            '#3498db',
+            '#e67e22',
+            '#8e44ad',
+            '#bdc3c7',
+            '#27ae60',
+            '#c0392b',
           ],
           data: this.salesAgentDataArr,
         },
-      ];
+      ]
     },
     callCenterAgentData() {
       return [
         {
-          label: "Total Leads",
-          backgroundColor: "#130f40",
+          label: 'Total Leads',
+          backgroundColor: '#130f40',
           data: this.callCenterAgentDataArr,
         },
-      ];
+      ]
     },
   },
 
   methods: {
     setPage: function(pageNumber) {
-      this.currentPage = pageNumber;
+      this.currentPage = pageNumber
+    },
+    async eventOnDate() {
+      let vm = this
+      let payload = {
+        start_date: vm.range.start,
+        end_date: vm.range.end,
+      }
     },
 
     setStudent(data) {
       // this.deleteStudentId = data
-      this.$store.commit("SET_CURRENT_STUDENT", null);
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', null)
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
 
     changeStatus(item) {
-      const vm = this;
-      let url = "";
-      if (vm.getUser.type == "admin") {
-        url = process.env.VUE_APP_API_URL + "/admin/status/" + item.id;
+      const vm = this
+      let url = ''
+      if (vm.getUser.type == 'admin') {
+        url = process.env.VUE_APP_API_URL + '/admin/status/' + item.id
       } else {
-        url = process.env.VUE_APP_API_URL + "/sales-agent/status/" + item.id;
+        url = process.env.VUE_APP_API_URL + '/sales-agent/status/' + item.id
       }
       axios
         .post(url, {
@@ -338,91 +394,91 @@ export default {
         })
         .then((response) => {
           vm.$toast.success(response.data.message, {
-            position: "top-right",
-            closeButton: "button",
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-          vm.getStudent();
+          })
+          vm.getStudent()
         })
         .catch((errors) => {
-          var err = "";
+          var err = ''
 
           if (errors)
             this.$toast.error(errors.response.data.message, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
-        });
+            })
+        })
     },
     currentStudent(data) {
-      this.$store.commit("SET_CURRENT_STUDENT", {});
-      this.$store.commit("SET_CURRENT_STUDENT", data);
+      this.$store.commit('SET_CURRENT_STUDENT', {})
+      this.$store.commit('SET_CURRENT_STUDENT', data)
     },
     getAgentHistory(id) {
-      const vm = this;
+      const vm = this
       // console.log(vm.getAllStudentData);
       axios
-        .get(process.env.VUE_APP_API_URL + "/admin/agent-login-history/" + id)
+        .get(process.env.VUE_APP_API_URL + '/admin/agent-login-history/' + id)
         // .get(process.env.VUE_APP_API_URL +"/admin/agent-login-history/"+vm.getAllStudentData)
         .then((response) => {
           // console.log("data::", response.data.data);
-          vm.history = response.data.data;
+          vm.history = response.data.data
         })
         .catch((errors) => {
-          var err = "";
-        });
+          var err = ''
+        })
     },
     getAgentLeads(id) {
-      const vm = this;
+      const vm = this
       axios
-        .get(process.env.VUE_APP_API_URL + "/admin/agent-leads/" + id)
+        .get(process.env.VUE_APP_API_URL + '/admin/agent-leads/' + id)
         .then((response) => {
           // console.log("data::", response.data.data);
-          vm.items = response.data.data;
+          vm.items = response.data.data
         })
         .catch((errors) => {
-          var err = "";
-        });
+          var err = ''
+        })
     },
     getSaleAgentCounts(id) {
-      const vm = this;
+      const vm = this
       axios
-        .get(process.env.VUE_APP_API_URL + "/admin/sale-agent-chart/" + id)
+        .get(process.env.VUE_APP_API_URL + '/admin/sale-agent-chart/' + id)
         .then((response) => {
           // console.log("salesAgentDataArr::", response.data.data);
-          vm.salesAgentDataArr.push(response.data.data.new_lead);
-          vm.salesAgentDataArr.push(response.data.data.in_progress);
-          vm.salesAgentDataArr.push(response.data.data.on_hold);
-          vm.salesAgentDataArr.push(response.data.data.expected);
-          vm.salesAgentDataArr.push(response.data.data.not_expected);
-          vm.salesAgentDataArr.push(response.data.data.applied);
-          vm.salesAgentDataArr.push(response.data.data.rejected);
+          vm.salesAgentDataArr.push(response.data.data.new_lead)
+          vm.salesAgentDataArr.push(response.data.data.in_progress)
+          vm.salesAgentDataArr.push(response.data.data.on_hold)
+          vm.salesAgentDataArr.push(response.data.data.expected)
+          vm.salesAgentDataArr.push(response.data.data.not_expected)
+          vm.salesAgentDataArr.push(response.data.data.applied)
+          vm.salesAgentDataArr.push(response.data.data.rejected)
         })
         .catch((errors) => {
-          var err = "";
-        });
+          var err = ''
+        })
     },
 
     getCallAgentCounts(id) {
-      const vm = this;
+      const vm = this
       axios
-        .get(process.env.VUE_APP_API_URL + "/admin/call-agent-chart/" + id)
+        .get(process.env.VUE_APP_API_URL + '/admin/call-agent-chart/' + id)
         .then((response) => {
           // console.log("callCenterAgentDataArr::", response.data.data);
-            $.each(response.data.data,function(index,data){
+          $.each(response.data.data, function(index, data) {
             vm.callCenterAgentDataArr.push(data)
           })
         })
         .catch((errors) => {
-          var err = "";
-        });
+          var err = ''
+        })
     },
   },
   mounted() {
-    let vm = this;
+    let vm = this
     // this.getAgentLeads(id);
   },
   watch: {
@@ -431,12 +487,50 @@ export default {
     // },
   },
   created() {
-    var id = this.$route.params.id;
-    this.$getStudent();
-    this.getAgentHistory(id);
-    this.getAgentLeads(id);
-    this.getSaleAgentCounts(id);
-    this.getCallAgentCounts(id);
+    var id = this.$route.params.id
+    this.$getStudent()
+    this.getAgentHistory(id)
+    this.getAgentLeads(id)
+    this.getSaleAgentCounts(id)
+    this.getCallAgentCounts(id)
   },
-};
+}
 </script>
+<style lang="scss">
+.datePicker {
+  display: flex;
+  justify-content: end;
+  margin-top: 10px;
+  margin-right: 0px;
+  .closeBtn {
+    position: absolute;
+    top: -3px;
+    right: 255px;
+    background: #1a202c;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
+
+.showResults {
+  h6 {
+    color: #000;
+    text-align: right;
+    margin-bottom: 0;
+    font-size: 18px;
+    span.resultLable {
+      margin-right: 10px;
+      text-decoration: underline;
+    }
+    span {
+      font-weight: 700;
+    }
+  }
+}
+</style>
