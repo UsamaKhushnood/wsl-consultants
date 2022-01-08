@@ -43,9 +43,9 @@
               Agent's Progress
             </h5>
             <b-button-group size="sm" class="ml-auto">
-              <b-button class="bg-gradient-primary">Yesterday</b-button>
-              <b-button class="bg-danger">Weekly</b-button>
-              <b-button class="bg-black-active">Monthly</b-button>
+              <b-button class="bg-gradient-primary" @click="filterBy('yesterday')">Yesterday</b-button>
+              <b-button class="bg-danger" @click=" filterBy('weekly')">Weekly</b-button>
+              <b-button class="bg-black-active"  @click="filterBy('monthly')">Monthly</b-button>
               <b-button
                 class="ml-1 bg-xing"
                 @click="showDatePicker = !showDatePicker"
@@ -64,6 +64,7 @@
                 }}
               </h6>
               <CChartPie
+              v-if="items.length > 0"
                 :datasets="salesAgentData"
                 :labels="[
                   'New Leads',
@@ -374,6 +375,50 @@ export default {
       }
     },
 
+    filterBy(data) {
+       const vm = this
+      let url = ''
+        url = process.env.VUE_APP_API_URL + '/admin/filter/' + this.getAgent.id+'?q='+data
+       axios
+        .get(url)
+        .then((response) => {
+          vm.$toast.success(response.data.message, {
+            position: 'top-right',
+            closeButton: 'button',
+            icon: true,
+            rtl: false,
+          })
+           vm.items = []
+           vm.items = response.data.data
+          
+          if(this.getAgent.type =='Sales Agent'){
+             vm.salesAgentDataArr.push(response.data.graph.new_lead)
+            vm.salesAgentDataArr.push(response.data.graph.in_progress)
+            vm.salesAgentDataArr.push(response.data.graph.on_hold)
+            vm.salesAgentDataArr.push(response.data.graph.expected)
+            vm.salesAgentDataArr.push(response.data.graph.not_expected)
+            vm.salesAgentDataArr.push(response.data.graph.applied)
+            vm.salesAgentDataArr.push(response.data.graph.rejected)
+          }else{
+              vm.callCenterAgentDataArr=[]
+             $.each(response.data.graph, function(index, data) {
+            vm.callCenterAgentDataArr.push(data)
+          })
+          }
+           
+        })
+        .catch((errors) => {
+          var err = ''
+          if (errors)
+          this.$toast.error(errors.response.data.message, {
+            position: 'top-right',
+            closeButton: 'button',
+            icon: true,
+            rtl: false,
+          })
+      });
+    },
+
     setStudent(data) {
       // this.deleteStudentId = data
       this.$store.commit('SET_CURRENT_STUDENT', null)
@@ -404,14 +449,14 @@ export default {
         .catch((errors) => {
           var err = ''
 
-          if (errors)
-            this.$toast.error(errors.response.data.message, {
-              position: 'top-right',
-              closeButton: 'button',
-              icon: true,
-              rtl: false,
-            })
+            if (errors)
+              this.$toast.error(errors.response.data.message, {
+                position: 'top-right',
+                closeButton: 'button',
+                icon: true,
+                rtl: false,
         })
+      })
     },
     currentStudent(data) {
       this.$store.commit('SET_CURRENT_STUDENT', {})

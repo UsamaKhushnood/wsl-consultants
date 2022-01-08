@@ -287,7 +287,11 @@
                   :href="ImageUrl + '/student/' + data.cv"
                   download
                   class="mb-4 ml-2"
-                  >Download CV {{index}}</a
+                  >Download CV {{index}}
+                 
+                      <i class="fa fa-trash"  @click.prevent="deleteCv(data.id)"></i>
+                
+                  </a
                 >
               </div>
               <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
@@ -395,6 +399,26 @@ export default {
       } else {
         url = '/screen-shot-delete/'
       }
+      axios
+        .post(process.env.VUE_APP_API_URL + url + id)
+        .then((response) => {
+          vm.$toast.success(response.data.message, {
+            position: 'top-right',
+            closeButton: 'button',
+            icon: true,
+            rtl: false,
+          })
+          vm.getStudent()
+          vm.$refs.model_hide.click()
+        })
+        .catch((errors) => {
+          console.log(errors)
+        })
+    },
+    deleteCv(id) {
+      const vm = this
+      var url = ''
+      url = '/admin/cv-delete/'
       axios
         .post(process.env.VUE_APP_API_URL + url + id)
         .then((response) => {
