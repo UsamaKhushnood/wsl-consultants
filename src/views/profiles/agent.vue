@@ -388,7 +388,7 @@ export default {
       let url = ''
 
       if(this.filterByRange ===true){
-        url = process.env.VUE_APP_API_URL + '/admin/filter/' + vm.getAgent.id+'?start_date='+moment(vm.range.start).format('MM-DD-YYYY')+'&&end_date='+moment(vm.range.end).format("MM-DD-YYYY")
+        url = process.env.VUE_APP_API_URL + '/admin/filter/' + vm.getAgent.id+'?start_date='+moment(vm.range.start).format('YYYY-MM-DD')+'&&end_date='+moment(vm.range.end).format("YYYY-MM-DD")
       }else{
         url = process.env.VUE_APP_API_URL + '/admin/filter/' + this.getAgent.id+'?q='+data
       }
@@ -404,7 +404,8 @@ export default {
           })
           vm.items = []
           vm.items = response.data.data
-          if(this.getAgent.type =='Sales Agent'){
+          if(vm.getAgent.type =='Sales Agent'){
+            vm.salesAgentDataArr=[]
             vm.salesAgentDataArr.push(response.data.graph.new_lead)
             vm.salesAgentDataArr.push(response.data.graph.in_progress)
             vm.salesAgentDataArr.push(response.data.graph.on_hold)
