@@ -369,10 +369,10 @@ export default {
    
   },
   watch: {
-    propsData(NewVal,oldVal) {
+    // propsData(NewVal,oldVal) {
       // console.log("old", oldVal);
       // console.log("new", NewVal);
-    },
+    // },
   },
   destroyed() {
     this.$store.commit("SET_ALL_STUDENT_DATA", null);

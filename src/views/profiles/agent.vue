@@ -93,6 +93,7 @@
                   v-model="range"
                   :model-config="modelConfig"
                   @input="eventOnDate"
+              
                   title-position="right"
                   color="red"
                   is-dark
@@ -287,12 +288,17 @@ import AllPopups from '@/views/new-request-data/AllPopups'
 import { mapGetters, mapState } from 'vuex'
 import axios from 'axios'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+import Vue from "vue";
+import moment from "moment";
+
 
 export default {
   mixins: [getSelectedStudentMix],
   components: { CChartPie, CChartBar, AllPopups, DatePicker },
   data() {
     return {
+      moment: moment,
+      filterByRange: false,
       showDatePicker: true,
       items: [],
       deleteStudentId: '',
@@ -369,17 +375,25 @@ export default {
     },
     async eventOnDate() {
       let vm = this
-      let payload = {
+   
+     let payload = {
         start_date: vm.range.start,
         end_date: vm.range.end,
       }
+     
     },
 
     filterBy(data) {
        const vm = this
       let url = ''
+
+      if(this.filterByRange ===true){
+        url = process.env.VUE_APP_API_URL + '/admin/filter/' + vm.getAgent.id+'?start_date='+moment(vm.range.start).format('MM-DD-YYYY')+'&&end_date='+moment(vm.range.end).format("MM-DD-YYYY")
+      }else{
         url = process.env.VUE_APP_API_URL + '/admin/filter/' + this.getAgent.id+'?q='+data
-       axios
+      }
+       
+      axios
         .get(url)
         .then((response) => {
           vm.$toast.success(response.data.message, {
@@ -388,11 +402,10 @@ export default {
             icon: true,
             rtl: false,
           })
-           vm.items = []
-           vm.items = response.data.data
-          
+          vm.items = []
+          vm.items = response.data.data
           if(this.getAgent.type =='Sales Agent'){
-             vm.salesAgentDataArr.push(response.data.graph.new_lead)
+            vm.salesAgentDataArr.push(response.data.graph.new_lead)
             vm.salesAgentDataArr.push(response.data.graph.in_progress)
             vm.salesAgentDataArr.push(response.data.graph.on_hold)
             vm.salesAgentDataArr.push(response.data.graph.expected)
@@ -401,15 +414,16 @@ export default {
             vm.salesAgentDataArr.push(response.data.graph.rejected)
           }else{
               vm.callCenterAgentDataArr=[]
-             $.each(response.data.graph, function(index, data) {
+            $.each(response.data.graph, function(index, data) {
             vm.callCenterAgentDataArr.push(data)
           })
           }
-           
+          vm.filterByRange=false
         })
         .catch((errors) => {
           var err = ''
           if (errors)
+          vm.filterByRange=false
           this.$toast.error(errors.response.data.message, {
             position: 'top-right',
             closeButton: 'button',
@@ -417,6 +431,7 @@ export default {
             rtl: false,
           })
       });
+      
     },
 
     setStudent(data) {
@@ -530,6 +545,12 @@ export default {
     // getAllStudentData: function (val) {
     //   this.getAllStudentData = val
     // },
+     range(NewVal,oldVal) {
+      // console.log("old", oldVal);
+      this.filterByRange=true
+      this.filterBy(null)
+      // console.log("new", NewVal);
+    },
   },
   created() {
     var id = this.$route.params.id
