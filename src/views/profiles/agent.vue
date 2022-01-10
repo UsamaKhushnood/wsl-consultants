@@ -37,20 +37,33 @@
     <!-- warpper  -->
     <div class="row mt-4">
       <div class="col-12">
-        <div class="bg-white radius-10 py-3 px-3 position-relative">
+        <div
+          class="bg-white radius-10 py-3 px-3 position-relative"
+          style="min-height: 500px;"
+        >
           <div class="d-flex align-items-center ">
             <h5 class="agent-progress text-black text-bold">
               Agent's Progress
             </h5>
             <b-button-group size="sm" class="ml-auto">
-              <b-button class="bg-gradient-primary" @click="filterBy('yesterday')">Yesterday</b-button>
-              <b-button class="bg-danger" @click=" filterBy('weekly')">Weekly</b-button>
-              <b-button class="bg-black-active"  @click="filterBy('monthly')">Monthly</b-button>
               <b-button
-                class="ml-1 bg-xing"
+                class="bg-gradient-primary c-white"
+                @click="filterBy('yesterday')"
+                >Yesterday</b-button
+              >
+              <b-button class="bg-danger c-white" @click="filterBy('weekly')"
+                >Last Week</b-button
+              >
+              <b-button
+                class="bg-black-active c-white"
+                @click="filterBy('monthly')"
+                >Last Month</b-button
+              >
+              <b-button
+                class="ml-1 bg-xing c-white"
                 @click="showDatePicker = !showDatePicker"
               >
-                {{ showDatePicker ? 'Close' : 'Open' }} Date Picker</b-button
+                {{ showDatePicker ? 'Close' : 'Open' }}Date Picker</b-button
               >
             </b-button-group>
           </div>
@@ -64,7 +77,6 @@
                 }}
               </h6>
               <CChartPie
-              v-if="items.length > 0"
                 :datasets="salesAgentData"
                 :labels="[
                   'New Leads',
@@ -93,7 +105,8 @@
                   v-model="range"
                   :model-config="modelConfig"
                   @input="eventOnDate"
-              
+                  min-date="Thu Dec 30 2021 13:55:22 GMT+0500 (Pakistan Standard Time)"
+                  :max-date="new Date()"
                   title-position="right"
                   color="red"
                   is-dark
@@ -104,19 +117,55 @@
           </div>
           <div class="showResults">
             <h6>
-              <span class="resultLable"> Showing Results from:</span>
-              <span style="color: #1f1498">{{ range.start }} </span>
-              <span style="margin: 0 15px;">to</span>
-              <span style="color:#036466">{{ range.end }}</span>
+              <span class="resultLable"> Showing Results for:</span>
+              <template v-if="filterByRange">
+                <span style="color: #1f1498">{{ range.start }} </span>
+                <span style="margin: 0 15px;">to</span>
+                <span style="color:#036466">{{ range.end }}</span>
+              </template>
+              <template v-else-if="showingResultsFor !== null">
+                <span style="color: #1f1498"
+                  >{{
+                    showingResultsFor === 'yesterday'
+                      ? 'Yesterday'
+                      : showingResultsFor === 'weekly'
+                      ? 'Last Week'
+                      : showingResultsFor === 'monthly'
+                      ? 'Last Month'
+                      : 'All'
+                  }}
+                </span>
+              </template>
+              <template v-else>
+                <span style="color: #1f1498">All</span>
+              </template>
+
+              <b-button
+                v-if="filterByRange || showingResultsFor !== null"
+                class="ml-3 c-black"
+                variant="link"
+                size="sm"
+                @click="resetLeadsFilters"
+                >Reset</b-button
+              >
             </h6>
           </div>
+          <b-overlay
+            :show="showLoading"
+            variant="light"
+            opacity="0.7"
+            spinner-variant="primary"
+            no-wrap
+            class="overlayModal"
+          >
+          </b-overlay>
         </div>
       </div>
     </div>
     <!-- warpper  -->
     <div class="row mt-4">
       <div class="col-12">
-        <div class="bg-white radius-10 py-3 px-3">
+        <div class="bg-white radius-10 py-3 px-3 position-relative">
           <h5 class="agent-progress text-black text-bold">
             Agent's Leads
           </h5>
@@ -254,13 +303,22 @@
               </td>
             </template>
           </CDataTable>
+          <b-overlay
+            :show="showLoading"
+            variant="light"
+            opacity="0.7"
+            spinner-variant="primary"
+            no-wrap
+            class="overlayModal"
+          >
+          </b-overlay>
         </div>
       </div>
     </div>
     <!-- warpper  -->
     <div class="row mt-4">
       <div class="col-12">
-        <div class="bg-white radius-10 py-3 px-3">
+        <div class="bg-white radius-10 py-3 px-3 position-relative">
           <h5 class="agent-progress text-black text-bold">
             Agent's Login History
           </h5>
@@ -275,6 +333,15 @@
             pagination
           >
           </CDataTable>
+          <b-overlay
+            :show="showLoading"
+            variant="light"
+            opacity="0.7"
+            spinner-variant="primary"
+            no-wrap
+            class="overlayModal"
+          >
+          </b-overlay>
         </div>
       </div>
     </div>
@@ -288,17 +355,17 @@ import AllPopups from '@/views/new-request-data/AllPopups'
 import { mapGetters, mapState } from 'vuex'
 import axios from 'axios'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
-import Vue from "vue";
-import moment from "moment";
-
+import moment from 'moment'
 
 export default {
   mixins: [getSelectedStudentMix],
   components: { CChartPie, CChartBar, AllPopups, DatePicker },
   data() {
     return {
+      showLoading: false,
       moment: moment,
       filterByRange: false,
+      showingResultsFor: null,
       showDatePicker: true,
       items: [],
       deleteStudentId: '',
@@ -375,27 +442,52 @@ export default {
     },
     async eventOnDate() {
       let vm = this
-   
-     let payload = {
+      let payload = {
         start_date: vm.range.start,
         end_date: vm.range.end,
       }
-     
+    },
+    resetLeadsFilters() {
+      var id = this.$route.params.id
+      this.filterByRange = false
+      this.showingResultsFor = null
+      this.$getStudent()
+      this.getAgentHistory(id)
+      this.getAgentLeads(id)
+      this.getSaleAgentCounts(id)
+      this.getCallAgentCounts(id)
     },
 
     filterBy(data) {
-       const vm = this
+      const vm = this
       let url = ''
+      this.showLoading = true
 
-      if(this.filterByRange ===true){
-        url = process.env.VUE_APP_API_URL + '/admin/filter/' + vm.getAgent.id+'?start_date='+moment(vm.range.start).format('YYYY-MM-DD')+'&&end_date='+moment(vm.range.end).format("YYYY-MM-DD")
-      }else{
-        url = process.env.VUE_APP_API_URL + '/admin/filter/' + this.getAgent.id+'?q='+data
+      if (this.filterByRange === true && data === 'dates') {
+        url =
+          process.env.VUE_APP_API_URL +
+          '/admin/filter/' +
+          vm.getAgent.id +
+          '?start_date=' +
+          moment(vm.range.start).format('YYYY-MM-DD') +
+          '&&end_date=' +
+          moment(vm.range.end).format('YYYY-MM-DD')
+        this.showingResultsFor = false
+      } else {
+        url =
+          process.env.VUE_APP_API_URL +
+          '/admin/filter/' +
+          this.getAgent.id +
+          '?q=' +
+          data
+        this.showingResultsFor = data
+        this.filterByRange = false
       }
-       
+
       axios
         .get(url)
         .then((response) => {
+          this.showLoading = false
           vm.$toast.success(response.data.message, {
             position: 'top-right',
             closeButton: 'button',
@@ -404,8 +496,9 @@ export default {
           })
           vm.items = []
           vm.items = response.data.data
-          if(vm.getAgent.type =='Sales Agent'){
-            vm.salesAgentDataArr=[]
+          if (vm.getAgent.type == 'Sales Agent') {
+            this.showLoading = false
+            vm.salesAgentDataArr = []
             vm.salesAgentDataArr.push(response.data.graph.new_lead)
             vm.salesAgentDataArr.push(response.data.graph.in_progress)
             vm.salesAgentDataArr.push(response.data.graph.on_hold)
@@ -413,26 +506,26 @@ export default {
             vm.salesAgentDataArr.push(response.data.graph.not_expected)
             vm.salesAgentDataArr.push(response.data.graph.applied)
             vm.salesAgentDataArr.push(response.data.graph.rejected)
-          }else{
-              vm.callCenterAgentDataArr=[]
+          } else {
+            this.showLoading = false
+            vm.callCenterAgentDataArr = []
             $.each(response.data.graph, function(index, data) {
-            vm.callCenterAgentDataArr.push(data)
-          })
+              vm.callCenterAgentDataArr.push(data)
+            })
           }
-          vm.filterByRange=false
+          // vm.filterByRange = false
         })
         .catch((errors) => {
+          this.showLoading = false
           var err = ''
-          if (errors)
-          vm.filterByRange=false
+          if (errors) vm.filterByRange = false
           this.$toast.error(errors.response.data.message, {
             position: 'top-right',
             closeButton: 'button',
             icon: true,
             rtl: false,
           })
-      });
-      
+        })
     },
 
     setStudent(data) {
@@ -465,14 +558,14 @@ export default {
         .catch((errors) => {
           var err = ''
 
-            if (errors)
-              this.$toast.error(errors.response.data.message, {
-                position: 'top-right',
-                closeButton: 'button',
-                icon: true,
-                rtl: false,
+          if (errors)
+            this.$toast.error(errors.response.data.message, {
+              position: 'top-right',
+              closeButton: 'button',
+              icon: true,
+              rtl: false,
+            })
         })
-      })
     },
     currentStudent(data) {
       this.$store.commit('SET_CURRENT_STUDENT', {})
@@ -493,19 +586,23 @@ export default {
         })
     },
     getAgentLeads(id) {
+      this.showLoading = true
       const vm = this
       axios
         .get(process.env.VUE_APP_API_URL + '/admin/agent-leads/' + id)
         .then((response) => {
+          this.showLoading = false
           // console.log("data::", response.data.data);
           vm.items = response.data.data
         })
         .catch((errors) => {
+          this.showLoading = false
           var err = ''
         })
     },
     getSaleAgentCounts(id) {
       const vm = this
+      vm.salesAgentDataArr = []
       axios
         .get(process.env.VUE_APP_API_URL + '/admin/sale-agent-chart/' + id)
         .then((response) => {
@@ -525,6 +622,7 @@ export default {
 
     getCallAgentCounts(id) {
       const vm = this
+      vm.callCenterAgentDataArr = []
       axios
         .get(process.env.VUE_APP_API_URL + '/admin/call-agent-chart/' + id)
         .then((response) => {
@@ -546,10 +644,10 @@ export default {
     // getAllStudentData: function (val) {
     //   this.getAllStudentData = val
     // },
-     range(NewVal,oldVal) {
+    range(NewVal, oldVal) {
       // console.log("old", oldVal);
-      this.filterByRange=true
-      this.filterBy(null)
+      this.filterByRange = true
+      this.filterBy('dates')
       // console.log("new", NewVal);
     },
   },
@@ -586,6 +684,9 @@ export default {
 }
 
 .showResults {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
   h6 {
     color: #000;
     text-align: right;

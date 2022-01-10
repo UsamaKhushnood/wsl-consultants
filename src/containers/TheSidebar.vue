@@ -16,7 +16,7 @@
     <!-- <div class="sidebar-wrapper"> -->
     <ul
       class="c-sidebar-nav h-100 ps"
-      style="position: relative; overflow: visible !important;"
+      style="position: relative; overflow: auto !important;"
     >
       <li class="c-sidebar-nav-title" v-if="getUser.type == 'admin'">
         Admin

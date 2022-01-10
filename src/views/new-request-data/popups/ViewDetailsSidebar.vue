@@ -271,7 +271,13 @@
               <p>{{ getSelectedStudent.email }}</p>
               <h5>Student Phone</h5>
               <p>{{ getSelectedStudent.phone }}</p>
-              <h5>Cv</h5>
+              <h5
+                v-if="
+                  getSelectedStudent.cvs.length > 0 || getSelectedStudent.cv
+                "
+              >
+                Cv
+              </h5>
               <div v-if="getSelectedStudent.student_info">
                 <h5>Qualification</h5>
                 <p>{{ getSelectedStudent.student_info.qualification }}</p>
@@ -282,17 +288,40 @@
                 <h5>Passing Year</h5>
                 <p>{{ getSelectedStudent.student_info.passing_year }}</p>
               </div>
-              <div v-if="getSelectedStudent.cvs" class="mb-4">
-                <a v-for="(data,index) in getSelectedStudent.cvs" :key="index"
+              <div
+                v-if="getSelectedStudent.cvs"
+                class="d-flex flex-column align-items-baseline"
+              >
+                <a
+                  v-for="(data, index) in getSelectedStudent.cvs"
+                  :key="index"
                   :href="ImageUrl + '/student/' + data.cv"
                   download
-                  class="mb-4 ml-2"
-                  >Download CV {{index}}
-                 
-                      <i class="fa fa-trash"  @click.prevent="deleteCv(data.id)"></i>
-                
-                  </a
+                  class="ml-2 f-14 mb-1"
                 >
+                  Download CV {{ index + 1 }}
+                  <b-icon
+                    icon="trash-fill"
+                    variant="danger"
+                    class="ml-2"
+                    @click.prevent="deleteCv(data.id)"
+                  ></b-icon>
+                </a>
+              </div>
+              <div v-if="getSelectedStudent.cv" class="mb-4">
+                <a
+                  :href="ImageUrl + '/student/' + getSelectedStudent.cv"
+                  download
+                  class="mb-4 ml-2 f-14"
+                >
+                  Download CV#
+                  <b-icon
+                    icon="trash-fill"
+                    variant="danger"
+                    class="ml-2"
+                    @click.prevent="deleteCv(data.id)"
+                  ></b-icon>
+                </a>
               </div>
               <h5 v-if="getSelectedStudent.screen_shot">Screenshot</h5>
               <div>
