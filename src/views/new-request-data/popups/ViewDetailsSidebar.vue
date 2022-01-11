@@ -166,7 +166,27 @@
                     {{ getSelectedStudent.created_at }}
                   </p>
                 </div>
-                <div class="col-sm-4 brdLeft" v-if="getUser.type == 'admin'">
+                <div
+                  class="col-sm-4 brdLeft"
+                  v-if="getUser.type == 'admin' && getSelectedStudent.website"
+                >
+                  <h6
+                    class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
+                    style="width: fit-content"
+                  >
+                    From Website
+                  </h6>
+
+                  <div class="text-center mb-2">
+                    <b-avatar variant="dark" size="80"> Website</b-avatar>
+                  </div>
+                </div>
+                <div
+                  class="col-sm-4 brdLeft"
+                  v-if="
+                    getUser.type == 'admin' && getSelectedStudent.call_agent
+                  "
+                >
                   <h6
                     class="font-bold bg-primary d-flex justify-content-center p-1 radius-10 text-white"
                     style="width: fit-content"
@@ -177,7 +197,7 @@
                   <div class="text-center mb-2">
                     <b-avatar variant="dark" size="80">
                       {{
-                        'Agent Name'
+                        getSelectedStudent.call_agent.first_name
                           .split(' ')
                           .map((i) => i.charAt(0))
                           .join('')
