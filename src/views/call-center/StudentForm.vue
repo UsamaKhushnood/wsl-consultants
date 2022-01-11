@@ -1,5 +1,5 @@
 <template>
-  <div class="student-form-page mt-5 ">
+  <div class="student-form-page mt-5">
     <form class="form-group pb-5 position-relative" id="formStudent">
       <div class="row bg-white p-5">
         <div class="col-md-12 mb-4">
@@ -15,7 +15,7 @@
               v-if="getUser.id"
               variant="success"
               @click="getUrl()"
-              class="w-25 mt-4 ml-auto "
+              class="w-25 mt-4 ml-auto"
               squared
               >Copy Url</b-button
             >
@@ -178,19 +178,20 @@
   </div>
 </template>
 <script>
-import axios from "axios";
-import { mapGetters } from "vuex";
-import pakistan_cities from "./cities";
+import axios from 'axios'
+import { mapGetters } from 'vuex'
+import pakistan_cities from './cities'
 import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 export default {
-  mixins:[getSelectedStudentMix],
+  name: 'StudentForm',
+  mixins: [getSelectedStudentMix],
   data() {
     return {
       selected: null,
       showBtn: false,
-      fileRecords: "",
-      uploadUrl: "",
-      uploadHeaders: { "X-Test-Header": "vue-file-agent" },
+      fileRecords: '',
+      uploadUrl: '',
+      uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
       fileRecordsForUpload: [], // maintain an upload queue
       first_name: null,
       last_name: null,
@@ -211,12 +212,12 @@ export default {
       options: [],
       cities_options: [],
       formOverlay: false,
-      uploadHeaders: { "X-Test-Header": "vue-file-agent" },
+      uploadHeaders: { 'X-Test-Header': 'vue-file-agent' },
       // options: ["Lahore", "Karachi", "Islamabad", "Multan"],
-    };
+    }
   },
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(['getUser']),
     // 	isDisabled: function(){
     // 	return !this.showBtn;
     // }
@@ -224,142 +225,143 @@ export default {
 
   methods: {
     trigger() {
-      this.$refs.sendReq.click();
+      this.$refs.sendReq.click()
     },
     changeBtnStatus() {
-      this.showBtn =true;
+      this.showBtn = true
     },
     resetfeilds() {
-      let vm =this;
-       vm.first_name = ''; 
-       vm.last_name = ''; 
-      vm.country = ''; 
-       vm.qualification = ''; 
-       vm.cgpa = ''; 
-       vm.major_sub = ''; 
-       vm.passing = ''; 
-       vm.occupation = ''; 
-       vm.question = ''; 
-       vm.country = ''; 
-        vm.city = ''; 
-        vm.email = ''; 
-       vm.cv = ''; 
-       vm.whatsapp_num = ''; 
-       vm.phone = ''; 
+      let vm = this
+      vm.first_name = ''
+      vm.last_name = ''
+      vm.country = ''
+      vm.qualification = ''
+      vm.cgpa = ''
+      vm.major_sub = ''
+      vm.passing = ''
+      vm.occupation = ''
+      vm.question = ''
+      vm.country = ''
+      vm.city = ''
+      vm.email = ''
+      vm.cv = ''
+      vm.whatsapp_num = ''
+      vm.phone = ''
     },
     addStudent() {
       // this.uploadFiles();
-      this.formOverlay = true;
-      let call_agent_id = "";
-      const vm = this;
-      let url = "";
+      this.formOverlay = true
+      let call_agent_id = ''
+      const vm = this
+      let url = ''
       if (vm.getUser.type) {
         url =
-          vm.getUser.type == "admin"
-            ? process.env.VUE_APP_API_URL + "/admin/students"
-            : process.env.VUE_APP_API_URL + "/call-agent/students";
+          vm.getUser.type == 'admin'
+            ? process.env.VUE_APP_API_URL + '/admin/students'
+            : process.env.VUE_APP_API_URL + '/call-agent/students'
       } else {
-        url = process.env.VUE_APP_API_URL + "/students";
+        url = process.env.VUE_APP_API_URL + '/students'
       }
-       var formData = new FormData();
-      var cv = document.querySelector("#cv");
-      formData.append("first_name", vm.first_name);
-      formData.append("last_name", vm.last_name);
-      formData.append("qualification", vm.qualification);
-      formData.append("cgpa", vm.cgpa);
-      formData.append("major_sub", vm.major_sub);
-      formData.append("passing_year", vm.passing);
-      formData.append("occupation", vm.occupation);
-      formData.append("question", vm.question);
-      formData.append("country", vm.country_name);
-      formData.append("city", vm.city_name);
-      formData.append("email", vm.email);
-      formData.append("whatsapp_num", vm.whatsapp_num);
-      formData.append("phone", vm.phone);
-      formData.append("call_agent_id", this.$route.query.call_agent_id
-            ? atob(this.$route.query.call_agent_id)
-            : vm.getUser.id);
-            if(typeof cv.files[0] != "undefined"){
-              console.log(typeof cv.files[0])
-              formData.append("cv", cv.files ? cv.files[0] : "");
-            }
+      var formData = new FormData()
+      var cv = document.querySelector('#cv')
+      formData.append('first_name', vm.first_name)
+      formData.append('last_name', vm.last_name)
+      formData.append('qualification', vm.qualification)
+      formData.append('cgpa', vm.cgpa)
+      formData.append('major_sub', vm.major_sub)
+      formData.append('passing_year', vm.passing)
+      formData.append('occupation', vm.occupation)
+      formData.append('question', vm.question)
+      formData.append('country', vm.country_name)
+      formData.append('city', vm.city_name)
+      formData.append('email', vm.email)
+      formData.append('whatsapp_num', vm.whatsapp_num)
+      formData.append('phone', vm.phone)
+      formData.append(
+        'call_agent_id',
+        this.$route.query.call_agent_id
+          ? atob(this.$route.query.call_agent_id)
+          : vm.getUser.id
+      )
+      if (typeof cv.files[0] != 'undefined') {
+        console.log(typeof cv.files[0])
+        formData.append('cv', cv.files ? cv.files[0] : '')
+      }
       axios
         .post(url, formData, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         })
         .then((response) => {
-     
-          vm.formOverlay = false;
-          vm.BtnStatus = false;
+          vm.formOverlay = false
+          vm.BtnStatus = false
           // vm.$store.commit("SET_SPINNER", false);
-          vm.getStudent();
-          vm.$toast.success("Add Student Successfully", {
-            position: "top-right",
-            closeButton: "button",
+          vm.getStudent()
+          vm.$toast.success('Add Student Successfully', {
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
+          })
           vm.resetfeilds()
-          vm.$refs.formStudent.reset() 
+          vm.$refs.formStudent.reset()
           // vm.$store.commit('SET_SPINNER',false);
         })
         .catch((errors) => {
-          vm.formOverlay = false;
-          if(errors.response){
+          vm.formOverlay = false
+          if (errors.response) {
             vm.$toast.error(errors.response.data.message, {
-              position: "top-right",
-              closeButton: "button",
+              position: 'top-right',
+              closeButton: 'button',
               icon: true,
               rtl: false,
-            });
+            })
           }
           // vm.$store.commit('SET_SPINNER',false);
-        });
+        })
     },
     sendTo(url) {
-      window.open(url, "_blank");
+      window.open(url, '_blank')
     },
 
     getUrl() {
-      const vm = this;
+      const vm = this
       // first name will replace with password
 
       var credentials = `${process.env.VUE_APP_URL +
-        "form?call_agent_id=" +
-        btoa(this.getUser.id)}`;
+        'form?call_agent_id=' +
+        btoa(this.getUser.id)}`
       navigator.clipboard.writeText(credentials).then(
         function() {
-          vm.isModalVisible = false;
-          vm.$toast.success("Successfully Copied", {
-            position: "top-right",
-            closeButton: "button",
+          vm.isModalVisible = false
+          vm.$toast.success('Successfully Copied', {
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
-         
+          })
         },
         function() {
-          vm.isModalVisible = false;
-          vm.$toast.error("Something went wrong", {
-            position: "top-right",
-            closeButton: "button",
+          vm.isModalVisible = false
+          vm.$toast.error('Something went wrong', {
+            position: 'top-right',
+            closeButton: 'button',
             icon: true,
             rtl: false,
-          });
+          })
         }
-      );
+      )
     },
     handleCvUpload(event) {
-      let vm = this;
-      var image = event.target.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(image);
+      let vm = this
+      var image = event.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(image)
       reader.onload = (e) => {
-        vm.fileRecords = e.target.result;
-        console.log(this.fileRecords);
-      };
+        vm.fileRecords = e.target.result
+        console.log(this.fileRecords)
+      }
     },
     uploadFiles: function() {
       // Using the default uploader. You may use another uploader instead.
@@ -367,8 +369,8 @@ export default {
         this.uploadUrl,
         this.uploadHeaders,
         this.fileRecordsForUpload
-      );
-      this.fileRecordsForUpload = [];
+      )
+      this.fileRecordsForUpload = []
     },
     deleteUploadedFile: function(fileRecord) {
       // Using the default uploader. You may use another uploader instead.
@@ -376,49 +378,49 @@ export default {
         this.uploadUrl,
         this.uploadHeaders,
         fileRecord
-      );
+      )
     },
     filesSelected: function(fileRecordsNewlySelected) {
       var validFileRecords = fileRecordsNewlySelected.filter(
         (fileRecord) => !fileRecord.error
-      );
+      )
       this.fileRecordsForUpload = this.fileRecordsForUpload.concat(
         validFileRecords
-      );
+      )
     },
     onBeforeDelete: function(fileRecord) {
-      var i = this.fileRecordsForUpload.indexOf(fileRecord);
+      var i = this.fileRecordsForUpload.indexOf(fileRecord)
       if (i !== -1) {
         // queued file, not yet uploaded. Just remove from the arrays
-        this.fileRecordsForUpload.splice(i, 1);
-        var k = this.fileRecords.indexOf(fileRecord);
-        if (k !== -1) this.fileRecords.splice(k, 1);
+        this.fileRecordsForUpload.splice(i, 1)
+        var k = this.fileRecords.indexOf(fileRecord)
+        if (k !== -1) this.fileRecords.splice(k, 1)
       } else {
-        if (confirm("Are you sure you want to delete?")) {
-          this.$refs.vueFileAgent.deleteFileRecord(fileRecord); // will trigger 'delete' event
+        if (confirm('Are you sure you want to delete?')) {
+          this.$refs.vueFileAgent.deleteFileRecord(fileRecord) // will trigger 'delete' event
         }
       }
     },
     fileDeleted: function(fileRecord) {
-      var i = this.fileRecordsForUpload.indexOf(fileRecord);
+      var i = this.fileRecordsForUpload.indexOf(fileRecord)
       if (i !== -1) {
-        this.fileRecordsForUpload.splice(i, 1);
+        this.fileRecordsForUpload.splice(i, 1)
       } else {
-        this.deleteUploadedFile(fileRecord);
+        this.deleteUploadedFile(fileRecord)
       }
     },
   },
   created() {
     //  this.$store.commit('SET_SPINNER',false);
     // this.getCountries();
-    this.cities_options = pakistan_cities;
-    if (!this.$route.query.call_agent_id) {
-      if (!this.getUser) {
-        this.$router.push({ path: "/login" });
-      }
-    }
+    this.cities_options = pakistan_cities
+    // if (!this.$route.query.call_agent_id) {
+    //   if (!this.getUser) {
+    //     this.$router.push({ path: "/login" });
+    //   }
+    // }
   },
-};
+}
 </script>
 <style lang="scss">
 .student-form-page {
