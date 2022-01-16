@@ -48,13 +48,20 @@
         </div>
         <div class="col-md-6 mt-2">
           <div class="form-element">
-            <label for="whatsapp">Whatsapp Number</label>
+            <label for="whatsapp"
+              >Whatsapp Number <span class="text-danger">*</span></label
+            >
             <input type="text" v-model="whatsapp_num" id="whatsapp" />
+            <span class="error-msg text-danger f-12" v-show="showWhatsappErr"
+              >Whatsapp is required</span
+            >
           </div>
         </div>
         <div class="col-md-6 mt-2">
           <div class="form-element">
-            <label for="preferredCountry">Preffered Country</label>
+            <label for="preferredCountry"
+              >Preffered Country <span class="text-danger">*</span></label
+            >
             <!-- <b-form-select
               id="preferredCountry"
               @change="getCities()"
@@ -77,6 +84,11 @@
               ]"
             >
             </b-form-select>
+            <span
+              class="error-msg text-danger f-12"
+              v-show="showPrefferedCountryErr"
+              >Preffered Country is required</span
+            >
           </div>
         </div>
         <div class="col-12 mt-3 mb-0">
@@ -187,6 +199,8 @@ export default {
   mixins: [getSelectedStudentMix],
   data() {
     return {
+      showWhatsappErr: false,
+      showPrefferedCountryErr: false,
       selected: null,
       showBtn: false,
       fileRecords: '',
@@ -232,94 +246,130 @@ export default {
     },
     resetfeilds() {
       let vm = this
-      vm.first_name = ''
-      vm.last_name = ''
-      vm.country = ''
-      vm.qualification = ''
-      vm.cgpa = ''
-      vm.major_sub = ''
-      vm.passing = ''
-      vm.occupation = ''
-      vm.question = ''
-      vm.country = ''
-      vm.city = ''
-      vm.email = ''
-      vm.cv = ''
-      vm.whatsapp_num = ''
-      vm.phone = ''
+      vm.first_name = null
+      vm.last_name = null
+      vm.country = null
+      vm.qualification = null
+      vm.cgpa = null
+      vm.major_sub = null
+      vm.passing = null
+      vm.occupation = null
+      vm.question = null
+      vm.country = null
+      vm.city = null
+      vm.email = null
+      vm.cv = null
+      vm.whatsapp_num = null
+      vm.phone = null
+      vm.showWhatsappErr = false
+      vm.showPrefferedCountryErr = false
     },
     addStudent() {
       // this.uploadFiles();
-      this.formOverlay = true
-      let call_agent_id = ''
       const vm = this
       let url = ''
-      if (vm.getUser.type) {
-        url =
-          vm.getUser.type == 'admin'
-            ? process.env.VUE_APP_API_URL + '/admin/students'
-            : process.env.VUE_APP_API_URL + '/call-agent/students'
-      } else {
-        url = process.env.VUE_APP_API_URL + '/students'
+      vm.showWhatsappErr = false
+      vm.showPrefferedCountryErr = false
+
+      let errors = []
+      if (
+        vm.whatsapp_num != null
+          ? vm.whatsapp_num.trim() === ''
+          : '' || vm.whatsapp_num === null
+      ) {
+        vm.showWhatsappErr = true
+        errors.push('Whatsapp is Required')
+        console.log(errors)
       }
-      var formData = new FormData()
-      var cv = document.querySelector('#cv')
-      formData.append('first_name', vm.first_name)
-      formData.append('last_name', vm.last_name)
-      formData.append('qualification', vm.qualification)
-      formData.append('cgpa', vm.cgpa)
-      formData.append('major_sub', vm.major_sub)
-      formData.append('passing_year', vm.passing)
-      formData.append('occupation', vm.occupation)
-      formData.append('question', vm.question)
-      formData.append('country', vm.country_name)
-      formData.append('city', vm.city_name)
-      formData.append('email', vm.email)
-      formData.append('whatsapp_num', vm.whatsapp_num)
-      formData.append('phone', vm.phone)
-      formData.append(
-        'call_agent_id',
-        this.$route.query.call_agent_id
-          ? atob(this.$route.query.call_agent_id)
-          : vm.getUser.id
-      )
-      if (typeof cv.files[0] != 'undefined') {
-        console.log(typeof cv.files[0])
-        formData.append('cv', cv.files ? cv.files[0] : '')
+      if (
+        vm.country_name
+          ? vm.country_name.trim() === ''
+          : '' || vm.country_name === null
+      ) {
+        vm.showPrefferedCountryErr = true
+        errors.push('Prefferred Country is Required')
       }
-      axios
-        .post(url, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((response) => {
-          vm.formOverlay = false
-          vm.BtnStatus = false
-          // vm.$store.commit("SET_SPINNER", false);
-          vm.getStudent()
-          vm.$toast.success('Add Student Successfully', {
+      if (errors.length > 0) {
+        console.log('validate form please')
+        errors.forEach((error) => {
+          vm.$toast.error(error, {
             position: 'top-right',
             closeButton: 'button',
             icon: true,
             rtl: false,
           })
-          vm.resetfeilds()
-          vm.$refs.formStudent.reset()
-          // vm.$store.commit('SET_SPINNER',false);
         })
-        .catch((errors) => {
-          vm.formOverlay = false
-          if (errors.response) {
-            vm.$toast.error(errors.response.data.message, {
+
+        return
+      } else {
+        vm.formOverlay = true
+        if (vm.getUser.type) {
+          url =
+            vm.getUser.type == 'admin'
+              ? process.env.VUE_APP_API_URL + '/admin/students'
+              : process.env.VUE_APP_API_URL + '/call-agent/students'
+        } else {
+          url = process.env.VUE_APP_API_URL + '/students'
+        }
+        var formData = new FormData()
+        var cv = document.querySelector('#cv')
+        formData.append('first_name', vm.first_name)
+        formData.append('last_name', vm.last_name)
+        formData.append('qualification', vm.qualification)
+        formData.append('cgpa', vm.cgpa)
+        formData.append('major_sub', vm.major_sub)
+        formData.append('passing_year', vm.passing)
+        formData.append('occupation', vm.occupation)
+        formData.append('question', vm.question)
+        formData.append('country', vm.country_name)
+        formData.append('city', vm.city_name)
+        formData.append('email', vm.email)
+        formData.append('whatsapp_num', vm.whatsapp_num)
+        formData.append('phone', vm.phone)
+        formData.append(
+          'call_agent_id',
+          this.$route.query.call_agent_id
+            ? atob(this.$route.query.call_agent_id)
+            : vm.getUser.id
+        )
+        if (typeof cv.files[0] != 'undefined') {
+          console.log(typeof cv.files[0])
+          formData.append('cv', cv.files ? cv.files[0] : '')
+        }
+        axios
+          .post(url, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            vm.formOverlay = false
+            vm.BtnStatus = false
+            // vm.$store.commit("SET_SPINNER", false);
+            vm.getStudent()
+            vm.$toast.success('Add Student Successfully', {
               position: 'top-right',
               closeButton: 'button',
               icon: true,
               rtl: false,
             })
-          }
-          // vm.$store.commit('SET_SPINNER',false);
-        })
+            vm.resetfeilds()
+            vm.$refs.formStudent.reset()
+            // vm.$store.commit('SET_SPINNER',false);
+          })
+          .catch((errors) => {
+            vm.formOverlay = false
+            if (errors.response) {
+              vm.$toast.error(errors.response.data.message, {
+                position: 'top-right',
+                closeButton: 'button',
+                icon: true,
+                rtl: false,
+              })
+            }
+            // vm.$store.commit('SET_SPINNER',false);
+          })
+      }
     },
     sendTo(url) {
       window.open(url, '_blank')
