@@ -206,6 +206,18 @@
                 <p class="mb-0">{{ index + 1 }}</p>
               </td>
             </template>
+            <template #created_at="{item}">
+              <td class="text-center">
+                <span>
+                  {{ item.created_at }}
+                </span>
+                <span v-show="item.website">
+                  <span class="badge badge-success badge-pill ml-1">
+                    Website
+                  </span>
+                </span>
+              </td>
+            </template>
             <template #whatsapp_num="{item}">
               <td>
                 <a
@@ -389,25 +401,25 @@ export default {
   computed: {
     ...mapGetters(['getUser', 'getAllStudent', 'getAgent', 'getCurrentAgent']),
     ...mapState(['allStudent', 'allStudentData']), // "getAllStudentData"
-    /* eslint-disable */ totalPages: function() {
-      if (this.resultCount == 0) {
-        return 1
-      } else {
-        return Math.ceil(this.resultCount / this.itemsPerPage)
-      }
-    },
-    /* eslint-disable */
-    paginate: function() {
-      if (!this.articles || this.articles.length != this.articles.length) {
-        return
-      }
-      this.resultCount = this.articles.length
-      if (this.currentPage >= this.totalPages) {
-        this.currentPage = this.totalPages
-      }
-      var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
-      return this.articles.slice(index, index + this.itemsPerPage)
-    },
+    // /* eslint-disable */ totalPages: function() {
+    //   if (this.resultCount == 0) {
+    //     return 1
+    //   } else {
+    //     return Math.ceil(this.resultCount / this.itemsPerPage)
+    //   }
+    // },
+    // /* eslint-disable */
+    // paginate: function() {
+    //   if (!this.articles || this.articles.length != this.articles.length) {
+    //     return
+    //   }
+    //   this.resultCount = this.articles.length
+    //   if (this.currentPage >= this.totalPages) {
+    //     this.currentPage = this.totalPages
+    //   }
+    //   var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+    //   return this.articles.slice(index, index + this.itemsPerPage)
+    // },
     salesAgentData() {
       return [
         {
@@ -517,7 +529,7 @@ export default {
         })
         .catch((errors) => {
           this.showLoading = false
-          var err = ''
+
           if (errors) vm.filterByRange = false
           this.$toast.error(errors.response.data.message, {
             position: 'top-right',

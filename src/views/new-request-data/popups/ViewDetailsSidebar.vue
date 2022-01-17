@@ -291,13 +291,7 @@
               <p>{{ getSelectedStudent.email }}</p>
               <h5>Student Phone</h5>
               <p>{{ getSelectedStudent.phone }}</p>
-              <h5
-                v-if="
-                  getSelectedStudent.cvs.length > 0 || getSelectedStudent.cv
-                "
-              >
-                Cv
-              </h5>
+
               <div v-if="getSelectedStudent.student_info">
                 <h5>Qualification</h5>
                 <p>{{ getSelectedStudent.student_info.qualification }}</p>
@@ -308,6 +302,13 @@
                 <h5>Passing Year</h5>
                 <p>{{ getSelectedStudent.student_info.passing_year }}</p>
               </div>
+              <h5
+                v-if="
+                  getSelectedStudent.cvs.length > 0 || getSelectedStudent.cv
+                "
+              >
+                Cv
+              </h5>
               <div
                 v-if="getSelectedStudent.cvs"
                 class="d-flex flex-column align-items-baseline"

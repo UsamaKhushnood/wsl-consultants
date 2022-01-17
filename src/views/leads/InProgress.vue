@@ -59,7 +59,7 @@
                           </td>
                         </template>
                         <template #assigned_to="{item}">
-                          <td>
+                          <td class="text-center">
                             <span
                               v-if="item.agent == null"
                               class="badge badge-pill badge-danger"
@@ -72,6 +72,11 @@
                                   ? 'unassigned'
                                   : item.agent.first_name
                               }}
+                            </span>
+                            <span v-show="item.website">
+                              <div class="badge badge-success badge-pill ml-1">
+                                Website
+                              </div>
                             </span>
                           </td>
                         </template>
