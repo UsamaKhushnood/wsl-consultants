@@ -304,10 +304,12 @@
               </div>
               <h5
                 v-if="
-                  getSelectedStudent.cvs.length > 0 || getSelectedStudent.cv
+                  typeof getSelectedStudent.cvs != undefined
+                    ? getSelectedStudent.cvs.length > 0
+                    : ''
                 "
               >
-                Cv
+                Multiple Cv
               </h5>
               <div
                 v-if="getSelectedStudent.cvs"
@@ -329,6 +331,7 @@
                   ></b-icon>
                 </a>
               </div>
+              <h5 v-if="getSelectedStudent.cv">Single CV</h5>
               <div v-if="getSelectedStudent.cv" class="mb-4">
                 <a
                   :href="ImageUrl + '/student/' + getSelectedStudent.cv"

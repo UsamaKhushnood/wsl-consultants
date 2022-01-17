@@ -150,6 +150,7 @@ export default {
     phone: '',
     whatsapp_num: '',
     cv: null,
+    cvs: null,
     screenShot: '',
     imageList: [],
     uploadedImages: [],
