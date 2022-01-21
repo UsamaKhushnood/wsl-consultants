@@ -49,6 +49,18 @@
                         ]"
                         pagination
                       >
+                        <template #country="{item}">
+                          <td class="text-center">
+                            <span>
+                              {{ item.country }}
+                            </span>
+                            <span v-show="item.website">
+                              <div class="badge badge-success badge-pill ml-1">
+                                Website
+                              </div>
+                            </span>
+                          </td>
+                        </template>
                         <template #AssignedTo="{item}">
                           <td>
                             <span
