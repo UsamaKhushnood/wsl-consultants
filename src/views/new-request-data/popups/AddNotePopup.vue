@@ -43,16 +43,10 @@
               </p>
             </div>
           </div>
-            <div class="form-element">
-              <label for="cv">Student CV:</label>
-              <input
-                type="file"
-                ref="file"
-                multiple
-                required
-                id="cv"
-              />
-            </div>
+          <div class="form-element">
+            <label for="cv">Student CV:</label>
+            <input type="file" ref="file" multiple required id="cv" />
+          </div>
           <div class="row mt-4 mr-2 justify-content-end">
             <b-button
               variant="dark"
@@ -80,7 +74,7 @@ import VueUploadMultipleImage from 'vue-upload-multiple-image'
 import { getSelectedStudentMix } from '@/mixins/getSelectedStudent.js'
 export default {
   props: ['propsindex', 'item'],
-  mixins:[getSelectedStudentMix],
+  mixins: [getSelectedStudentMix],
   computed: {
     ...mapGetters(['getSelectedStudentId', 'getUser']),
   },
@@ -98,25 +92,29 @@ export default {
   methods: {
     addNote() {
       const vm = this
-      if (vm.text == '' && vm.imageList.length == 0 && this.$refs.file.files.length < 0) {
+      if (
+        vm.text == '' &&
+        vm.imageList.length == 0 &&
+        this.$refs.file.files.length < 0
+      ) {
         alert('please Add one Value')
         return
       } else {
         this.formOverlay = true
         let url = vm.getUser.type == 'admin' ? '/admin/notes' : '/notes'
 
-        var formData = new FormData();
-      formData.append("student_id", vm.getSelectedStudentId);
+        var formData = new FormData()
+        formData.append('student_id', vm.getSelectedStudentId)
 
-        for( var i = 0; i < this.$refs.file.files.length; i++ ){
-                let file = this.$refs.file.files[i];
-                formData.append('cv[' + i + ']', file);
-            }
+        for (var i = 0; i < this.$refs.file.files.length; i++) {
+          let file = this.$refs.file.files[i]
+          formData.append('cv[' + i + ']', file)
+        }
         //  for multi cvs
-        if(this.$refs.file.files.length > 0){
+        if (this.$refs.file.files.length > 0) {
           axios
-          .post(process.env.VUE_APP_API_URL + url, formData)
-          .then((response) => {
+            .post(process.env.VUE_APP_API_URL + url, formData)
+            .then((response) => {
               vm.$refs.cancel.click()
               this.formOverlay = false
               vm.$toast.success('Notes Add Successfully', {
@@ -128,10 +126,9 @@ export default {
               vm.text = ''
               vm.imageList = []
               vm.getStudent()
-          })
-
+            })
         }
-        
+
         // for the screenshot
         axios
           .post(process.env.VUE_APP_API_URL + url, {
@@ -155,7 +152,6 @@ export default {
           })
           .catch((errors) => {
             var err = ''
-           
           })
       }
     },

@@ -10,12 +10,22 @@
         <div class="clearfix">
           <div class="row">
             <div class="col-sm-12">
-              <button
-                class="btn btn-dark btn-sm ml-auto d-block mb-2"
-                v-b-modal="'create-lead-modal'"
-              >
-                Create New Lead
-              </button>
+              <div class="d-flex">
+                <button
+                  class="btn btn-dark btn-sm ml-auto d-block mb-2"
+                  v-b-modal="'create-lead-modal'"
+                >
+                  Create New Lead
+                </button>
+                <button
+                  class="btn btn-danger btn-sm ml-2 d-block mb-2"
+                  v-b-modal="'successfully-added-modal' + 1"
+                  v-if="selectedQuries.length >= 1"
+                >
+                  Assign {{ selectedQuries.length }}
+                  {{ selectedQuries.length === 1 ? 'Lead' : 'Leads' }}
+                </button>
+              </div>
               <CreateNewLead />
               <!-- <EditLead  /> -->
 
@@ -40,10 +50,18 @@
                             key: 'sr',
                             sorter: false,
                             filter: false,
-                            _style: 'width:50px',
+                            _style: 'width: 50px',
                             label: 'Sr#',
                           },
-                          'created_at',
+                          {
+                            key: 'select',
+                            _style: 'width: 50px',
+                            _classes: 'text-center',
+                            filter: false,
+                            sorter: false,
+                          },
+
+                          'first_name',
                           'whatsapp_num',
                           'country',
                           'assigned_to',
@@ -55,6 +73,41 @@
                         ]"
                         pagination
                       >
+                        <template #select-filter="{}">
+                          <td
+                            class="selectionBox text-center selectAll d-flex align-items-center justify-content-center"
+                            style="border: 0"
+                          >
+                            <input
+                              type="checkbox"
+                              id="selectAllCheck"
+                              :checked="isAllQueriesSelect"
+                              @click="selectAllQuries"
+                              class=" pointer"
+                            />
+
+                            <!-- <label for="selectAllCheck" class="mb-0 pointer">
+                              {{
+                                isAllQueriesSelect
+                                  ? 'Deselect All'
+                                  : 'Select All'
+                              }}
+                            </label> -->
+                          </td>
+                        </template>
+                        <template #select="{item}">
+                          <td
+                            class="selectionBox checkbox tableCheckbox text-center"
+                          >
+                            <input
+                              type="checkbox"
+                              :value="item.id"
+                              v-model="selectedQuries"
+                              @click="selectQuries"
+                              class=" pointer"
+                            />
+                          </td>
+                        </template>
                         <template #country="{item}">
                           <td class="text-center">
                             <span>
@@ -285,10 +338,13 @@ export default {
   mixins: [getSelectedStudentMix],
   data: () => ({
     items: [],
+    selectedQuries: [],
     deleteStudentId: '',
     formOverlay: true,
+    isAllQueriesSelect: false,
     resultCount: 0,
     user_for_pro: '',
+    leadsType: '',
   }),
   computed: {
     ...mapGetters(['getUser', 'getAllStudentData', 'getItems']),
@@ -299,6 +355,25 @@ export default {
     },
   },
   methods: {
+    selectAllQuries() {
+      if (this.isAllQueriesSelect) {
+        this.selectedQuries = []
+        this.isAllQueriesSelect = false
+      } else {
+        this.selectedQuries = []
+        for (var item in this.getItems) {
+          this.selectedQuries.push(this.getItems[item].id)
+        }
+        this.isAllQueriesSelect = true
+      }
+    },
+    selectQuries() {
+      if (this.selectedQuries.length !== this.getItems.length) {
+        this.isAllQueriesSelect = false
+      } else {
+        this.isAllQueriesSelect = true
+      }
+    },
     setStudent(data) {
       // this.deleteStudentId = data
       this.$store.commit('SET_CURRENT_STUDENT', null)
@@ -308,7 +383,6 @@ export default {
     },
     changeStatus(item) {
       const vm = this
-
       let url = ''
       if (vm.getUser.type == 'admin') {
         url = process.env.VUE_APP_API_URL + '/admin/status/' + item.id

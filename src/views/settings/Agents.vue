@@ -40,6 +40,14 @@
                 View Profile
               </b-button>
             </router-link>
+            <b-button
+              size="sm"
+              variant="link"
+              v-b-modal="'edit-agent-modal' + data.id"
+            >
+              Edit Profile
+            </b-button>
+            <EditAgentPopup :propsindex="data.id" />
           </div>
         </div>
         <hr />
@@ -129,7 +137,9 @@
 </template>
 <script>
 import axios from 'axios'
+import EditAgentPopup from '../new-request-data/popups/EditAgentPopup.vue'
 export default {
+  components: { EditAgentPopup },
   data() {
     return {
       items: [],
