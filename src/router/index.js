@@ -11,13 +11,7 @@ const LoginTimeSettings = () => import('@/views/settings/LoginTimeSettings')
 const Agents = () => import('@/views/settings/Agents')
 const Agent = () => import('@/views/profiles/agent')
 const AllLeads = () => import('@/views/leads/AllLeads')
-const Applied = () => import('@/views/leads/Applied')
-const Expected = () => import('@/views/leads/Expected')
-const NotExpected = () => import('@/views/leads/NotExpected')
-const NewLeads = () => import('@/views/leads/NewLeads')
-const InProgress = () => import('@/views/leads/InProgress')
-const OnHold = () => import('@/views/leads/OnHold')
-const Rejected = () => import('@/views/leads/Rejected')
+
 // Views - Pages
 const StudentForm = () => import('@/views/call-center/StudentForm')
 const Page404 = () => import('@/views/pages/Page404')
@@ -86,46 +80,10 @@ function configRoutes() {
           component: Agent,
         },
         {
-          path: 'all-leads',
-          name: 'All Leads',
+          path: 'leads/:type',
+          name: 'Leads',
           component: AllLeads,
         },
-        {
-          path: 'leads/applied',
-          name: 'Applied Leads',
-          component: Applied,
-        },
-        {
-          path: 'leads/expected',
-          name: 'Expected Leads',
-          component: Expected,
-        },
-        {
-          path: 'leads/not-expected',
-          name: 'Not Expected Leads',
-          component: NotExpected,
-        },
-        {
-          path: 'leads/new-leads',
-          name: 'New Leads',
-          component: NewLeads,
-        },
-        {
-          path: 'leads/in-progress',
-          name: 'In Progress Leads',
-          component: InProgress,
-        },
-        {
-          path: 'leads/rejected',
-          name: 'Rejected Leads',
-          component: Rejected,
-        },
-        {
-          path: 'leads/on-hold',
-          name: 'On Hold Leads',
-          component: OnHold,
-        },
-
         {
           path: '*',
           name: 'Page Not Found',

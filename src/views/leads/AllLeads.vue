@@ -4,7 +4,10 @@
       <div class="vd_content clearfix">
         <div class="vd_title-section clearfix">
           <div class="vd_panel-header">
-            <h1><i class="fas fa-cubes"></i> All Leads</h1>
+            <h1>
+              <i class="fas fa-cubes mr-2"></i
+              >{{ $route.params.name ? $route.params.name : $route.name }}
+            </h1>
           </div>
         </div>
         <div class="clearfix">
@@ -18,14 +21,23 @@
                   Create New Lead
                 </button>
                 <button
-                  class="btn btn-danger btn-sm ml-2 d-block mb-2"
+                  class="btn btn-warning btn-sm ml-2 d-block mb-2"
                   v-b-modal="'successfully-added-modal' + 1"
                   v-if="selectedQuries.length >= 1"
                 >
                   Assign {{ selectedQuries.length }}
                   {{ selectedQuries.length === 1 ? 'Lead' : 'Leads' }}
                 </button>
+                <button
+                  class="btn btn-danger btn-sm ml-2 d-block mb-2"
+                  v-b-modal="'deny-request-modal' + 1"
+                  v-if="selectedQuries.length >= 1"
+                >
+                  Delete {{ selectedQuries.length }}
+                  {{ selectedQuries.length === 1 ? 'Lead' : 'Leads' }}
+                </button>
               </div>
+
               <CreateNewLead />
               <!-- <EditLead  /> -->
 
@@ -344,7 +356,6 @@ export default {
     isAllQueriesSelect: false,
     resultCount: 0,
     user_for_pro: '',
-    leadsType: '',
   }),
   computed: {
     ...mapGetters(['getUser', 'getAllStudentData', 'getItems']),
@@ -406,13 +417,6 @@ export default {
         })
         .catch((errors) => {
           var err = ''
-          // console.log("(error.response.status", errors.response.status);
-          // console.log("errors.response.data", errors.response.data.errors);
-          // console.log("errors.response.data", errors.response.data);
-          // if (errors.response.data.message == "Login Time Expire") {
-          //   console.log("errors.response.data", errors.response.data.message);
-          //   localStorage.setItem("token", null);
-          // }
           if (errors)
             this.$toast.error(err, {
               position: 'top-right',
@@ -429,6 +433,7 @@ export default {
   },
   mounted() {
     this.getStudent()
+    console.log(this.$route.params.type, 'route info')
   },
   watch: {
     // getAllStudentData: function (val) {

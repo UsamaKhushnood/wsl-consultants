@@ -110,7 +110,10 @@
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/all-leads"
+              :to="{
+                name: 'Leads',
+                params: { type: 'all-leads', name: 'All Leads' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -125,10 +128,31 @@
               </div>
             </router-link>
           </li>
+          <!-- <li class="c-sidebar-nav-item">
+            <router-link
+              active-class="c-active"
+              to="/dashboard/all-leads"
+              class="c-sidebar-nav-link"
+              target="_self"
+            >
+              <span v-if="getUser.type == 'admin'">
+                All Leads
+              </span>
+              <span v-else>
+                My Leads
+              </span>
+              <div class="badge badge-primary" v-if="getLeadCount">
+                {{ getLeadCount.all_leads }}
+              </div>
+            </router-link>
+          </li> -->
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/new-leads"
+              :to="{
+                name: 'Leads',
+                params: { type: 'new-leads', name: 'New Leads' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -141,7 +165,10 @@
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/in-progress"
+              :to="{
+                name: 'Leads',
+                params: { type: 'progress-leads', name: 'In Progress' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -154,7 +181,10 @@
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/on-hold"
+              :to="{
+                name: 'Leads',
+                params: { type: 'hold-leads', name: 'On Hold' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -168,7 +198,10 @@
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/expected"
+              :to="{
+                name: 'Leads',
+                params: { type: 'expected-leads', name: 'Expected Leads' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -181,7 +214,10 @@
           <li class="c-sidebar-nav-item">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/not-expected"
+              :to="{
+                name: 'Leads',
+                params: { type: 'notexpected-leads', name: 'Not Expected' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -194,7 +230,10 @@
           <li class="c-sidebar-nav-item bg-success">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/applied"
+              :to="{
+                name: 'Leads',
+                params: { type: 'applied-leads', name: 'Applied Leads' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
@@ -207,7 +246,10 @@
           <li class="c-sidebar-nav-item bg-danger">
             <router-link
               active-class="c-active"
-              to="/dashboard/leads/rejected"
+              :to="{
+                name: 'Leads',
+                params: { type: 'rejected-leads', name: 'Rejected Leads' },
+              }"
               class="c-sidebar-nav-link"
               target="_self"
             >
