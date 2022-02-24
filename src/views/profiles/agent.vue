@@ -6,8 +6,8 @@
           <div class="mr-3">
             <b-avatar size="lg">
               {{
-                getAgent.name
-                  ? getAgent.name
+                getAgent.first_name
+                  ? getAgent.first_name
                       .split(' ')
                       .map(function(str) {
                         return str ? str[0].toUpperCase() : ' '
@@ -18,7 +18,7 @@
             </b-avatar>
           </div>
           <div>
-            <h5 class="mb-0">{{ getAgent.name }}</h5>
+            <h5 class="mb-0">{{ getAgent.first_name }}</h5>
             <p class="m-0 text-primary text-bold">
               {{ getAgent.type }}
             </p>
@@ -189,7 +189,6 @@
               </button>
             </div>
           </div>
-
           <CDataTable
             responsive
             :hover="true"
@@ -429,6 +428,7 @@ export default {
     return {
       showLoading: false,
       moment: moment,
+      currentAgent: '',
       filterByRange: false,
       showingResultsFor: null,
       showDatePicker: true,
@@ -453,7 +453,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getUser', 'getAllStudent', 'getAgent', 'getCurrentAgent']),
+    ...mapGetters(['getUser', 'getAllStudent', 'getCurrentAgent']),
     ...mapState(['allStudent', 'allStudentData']), // "getAllStudentData"
     // /* eslint-disable */ totalPages: function() {
     //   if (this.resultCount == 0) {
@@ -474,6 +474,10 @@ export default {
     //   var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
     //   return this.articles.slice(index, index + this.itemsPerPage)
     // },
+
+    getAgent() {
+      return this.currentAgent
+    },
     salesAgentData() {
       return [
         {
@@ -720,10 +724,33 @@ export default {
           var err = ''
         })
     },
+
+    getAgentData() {
+      const vm = this
+      axios
+        .get(
+          process.env.VUE_APP_API_URL + '/admin/user/' + this.$route.params.id
+        )
+        .then((response) => {
+          console.log('currentAgentDataArr::', response.data.data)
+          vm.currentAgent = response.data.data
+        })
+        .catch((errors) => {
+          var err = ''
+        })
+    },
   },
-  mounted() {
+
+  beforeMount() {
     let vm = this
     // this.getAgentLeads(id);
+    var id = this.$route.params.id
+    this.getAgentData()
+    this.$getStudent()
+    this.getAgentHistory(id)
+    this.getAgentLeads(id)
+    this.getSaleAgentCounts(id)
+    this.getCallAgentCounts(id)
   },
   watch: {
     // getAllStudentData: function (val) {
@@ -737,12 +764,13 @@ export default {
     },
   },
   created() {
-    var id = this.$route.params.id
-    this.$getStudent()
-    this.getAgentHistory(id)
-    this.getAgentLeads(id)
-    this.getSaleAgentCounts(id)
-    this.getCallAgentCounts(id)
+    // var id = this.$route.params.id
+    // this.getAgent();
+    // this.$getStudent()
+    // this.getAgentHistory(id)
+    // this.getAgentLeads(id)
+    // this.getSaleAgentCounts(id)
+    // this.getCallAgentCounts(id)
   },
 }
 </script>
