@@ -166,9 +166,30 @@
     <div class="row mt-4">
       <div class="col-12">
         <div class="bg-white radius-10 py-3 px-3 position-relative">
-          <h5 class="agent-progress text-black text-bold">
-            Agent's Leads
-          </h5>
+          <div class="d-flex align-items-center justify-content-between">
+            <h5 class="agent-progress text-black text-bold">
+              Agent's Leads
+            </h5>
+            <div class="d-flex">
+              <button
+                class="btn btn-warning btn-sm ml-2 d-block mb-2"
+                v-b-modal="'successfully-added-modal' + 1"
+                v-if="selectedQuries.length >= 1"
+              >
+                Assign {{ selectedQuries.length }}
+                {{ selectedQuries.length === 1 ? 'Lead' : 'Leads' }}
+              </button>
+              <button
+                class="btn btn-danger btn-sm ml-2 d-block mb-2"
+                v-b-modal="'deny-request-modal' + 1"
+                v-if="selectedQuries.length >= 1"
+              >
+                Delete {{ selectedQuries.length }}
+                {{ selectedQuries.length === 1 ? 'Lead' : 'Leads' }}
+              </button>
+            </div>
+          </div>
+
           <CDataTable
             responsive
             :hover="true"
@@ -189,7 +210,14 @@
                 _style: 'width:50px',
                 label: 'Sr#',
               },
-              'created_at',
+              {
+                key: 'select',
+                _style: 'width: 50px',
+                _classes: 'text-center',
+                filter: false,
+                sorter: false,
+              },
+              'first_name',
               'whatsapp_num',
               'country',
               'status',
@@ -206,10 +234,35 @@
                 <p class="mb-0">{{ index + 1 }}</p>
               </td>
             </template>
-            <template #created_at="{item}">
-              <td class="text-center">
+            <template #select-filter="{}">
+              <td
+                class="selectionBox text-center selectAll d-flex align-items-center justify-content-center"
+                style="border: 0"
+              >
+                <input
+                  type="checkbox"
+                  id="selectAllCheck"
+                  :checked="isAllQueriesSelect"
+                  @click="selectAllQuries"
+                  class=" pointer"
+                />
+              </td>
+            </template>
+            <template #select="{item}">
+              <td class="selectionBox checkbox tableCheckbox text-center">
+                <input
+                  type="checkbox"
+                  :value="item.id"
+                  v-model="selectedQuries"
+                  @click="selectQuries"
+                  class=" pointer"
+                />
+              </td>
+            </template>
+            <template #first_name="{item}">
+              <td>
                 <span>
-                  {{ item.created_at }}
+                  {{ item.first_name }}
                 </span>
                 <span v-show="item.website">
                   <span class="badge badge-success badge-pill ml-1">
@@ -387,6 +440,7 @@ export default {
       history: [],
       salesAgentDataArr: [],
       callCenterAgentDataArr: [],
+      selectedQuries: [],
       range: {
         start: '04-Jan-2022',
         end: '21-Jan-2022',
@@ -451,6 +505,25 @@ export default {
   methods: {
     setPage: function(pageNumber) {
       this.currentPage = pageNumber
+    },
+    selectAllQuries() {
+      if (this.isAllQueriesSelect) {
+        this.selectedQuries = []
+        this.isAllQueriesSelect = false
+      } else {
+        this.selectedQuries = []
+        for (var item in this.items) {
+          this.selectedQuries.push(this.items[item].id)
+        }
+        this.isAllQueriesSelect = true
+      }
+    },
+    selectQuries() {
+      if (this.selectedQuries.length !== this.items.length) {
+        this.isAllQueriesSelect = false
+      } else {
+        this.isAllQueriesSelect = true
+      }
     },
     async eventOnDate() {
       let vm = this

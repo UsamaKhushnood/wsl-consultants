@@ -42,16 +42,16 @@
 </template>
 
 <script>
-import TheHeaderDropdownAccnt from "./TheHeaderDropdownAccnt";
-import { mapState } from "vuex";
+import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+import { mapState } from 'vuex'
 
 export default {
-  name: "TheHeader",
+  name: 'TheHeader',
   components: {
     TheHeaderDropdownAccnt,
   },
-  computed: mapState(["sidebarShow"]),
-};
+  computed: mapState(['sidebarShow']),
+}
 </script>
 <style>
 .fullscreenIcon {
